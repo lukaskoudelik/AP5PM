@@ -1,0 +1,34 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-searchbar 
+      placeholder="Hledat..." 
+      [(ngModel)]="searchQuery" 
+      (ionInput)="onSearchInput()">
+    </ion-searchbar>
+    <ion-buttons slot="end">
+      <ion-back-button defaultHref="/tabs/tab1"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-segment [(ngModel)]="filter" (ionChange)="onFilterChange()">
+    <ion-segment-button value="all">
+      VŠE
+    </ion-segment-button>
+    <ion-segment-button value="teams">
+      TÝMY
+    </ion-segment-button>
+    <ion-segment-button value="divisions">
+      SOUTĚŽE
+    </ion-segment-button>
+    <ion-segment-button value="players">
+      HRÁČI
+    </ion-segment-button>
+  </ion-segment>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-list>
+    <ion-item *ngFor="let result of filteredResults">
+      {{ result }}
+    </ion-item>
+  </ion-list>
+</ion-content>

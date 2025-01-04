@@ -5,7 +5,12 @@ const routes: Routes = [
   {
     path: '',
     loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule)
-  }
+  },
+  {
+    path: 'search',
+    loadComponent: () => import('./search/search.page').then(m => m.SearchPage),
+  },
+  
 ];
 @NgModule({
   imports: [
