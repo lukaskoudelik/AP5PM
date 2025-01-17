@@ -1,8 +1,11 @@
-import { Component} from '@angular/core';
-import { FormsModule } from '@angular/forms'; 
-import { IonicModule } from '@ionic/angular'; 
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { NavController } from '@ionic/angular';
+import { SupabaseService } from '../services/supabase.service';
+import { Subject } from 'rxjs';
+
 
 @Component({
   selector: 'app-search',
@@ -11,26 +14,66 @@ import { NavController } from '@ionic/angular';
   standalone: true,
   imports: [CommonModule, IonicModule, FormsModule],
 })
-
-export class SearchPage {
+export class SearchPage implements OnInit, OnDestroy {
   searchQuery: string = '';
   searchResults: any[] = [];
   filteredResults: any[] = [];
   filter: string = 'all';
+  private destroy$: Subject<void> = new Subject<void>();
+  private dataLoaded = false;
 
-  // Ukázková data
-  allItems: { [key: string]: string[] } = { players: ['Jan Novák', 'Petr Novotný', 'František Žebř', 'Adam Šmíd', 'Jan Koller'],
-    teams: ['Zlín', 'Sparta Praha', 'Příluky'],
-    divisions: ['1. liga', '2. liga', '3. liga'] };
-  
+  constructor(private navController: NavController, private supabaseService: SupabaseService) {}
 
-  constructor(private navController: NavController) {
-    this.searchResults = [
-      ...this.allItems['players'],
-      ...this.allItems['teams'],
-      ...this.allItems['divisions']
-    ];
-    this.filteredResults = [...this.searchResults];
+  ionViewWillEnter() {
+    if (!this.dataLoaded) {
+      this.loadAllData();
+    }
+  }
+
+  ionViewWillLeave() {
+    this.filteredResults = [];
+  }
+
+  ngOnInit() {
+    if (!this.dataLoaded) {
+      this.loadAllData();
+    }
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  // Funkce pro načítání lig, týmů a hráčů
+  async loadAllData() {
+    try {
+      const leaguesData = await this.supabaseService.getLeagues();
+      const teamsData = await this.supabaseService.getTeams();
+      const playersData = await this.supabaseService.getPlayers();
+
+      // Sloučení a transformace dat
+      this.searchResults = [
+        ...this.formatData(leaguesData, 'league'),
+        ...this.formatData(teamsData, 'team'),
+        ...this.formatData(playersData, 'player'),
+      ];
+
+      this.filteredResults = [...this.searchResults];
+      this.dataLoaded = true;
+
+      console.log('Loaded data:', this.searchResults);
+    } catch (error) {
+      console.error('Error loading data:', error);
+    }
+  }
+
+  formatData(data: any[], type: string) {
+    return data.map((item: any) => ({
+      id: item.id,
+      name: item.name || `${item.first_name} ${item.second_name}`,
+      type,
+    }));
   }
 
   onSearchInput() {
@@ -40,26 +83,22 @@ export class SearchPage {
   onFilterChange() {
     this.filterResults();
   }
-  
+
   filterResults() {
     if (this.filter === 'all') {
-      this.filteredResults = [
-        ...this.allItems['players'],
-        ...this.allItems['teams'],
-        ...this.allItems['divisions']
-      ].filter(item =>
-        item.toLowerCase().includes(this.searchQuery.toLowerCase())
+      this.filteredResults = this.searchResults.filter(item =>
+        item.name.toLowerCase().includes(this.searchQuery.toLowerCase())
       );
-    }
-    else {
-      this.filteredResults = this.allItems[this.filter].filter(item =>
-        item.toLowerCase().includes(this.searchQuery.toLowerCase())
-      );
+    } else {
+      this.filteredResults = this.searchResults
+        .filter(item => item.type === this.filter)
+        .filter(item =>
+          item.name.toLowerCase().includes(this.searchQuery.toLowerCase())
+        );
     }
   }
 
   goBack() {
     this.navController.back();
   }
-
 }

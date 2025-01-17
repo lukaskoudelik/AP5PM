@@ -5,3 +5,21 @@ ion-searchbar {
     --icon-color: white;
     --clear-button-color: white;
   }
+
+ion-segment-button {
+    --color: var(--ion-color-dark);
+}
+
+@media (prefers-color-scheme: dark) {
+    ion-segment-button {
+        --color: var(--ion-color-light);
+        --color-checked: var(--ion-color-secondary);
+    }
+
+}
+
+@media (prefers-color-scheme: light) {
+    ion-segment-button{
+        --color-checked: var(--ion-color-primary);
+    }
+}

@@ -13,22 +13,25 @@
     <ion-segment-button value="all">
       VŠE
     </ion-segment-button>
-    <ion-segment-button value="teams">
+    <ion-segment-button value="team">
       TÝMY
     </ion-segment-button>
-    <ion-segment-button value="divisions">
+    <ion-segment-button value="league">
       SOUTĚŽE
     </ion-segment-button>
-    <ion-segment-button value="players">
+    <ion-segment-button value="player">
       HRÁČI
     </ion-segment-button>
   </ion-segment>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-list>
+  <ion-list *ngIf="filteredResults.length > 0">
     <ion-item *ngFor="let result of filteredResults">
-      {{ result }}
+      {{ result.name }}
     </ion-item>
   </ion-list>
+  <ion-item *ngIf="filteredResults.length === 0 && searchQuery !== ''">
+    Žádné výsledky nenalezeny.
+  </ion-item>
 </ion-content>
