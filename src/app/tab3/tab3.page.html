@@ -4,7 +4,27 @@
       <ion-title>Oblíbení hráči</ion-title>
     </ion-toolbar>
   </ion-header>
-  <ion-content class="ion-padding"></ion-content>
+  <ion-content>
+    <ion-list *ngIf="favoritePlayers.length > 0; else noFavorites">
+      <ion-item *ngFor="let player of favoritePlayers">
+        <ion-thumbnail slot="start">
+          <img [src]="player.photoUrl" alt="{{ player.name }}" />
+        </ion-thumbnail>
+        <ion-label>{{ player.name }}</ion-label>
+        <ion-button
+          slot="end"
+          fill="clear"
+          (click)="toggleFavorite(player, 'player')"
+          color="danger"
+        >
+          <ion-icon class="heart-icon-active" name="heart"></ion-icon>
+        </ion-button>
+      </ion-item>
+    </ion-list>
+    <ng-template #noFavorites>
+      <p class="ion-padding">Nemáte žádné oblíbené hráče.</p>
+    </ng-template>
+  </ion-content>
 </ion-menu>
 
 <ion-header [translucent]="true">

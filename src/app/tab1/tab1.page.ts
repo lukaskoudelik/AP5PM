@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { SupabaseService } from '../services/supabase.service';
 
 @Component({
   selector: 'app-tab1',
@@ -6,8 +7,56 @@ import { Component } from '@angular/core';
   styleUrls: ['tab1.page.scss'],
   standalone: false,
 })
-export class Tab1Page {
+export class Tab1Page implements OnInit{
 
-  constructor() {}
+  favoriteTeams: any[] = []; // Seznam oblíbených týmů
+
+  constructor(private supabaseService: SupabaseService) {}
+
+  ngOnInit() {
+    this.loadFavoriteTeams(); // Načtení oblíbených týmů při inicializaci
+  }
+
+  // Načítání oblíbených týmů z localStorage
+  async loadFavoriteTeams() {
+    const storedFavorites = localStorage.getItem('favorites');
+    let favorites = new Set<string>();
+
+    if (storedFavorites) {
+      favorites = new Set(JSON.parse(storedFavorites));
+    }
+
+    const teamsData = await this.supabaseService.getTeams();
+
+    this.favoriteTeams = await Promise.all(
+      teamsData
+        .filter(team => favorites.has(`team:${team.id}`))
+        .map(async team => ({
+          id: team.id,
+          name: team.name,
+          photoUrl: await this.supabaseService.getPhotoUrl(team.photo_url)
+        }))
+    );
+  }
+
+  // Přidání nebo odebrání týmu z oblíbených
+  toggleFavorite(team: any, type: string) {
+    const key = `${type}:${team.id}`;
+    const storedFavorites = localStorage.getItem('favorites');
+    let favorites = new Set<string>();
+
+    if (storedFavorites) {
+      favorites = new Set(JSON.parse(storedFavorites));
+    }
+
+    if (favorites.has(key)) {
+      favorites.delete(key);
+    } else {
+      favorites.add(key);
+    }
+
+    localStorage.setItem('favorites', JSON.stringify(Array.from(favorites)));
+    this.loadFavoriteTeams(); // Aktualizace seznamu
+  }
 
 }

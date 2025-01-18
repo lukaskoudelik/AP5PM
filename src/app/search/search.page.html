@@ -9,7 +9,7 @@
       <ion-back-button defaultHref="/tabs/tab1"></ion-back-button>
     </ion-buttons>
   </ion-toolbar>
-  <ion-segment [(ngModel)]="filter" (ionChange)="onFilterChange()">
+  <ion-segment class="fltr" [(ngModel)]="filter" (ionChange)="onFilterChange()">
     <ion-segment-button value="all">
       VŠE
     </ion-segment-button>
@@ -28,7 +28,23 @@
 <ion-content [fullscreen]="true">
   <ion-list *ngIf="filteredResults.length > 0">
     <ion-item *ngFor="let result of filteredResults">
-      {{ result.name }}
+      <ion-thumbnail slot="start">
+        <img [src]="result.photoUrl" alt="{{ result.name }}" />
+      </ion-thumbnail>
+      <ion-label>
+        <h2>{{ result.name }}</h2>
+      </ion-label>
+      <ion-button
+        slot="end"
+        fill="clear"
+        (click)="toggleFavorite(result, result.type)"
+        [color]="result.isFavorite ? 'danger' : 'medium'"
+    >
+        <ion-icon
+            name="heart"
+            [class]="result.isFavorite ? 'heart-icon-active' : 'heart-icon-deactive'"
+        ></ion-icon>
+    </ion-button>
     </ion-item>
   </ion-list>
   <ion-item *ngIf="filteredResults.length === 0 && searchQuery !== ''">

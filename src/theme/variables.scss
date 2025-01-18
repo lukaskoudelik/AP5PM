@@ -19,4 +19,28 @@
     --background: var(--ion-color-primary);
     --color: var(--ion-color-light);
   }
+
+  @media (prefers-color-scheme: dark) {
+    .heart-icon-active {
+      font-size: 2rem;
+      color: var(--ion-color-secondary);
+    }
+
+    .heart-icon-deactive {
+      font-size: 2rem;
+      color: gray;
+    }
+  }
+
+  @media (prefers-color-scheme: light) {
+    .heart-icon-active {
+      font-size: 2rem;
+      color: var(--ion-color-primary);
+    }
+
+    .heart-icon-deactive {
+      font-size: 2rem;
+      color: gray;
+    }
+  }
   

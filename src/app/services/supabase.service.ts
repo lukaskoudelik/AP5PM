@@ -43,4 +43,18 @@ export class SupabaseService {
     }
     return data || [];
   }
+
+  async getPhotoUrl(path: string): Promise<string> {
+    try {
+      const { data } = this.supabase.storage.from('images').getPublicUrl(path);
+      if (!data || !data.publicUrl) {
+        console.error('Chyba: URL obrázku nebyla nalezena pro cestu:', path);
+        return '';
+      }
+      return data.publicUrl;
+    } catch (error) {
+      console.error('Neočekávaná chyba při získávání URL obrázku:', error);
+      return '';
+    }
+  }
 }

@@ -19,6 +19,7 @@ export class SearchPage implements OnInit, OnDestroy {
   searchResults: any[] = [];
   filteredResults: any[] = [];
   filter: string = 'all';
+  favorites: Set<string> = new Set();
   private destroy$: Subject<void> = new Subject<void>();
   private dataLoaded = false;
 
@@ -52,13 +53,11 @@ export class SearchPage implements OnInit, OnDestroy {
       const teamsData = await this.supabaseService.getTeams();
       const playersData = await this.supabaseService.getPlayers();
 
-      // Sloučení a transformace dat
-      this.searchResults = [
-        ...this.formatData(leaguesData, 'league'),
-        ...this.formatData(teamsData, 'team'),
-        ...this.formatData(playersData, 'player'),
-      ];
+      const formattedLeagues = await this.formatData(leaguesData, 'league');
+      const formattedTeams = await this.formatData(teamsData, 'team');
+      const formattedPlayers = await this.formatData(playersData, 'player');
 
+      this.searchResults = [...formattedLeagues, ...formattedTeams, ...formattedPlayers];
       this.filteredResults = [...this.searchResults];
       this.dataLoaded = true;
 
@@ -68,12 +67,22 @@ export class SearchPage implements OnInit, OnDestroy {
     }
   }
 
-  formatData(data: any[], type: string) {
-    return data.map((item: any) => ({
-      id: item.id,
-      name: item.name || `${item.first_name} ${item.second_name}`,
-      type,
-    }));
+  async formatData(data: any[], type: string) {
+    const formattedData = [];
+    const storedFavorites = localStorage.getItem('favorites');
+    const favorites = storedFavorites ? new Set(JSON.parse(storedFavorites)) : new Set<string>();
+    
+    for (const item of data) {
+      const photoUrl = await this.supabaseService.getPhotoUrl(item.photo_url);
+      formattedData.push({
+        id: item.id,
+        name: item.name || `${item.first_name} ${item.second_name}`,
+        type,
+        photoUrl,
+        isFavorite: favorites.has(`${type}:${item.id}`), 
+      });
+    }
+    return formattedData;
   }
 
   onSearchInput() {
@@ -97,6 +106,47 @@ export class SearchPage implements OnInit, OnDestroy {
         );
     }
   }
+
+  toggleFavorite(item: any, type: string) {
+    const key = `${type}:${item.id}`;
+    const storedFavorites = localStorage.getItem('favorites');
+    let favorites = new Set<string>();
+
+    if (storedFavorites) {
+        favorites = new Set(JSON.parse(storedFavorites));
+    }
+
+    if (favorites.has(key)) {
+        favorites.delete(key);
+        item.isFavorite = false; // Aktualizujeme stav přímo v item
+    } else {
+        favorites.add(key);
+        item.isFavorite = true; // Aktualizujeme stav přímo v item
+    }
+
+    localStorage.setItem('favorites', JSON.stringify(Array.from(favorites)));
+}
+
+updateFavoriteStatus(item: any) {
+  const key = `${item.type}:${item.id}`;
+  this.searchResults = this.searchResults.map(result =>
+    `${result.type}:${result.id}` === key
+      ? { ...result, isFavorite: this.favorites.has(key) }
+      : result
+  );
+  this.filterResults();
+}
+
+saveFavorites() {
+  localStorage.setItem('favorites', JSON.stringify(Array.from(this.favorites)));
+}
+
+loadFavorites() {
+  const storedFavorites = localStorage.getItem('favorites');
+  if (storedFavorites) {
+    this.favorites = new Set(JSON.parse(storedFavorites));
+  }
+}
 
   goBack() {
     this.navController.back();
