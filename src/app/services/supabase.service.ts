@@ -57,4 +57,31 @@ export class SupabaseService {
       return '';
     }
   }
+
+  async getTeamById(teamId: string) {
+    const { data, error } = await this.supabase.from('teams').select('*').eq('id', teamId).single();
+    if (error) {
+      console.error(`Chyba při načítání týmu s ID ${teamId}:`, error.message);
+      return null;
+    }
+    return data || null;
+  }
+
+  async getLeagueById(leagueId: string) {
+    const { data, error } = await this.supabase.from('leagues').select('*').eq('id', leagueId).single();
+    if (error) {
+      console.error(`Chyba při načítání týmu s ID ${leagueId}:`, error.message);
+      return null;
+    }
+    return data || null;
+  }
+
+  async getPlayerById(playerId: string) {
+    const { data, error } = await this.supabase.from('players').select('*').eq('id', playerId).single();
+    if (error) {
+      console.error(`Chyba při načítání týmu s ID ${playerId}:`, error.message);
+      return null;
+    }
+    return data || null;
+  }
 }

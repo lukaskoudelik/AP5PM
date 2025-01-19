@@ -2,9 +2,11 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { SupabaseService } from '../services/supabase.service';
 import { Subject } from 'rxjs';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -12,7 +14,7 @@ import { Subject } from 'rxjs';
   templateUrl: './search.page.html',
   styleUrls: ['./search.page.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule, FormsModule],
+  imports: [CommonModule, IonicModule, FormsModule, RouterModule],
 })
 export class SearchPage implements OnInit, OnDestroy {
   searchQuery: string = '';
@@ -23,7 +25,7 @@ export class SearchPage implements OnInit, OnDestroy {
   private destroy$: Subject<void> = new Subject<void>();
   private dataLoaded = false;
 
-  constructor(private navController: NavController, private supabaseService: SupabaseService) {}
+  constructor(private navController: NavController, private supabaseService: SupabaseService, private router: Router) {}
 
   ionViewWillEnter() {
     if (!this.dataLoaded) {
@@ -62,6 +64,7 @@ export class SearchPage implements OnInit, OnDestroy {
       this.dataLoaded = true;
 
       console.log('Loaded data:', this.searchResults);
+      this.filterResults();
     } catch (error) {
       console.error('Error loading data:', error);
     }
@@ -79,7 +82,7 @@ export class SearchPage implements OnInit, OnDestroy {
         name: item.name || `${item.first_name} ${item.second_name}`,
         type,
         photoUrl,
-        isFavorite: favorites.has(`${type}:${item.id}`), 
+        isFavorite: favorites.has(`${type}:${item.id}`),
       });
     }
     return formattedData;
@@ -94,6 +97,8 @@ export class SearchPage implements OnInit, OnDestroy {
   }
 
   filterResults() {
+    this.filteredResults = [];
+  
     if (this.filter === 'all') {
       this.filteredResults = this.searchResults.filter(item =>
         item.name.toLowerCase().includes(this.searchQuery.toLowerCase())
@@ -118,10 +123,10 @@ export class SearchPage implements OnInit, OnDestroy {
 
     if (favorites.has(key)) {
         favorites.delete(key);
-        item.isFavorite = false; // Aktualizujeme stav přímo v item
+        item.isFavorite = false;
     } else {
         favorites.add(key);
-        item.isFavorite = true; // Aktualizujeme stav přímo v item
+        item.isFavorite = true;
     }
 
     localStorage.setItem('favorites', JSON.stringify(Array.from(favorites)));
@@ -150,5 +155,15 @@ loadFavorites() {
 
   goBack() {
     this.navController.back();
+  }
+
+  onItemClick(event: Event, result: any) {
+    const clickedElement = event.target as HTMLElement;
+
+    if (clickedElement.tagName === 'ION-BUTTON') {
+      event.preventDefault();
+    } else {
+      this.router.navigate(['../', result.type, result.id]);
+    }
   }
 }

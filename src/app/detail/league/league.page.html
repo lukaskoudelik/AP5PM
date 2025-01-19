@@ -1,0 +1,15 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title *ngIf="league && !isLoading">{{ league.name }}</ion-title>
+    <ion-title *ngIf="isLoading">Načítám ligu...</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title *ngIf="league && !isLoading" size="large">{{ league.name }}</ion-title>
+      <ion-title *ngIf="isLoading" size="large">Načítám ligu...</ion-title>
+    </ion-toolbar>
+  </ion-header>
+</ion-content>

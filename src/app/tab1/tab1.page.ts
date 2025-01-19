@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SupabaseService } from '../services/supabase.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-tab1',
@@ -11,10 +12,13 @@ export class Tab1Page implements OnInit{
 
   favoriteTeams: any[] = []; // Seznam oblíbených týmů
 
-  constructor(private supabaseService: SupabaseService) {}
+  constructor(
+    private supabaseService: SupabaseService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
-    this.loadFavoriteTeams(); // Načtení oblíbených týmů při inicializaci
+    this.loadFavoriteTeams();
   }
 
   // Načítání oblíbených týmů z localStorage
@@ -59,4 +63,20 @@ export class Tab1Page implements OnInit{
     this.loadFavoriteTeams(); // Aktualizace seznamu
   }
 
+   // Zavolá se, když je menu otevřeno
+   onMenuOpened() {
+      this.loadFavoriteTeams();
+  }
+
+  onItemClick(event: Event, team: any) {
+    const clickedElement = event.target as HTMLElement;
+
+    // Zkontrolujeme, zda byl kliknut tlačítko nebo jiný prvek
+    if (clickedElement.tagName === 'ION-BUTTON') {
+      event.preventDefault(); // Zruší přesměrování při kliknutí na tlačítko
+    } else {
+      // Zpracování normálního kliknutí
+      this.router.navigate(['../../team', team.id]);
+    }
+  }
 }

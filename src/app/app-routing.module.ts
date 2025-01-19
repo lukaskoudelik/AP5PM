@@ -10,6 +10,18 @@ const routes: Routes = [
     path: 'search',
     loadComponent: () => import('./search/search.page').then(m => m.SearchPage),
   },
+  {
+    path: 'team/:id',
+    loadComponent: () => import('./detail/team/team.page').then( m => m.TeamPage)
+  },
+  {
+    path: 'league/:id',
+    loadComponent: () => import('./detail/league/league.page').then( m => m.LeaguePage)
+  },
+  {
+    path: 'player/:id',
+    loadComponent: () => import('./detail/player/player.page').then( m => m.PlayerPage)
+  },
   
 ];
 @NgModule({

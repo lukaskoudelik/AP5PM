@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SupabaseService } from '../services/supabase.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-tab2',
@@ -11,7 +12,7 @@ export class Tab2Page implements OnInit{
 
     favoriteLeagues: any[] = [];
   
-    constructor(private supabaseService: SupabaseService) {}
+    constructor(private supabaseService: SupabaseService, private router: Router) {}
   
     ngOnInit() {
       this.loadFavoriteLeagues();
@@ -58,4 +59,18 @@ export class Tab2Page implements OnInit{
       localStorage.setItem('favorites', JSON.stringify(Array.from(favorites)));
       this.loadFavoriteLeagues();
     }
+
+    onMenuOpened() {
+      this.loadFavoriteLeagues();
+  }
+
+  onItemClick(event: Event, league: any) {
+    const clickedElement = event.target as HTMLElement;
+
+    if (clickedElement.tagName === 'ION-BUTTON') {
+      event.preventDefault();
+    } else {
+      this.router.navigate(['../../league', league.id]);
+    }
+  }
 }

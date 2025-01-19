@@ -1,4 +1,4 @@
-<ion-menu content-id="players-content" menu-id="players-menu">
+<ion-menu content-id="players-content" menu-id="players-menu" (ionDidOpen)="onMenuOpened()">
   <ion-header>
     <ion-toolbar>
       <ion-title>Oblíbení hráči</ion-title>
@@ -6,7 +6,7 @@
   </ion-header>
   <ion-content>
     <ion-list *ngIf="favoritePlayers.length > 0; else noFavorites">
-      <ion-item *ngFor="let player of favoritePlayers">
+      <ion-item *ngFor="let player of favoritePlayers" (click)="onItemClick($event, player)">
         <ion-thumbnail slot="start">
           <img [src]="player.photoUrl" alt="{{ player.name }}" />
         </ion-thumbnail>

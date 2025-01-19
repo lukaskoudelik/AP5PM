@@ -1,4 +1,4 @@
-<ion-menu content-id="divisions-content" menu-id="divisions-menu">
+<ion-menu content-id="divisions-content" menu-id="divisions-menu" (ionDidOpen)="onMenuOpened()">
     <ion-header>
       <ion-toolbar>
         <ion-title>Oblíbené soutěže</ion-title>
@@ -6,7 +6,7 @@
     </ion-header>
     <ion-content>
       <ion-list *ngIf="favoriteLeagues.length > 0; else noFavorites">
-        <ion-item *ngFor="let league of favoriteLeagues">
+        <ion-item *ngFor="let league of favoriteLeagues" (click)="onItemClick($event, league)">
           <ion-thumbnail slot="start">
             <img [src]="league.photoUrl" alt="{{ league.name }}" />
           </ion-thumbnail>

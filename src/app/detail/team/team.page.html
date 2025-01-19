@@ -1,0 +1,20 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title *ngIf="team && !isLoading">{{ team.name }}</ion-title>
+    <ion-title *ngIf="isLoading">Načítám tým...</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title *ngIf="team && !isLoading" size="large">{{ team.name }}</ion-title>
+      <ion-title *ngIf="isLoading" size="large">Načítám tým...</ion-title>
+    </ion-toolbar>
+  </ion-header>
+</ion-content>
+
+<!-- Zobrazit zprávu o načítání, pokud se data ještě nenačetla -->
+<div *ngIf="isLoading" class="loading-container">
+  Načítání...
+</div>

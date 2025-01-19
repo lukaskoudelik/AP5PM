@@ -27,7 +27,7 @@
 
 <ion-content [fullscreen]="true">
   <ion-list *ngIf="filteredResults.length > 0">
-    <ion-item *ngFor="let result of filteredResults">
+    <ion-item *ngFor="let result of filteredResults" (click)="onItemClick($event, result)"> 
       <ion-thumbnail slot="start">
         <img [src]="result.photoUrl" alt="{{ result.name }}" />
       </ion-thumbnail>
