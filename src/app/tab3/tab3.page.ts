@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SupabaseService } from '../services/supabase.service';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 
 @Component({
   selector: 'app-tab3',
@@ -12,11 +12,20 @@ import { Router } from '@angular/router';
 export class Tab3Page implements OnInit{
 
     favoritePlayers: any[] = [];
+    searchedResults: any[] = [];
+    filteredResults: any[] = [];
+    searchQuery: string = '';
   
     constructor(private supabaseService: SupabaseService, private router: Router) {}
   
     ngOnInit() {
       this.loadFavoritePlayers();
+      this.router.events.subscribe((event) => {
+                  if (event instanceof NavigationEnd && event.urlAfterRedirects === '/tabs/tab3') {
+                    // Znovunačtení dat při návratu
+                    this.loadFavoritePlayers();
+                  }
+                });
     }
   
     // Načítání oblíbených hráčů z localStorage
@@ -72,6 +81,55 @@ export class Tab3Page implements OnInit{
       event.preventDefault();
     } else {
       this.router.navigate(['../../player', player.id]);
+    }
+  }
+
+  filterResults() {
+    this.filteredResults = [];
+    this.filteredResults = this.searchedResults.filter(item =>
+      item.name.toLowerCase().includes(this.searchQuery.toLowerCase())
+    );
+
+  }
+
+  async loadAllPlayers() {
+    try {
+      const playersData = await this.supabaseService.getPlayers();
+      const formattedPlayers = await this.formatData(playersData, 'player');
+
+      this.searchedResults = [...formattedPlayers];
+      this.filteredResults = [...this.searchedResults];
+      this.filterResults();
+    } catch (error) {
+      console.error('Error loading data:', error);
+    }
+  }
+
+  async formatData(data: any[], type: string) {
+    const formattedData = [];
+    
+    for (const item of data) {
+      const photoUrl = await this.supabaseService.getPhotoUrl(item.photo_url);
+      formattedData.push({
+        id: item.id,
+        name: `${item.first_name} ${item.second_name}`,
+        photoUrl,
+      });
+    }
+    return formattedData;
+  }
+
+
+  ionViewWillEnter() {
+    this.loadFavoritePlayers();
+  }
+
+  onSearchInput() {
+    if (!this.searchQuery) {
+      this.searchedResults = [];
+      this.filteredResults = [];
+    } else {
+      this.loadAllPlayers();
     }
   }
 

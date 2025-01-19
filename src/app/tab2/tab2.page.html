@@ -47,3 +47,42 @@
     </ion-header>
   </ion-content>
 </div>
+
+<ion-content [fullscreen]="true">
+  <ion-card>
+    <ion-card-header>
+      <ion-searchbar placeholder="Hledat soutěž..." [(ngModel)]="searchQuery" (ionInput)="onSearchInput()"
+        ></ion-searchbar>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list *ngIf="filteredResults.length > 0">
+        <ion-item *ngFor="let result of filteredResults" (click)="onItemClick($event, result)">
+          <ion-thumbnail slot="start">
+            <img [src]="result.photoUrl" alt="{{ result.name }}" />
+          </ion-thumbnail>
+          <ion-label>
+            <h2>{{ result.name }}</h2>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title class="ion-text-center">Oblíbené soutěže</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list *ngIf="favoriteLeagues.length > 0; else noFavorites">
+        <ion-item *ngFor="let league of favoriteLeagues" (click)="onItemClick($event, league)">
+          <ion-thumbnail slot="start">
+            <img [src]="league.photoUrl" alt="{{ league.name }}" />
+          </ion-thumbnail>
+          <ion-label>{{ league.name }}</ion-label>
+        </ion-item>
+      </ion-list>
+      <ng-template #noFavorites>
+        <p class="ion-padding">Nemáte žádné oblíbené týmy.</p>
+      </ng-template>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

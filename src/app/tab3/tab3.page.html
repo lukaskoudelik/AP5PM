@@ -47,3 +47,42 @@
     </ion-header>
   </ion-content>
 </div>
+
+<ion-content [fullscreen]="true">
+  <ion-card>
+    <ion-card-header>
+      <ion-searchbar placeholder="Hledat hráče..." [(ngModel)]="searchQuery" (ionInput)="onSearchInput()"
+        ></ion-searchbar>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list *ngIf="filteredResults.length > 0">
+        <ion-item *ngFor="let result of filteredResults" (click)="onItemClick($event, result)">
+          <ion-thumbnail slot="start">
+            <img [src]="result.photoUrl" alt="{{ result.name }}" />
+          </ion-thumbnail>
+          <ion-label>
+            <h2>{{ result.name }}</h2>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title class="ion-text-center">Oblíbení hráči</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list *ngIf="favoritePlayers.length > 0; else noFavorites">
+        <ion-item *ngFor="let player of favoritePlayers" (click)="onItemClick($event, player)">
+          <ion-thumbnail slot="start">
+            <img [src]="player.photoUrl" alt="{{ player.name }}" />
+          </ion-thumbnail>
+          <ion-label>{{ player.name }}</ion-label>
+        </ion-item>
+      </ion-list>
+      <ng-template #noFavorites>
+        <p class="ion-padding">Nemáte žádné oblíbené hráče.</p>
+      </ng-template>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SupabaseService } from '../services/supabase.service';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd  } from '@angular/router';
 
 @Component({
   selector: 'app-tab1',
@@ -11,6 +11,9 @@ import { Router } from '@angular/router';
 export class Tab1Page implements OnInit{
 
   favoriteTeams: any[] = []; // Seznam oblíbených týmů
+  searchQuery: string = '';
+  searchedResults: any[] = [];
+  filteredResults: any[] = [];
 
   constructor(
     private supabaseService: SupabaseService,
@@ -19,6 +22,12 @@ export class Tab1Page implements OnInit{
 
   ngOnInit() {
     this.loadFavoriteTeams();
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd && event.urlAfterRedirects === '/tabs/tab1') {
+        // Znovunačtení dat při návratu
+        this.loadFavoriteTeams();
+      }
+    });
   }
 
   // Načítání oblíbených týmů z localStorage
@@ -68,15 +77,62 @@ export class Tab1Page implements OnInit{
       this.loadFavoriteTeams();
   }
 
+  filterResults() {
+    this.filteredResults = [];
+    this.filteredResults = this.searchedResults.filter(item =>
+      item.name.toLowerCase().includes(this.searchQuery.toLowerCase())
+    );
+
+  }
+
   onItemClick(event: Event, team: any) {
     const clickedElement = event.target as HTMLElement;
-
-    // Zkontrolujeme, zda byl kliknut tlačítko nebo jiný prvek
     if (clickedElement.tagName === 'ION-BUTTON') {
-      event.preventDefault(); // Zruší přesměrování při kliknutí na tlačítko
+      event.preventDefault();
     } else {
-      // Zpracování normálního kliknutí
+
       this.router.navigate(['../../team', team.id]);
     }
+  }
+
+  onSearchInput() {
+    if (!this.searchQuery) {
+      this.searchedResults = [];
+      this.filteredResults = [];
+    } else {
+      this.loadAllTeams();
+    }
+  }
+
+  async loadAllTeams() {
+    try {
+      const teamsData = await this.supabaseService.getTeams();
+      const formattedTeams = await this.formatData(teamsData, 'team');
+
+      this.searchedResults = [...formattedTeams];
+      this.filteredResults = [...this.searchedResults];
+      this.filterResults();
+    } catch (error) {
+      console.error('Error loading data:', error);
+    }
+  }
+
+  async formatData(data: any[], type: string) {
+    const formattedData = [];
+    
+    for (const item of data) {
+      const photoUrl = await this.supabaseService.getPhotoUrl(item.photo_url);
+      formattedData.push({
+        id: item.id,
+        name: item.name,
+        photoUrl,
+      });
+    }
+    return formattedData;
+  }
+
+
+  ionViewWillEnter() {
+    this.loadFavoriteTeams();
   }
 }

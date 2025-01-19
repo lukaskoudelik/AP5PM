@@ -20,30 +20,6 @@
     --color: var(--ion-color-light);
   }
 
-  @media (prefers-color-scheme: dark) {
-    .heart-icon-active {
-      font-size: 2rem;
-      color: var(--ion-color-secondary);
-    }
-
-    .heart-icon-deactive {
-      font-size: 2rem;
-      color: gray;
-    }
-  }
-
-  @media (prefers-color-scheme: light) {
-    .heart-icon-active {
-      font-size: 2rem;
-      color: var(--ion-color-primary);
-    }
-
-    .heart-icon-deactive {
-      font-size: 2rem;
-      color: gray;
-    }
-  }
-
   .heart-icon-active-light {
     font-size: 2rem;
     color: var(--ion-color-secondary);
@@ -64,24 +40,40 @@ ion-segment-button {
 }
 
 
+ion-segment-button{
+  --color-checked: var(--ion-color-primary);
+}
+ion-segment.fltr {
+  --background: var(--ion-color-light);
+}
+.heart-icon-active {
+font-size: 2rem;
+color: var(--ion-color-primary);
+}
 
-@media (prefers-color-scheme: dark) {
+.heart-icon-deactive {
+font-size: 2rem;
+color: gray;
+}
+
+.ion-palette-dark {
   ion-segment-button {
-      --color: var(--ion-color-light);
-      --color-checked: var(--ion-color-secondary);
+    --color: var(--ion-color-light);
+    --color-checked: var(--ion-color-secondary);
   }
 
-  ion-segment.fltr {
+    ion-segment.fltr {
       --background: var(--ion-color-dark);
   }
 
+  .heart-icon-active {
+    font-size: 2rem;
+    color: var(--ion-color-secondary);
+  }
+
+  .heart-icon-deactive {
+    font-size: 2rem;
+    color: gray;
+  }
 }
 
-@media (prefers-color-scheme: light) {
-  ion-segment-button{
-      --color-checked: var(--ion-color-primary);
-  }
-  ion-segment.fltr {
-      --background: var(--ion-color-light);
-  }
-}

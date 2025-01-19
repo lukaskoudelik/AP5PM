@@ -7,9 +7,13 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Nastavení</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <ion-list inset="true">
+    <ion-item>
+      <ion-toggle
+      [checked]="isDarkMode"
+      (ionChange)="toggleDarkMode($event)"
+      justify="space-between"
+      id="paletteToggle">Dark Mode</ion-toggle>
+    </ion-item>
+  </ion-list>
 </ion-content>

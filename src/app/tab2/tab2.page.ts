@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SupabaseService } from '../services/supabase.service';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 
 @Component({
   selector: 'app-tab2',
@@ -11,11 +11,20 @@ import { Router } from '@angular/router';
 export class Tab2Page implements OnInit{
 
     favoriteLeagues: any[] = [];
+    searchedResults: any[] = [];
+    filteredResults: any[] = [];
+    searchQuery: string = '';
   
     constructor(private supabaseService: SupabaseService, private router: Router) {}
   
     ngOnInit() {
       this.loadFavoriteLeagues();
+      this.router.events.subscribe((event) => {
+            if (event instanceof NavigationEnd && event.urlAfterRedirects === '/tabs/tab2') {
+              // Znovunačtení dat při návratu
+              this.loadFavoriteLeagues();
+            }
+          });
     }
   
     // Načítání oblíbených lig z localStorage
@@ -71,6 +80,54 @@ export class Tab2Page implements OnInit{
       event.preventDefault();
     } else {
       this.router.navigate(['../../league', league.id]);
+    }
+  }
+  filterResults() {
+    this.filteredResults = [];
+    this.filteredResults = this.searchedResults.filter(item =>
+      item.name.toLowerCase().includes(this.searchQuery.toLowerCase())
+    );
+
+  }
+
+  async loadAllLeagues() {
+    try {
+      const leaguesData = await this.supabaseService.getLeagues();
+      const formattedleagues = await this.formatData(leaguesData, 'league');
+
+      this.searchedResults = [...formattedleagues];
+      this.filteredResults = [...this.searchedResults];
+      this.filterResults();
+    } catch (error) {
+      console.error('Error loading data:', error);
+    }
+  }
+
+  async formatData(data: any[], type: string) {
+    const formattedData = [];
+    
+    for (const item of data) {
+      const photoUrl = await this.supabaseService.getPhotoUrl(item.photo_url);
+      formattedData.push({
+        id: item.id,
+        name: item.name,
+        photoUrl,
+      });
+    }
+    return formattedData;
+  }
+
+
+  ionViewWillEnter() {
+    this.loadFavoriteLeagues();
+  }
+
+  onSearchInput() {
+    if (!this.searchQuery) {
+      this.searchedResults = [];
+      this.filteredResults = [];
+    } else {
+      this.loadAllLeagues();
     }
   }
 }
