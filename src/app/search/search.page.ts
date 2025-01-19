@@ -164,6 +164,7 @@ loadFavorites() {
       event.preventDefault();
     } else {
       this.router.navigate(['../', result.type, result.id]);
+      this.dataLoaded = false;
     }
   }
 }

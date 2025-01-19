@@ -2,6 +2,22 @@
   <ion-toolbar>
     <ion-title *ngIf="player && !isLoading">{{ player.first_name }} {{ player.second_name }}</ion-title>
     <ion-title *ngIf="isLoading">Načítám hráče...</ion-title>
+    <ion-buttons slot="end">
+      <ion-button
+          *ngIf="player && !isLoading"
+          slot="end"
+          fill="clear"
+          (click)="toggleFavorite(player, 'player')"
+          [color]="isFavoriteItem('player', player.id) ? 'danger' : 'medium'"
+        >
+          <ion-icon
+          [class]="isFavoriteItem('player', player.id) ? 'heart-icon-active-light' : 'heart-icon-deactive'"
+          name="heart"></ion-icon>
+        </ion-button>
+      <ion-button (click)="navigateToSearch()">
+        <ion-icon slot="icon-only" name="search"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -13,3 +29,29 @@
     </ion-toolbar>
   </ion-header>
 </ion-content>
+
+<ion-tabs>
+
+  <ion-tab-bar slot="bottom">
+    <ion-tab-button (click)="navigateToTab('tab1')">
+      <ion-icon aria-hidden="true" name="football-outline"></ion-icon>
+      <ion-label>Týmy</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button (click)="navigateToTab('tab2')">
+      <ion-icon aria-hidden="true" name="git-branch-outline"></ion-icon>
+      <ion-label>Soutěže</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button (click)="navigateToTab('tab3')">
+      <ion-icon aria-hidden="true" name="people-outline"></ion-icon>
+      <ion-label>Hráči</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button (click)="navigateToTab('tab4')">
+      <ion-icon aria-hidden="true" name="settings-outline"></ion-icon>
+      <ion-label>Nastavení</ion-label>
+    </ion-tab-button>
+  </ion-tab-bar>
+
+</ion-tabs>
