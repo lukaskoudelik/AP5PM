@@ -1,9 +1,6 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-searchbar 
-      placeholder="Hledat..." 
-      [(ngModel)]="searchQuery" 
-      (ionInput)="onSearchInput()">
+    <ion-searchbar placeholder="Hledat..." [(ngModel)]="searchQuery" (ionInput)="onSearchInput()">
     </ion-searchbar>
     <ion-buttons slot="end">
       <ion-back-button defaultHref="/tabs/tab1"></ion-back-button>
@@ -27,24 +24,17 @@
 
 <ion-content [fullscreen]="true">
   <ion-list *ngIf="filteredResults.length > 0">
-    <ion-item *ngFor="let result of filteredResults" (click)="onItemClick($event, result)"> 
+    <ion-item *ngFor="let result of filteredResults" (click)="onItemClick($event, result)">
       <ion-thumbnail slot="start">
         <img [src]="result.photoUrl" alt="{{ result.name }}" />
       </ion-thumbnail>
       <ion-label>
         <h2>{{ result.name }}</h2>
       </ion-label>
-      <ion-button
-        slot="end"
-        fill="clear"
-        (click)="toggleFavorite(result, result.type)"
-        [color]="result.isFavorite ? 'danger' : 'medium'"
-    >
-        <ion-icon
-            name="heart"
-            [class]="result.isFavorite ? 'heart-icon-active' : 'heart-icon-deactive'"
-        ></ion-icon>
-    </ion-button>
+      <ion-button slot="end" fill="clear" (click)="toggleFavorite(result, result.type)"
+        [color]="result.isFavorite ? 'danger' : 'medium'">
+        <ion-icon name="heart" [class]="result.isFavorite ? 'heart-icon-active' : 'heart-icon-deactive'"></ion-icon>
+      </ion-button>
     </ion-item>
   </ion-list>
   <ion-item *ngIf="filteredResults.length === 0 && searchQuery !== ''">

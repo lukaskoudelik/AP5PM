@@ -16,6 +16,7 @@ import { Router } from '@angular/router';
 export class PlayerPage implements OnInit {
   player: any;
   isLoading: boolean = true;
+  favoritePlayers: any[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -24,6 +25,7 @@ export class PlayerPage implements OnInit {
   ) {}
 
   async ngOnInit() {
+    this.loadFavoritePlayers();
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       const data = await this.supabaseService.getPlayerById(id);
@@ -75,4 +77,60 @@ export class PlayerPage implements OnInit {
     return favorites.has(`${type}:${id}`);
     
   }
+
+  // Načítání oblíbených hráčů z localStorage
+  async loadFavoritePlayers() {
+    const storedFavorites = localStorage.getItem('favorites');
+    let favorites = new Set<string>();
+
+    if (storedFavorites) {
+      favorites = new Set(JSON.parse(storedFavorites));
+    }
+
+    const playersData = await this.supabaseService.getPlayers();
+
+    this.favoritePlayers = await Promise.all(
+      playersData
+        .filter(player => favorites.has(`player:${player.id}`))
+        .map(async player => ({
+          id: player.id,
+          name: `${player.first_name} ${player.second_name}`,
+          photoUrl: await this.supabaseService.getPhotoUrl(player.photo_url)
+        }))
+    );
+  }
+
+  // Přidání nebo odebrání hráčů z oblíbených
+  toggleFavoriteFromMenu(player: any, type: string) {
+    const key = `${type}:${player.id}`;
+    const storedFavorites = localStorage.getItem('favorites');
+    let favorites = new Set<string>();
+
+    if (storedFavorites) {
+      favorites = new Set(JSON.parse(storedFavorites));
+    }
+
+    if (favorites.has(key)) {
+      favorites.delete(key);
+    } else {
+      favorites.add(key);
+    }
+
+    localStorage.setItem('favorites', JSON.stringify(Array.from(favorites)));
+    this.loadFavoritePlayers();
+  }
+
+  onMenuOpened() {
+    this.loadFavoritePlayers();
+}
+
+onItemClick(event: Event, player: any) {
+  const clickedElement = event.target as HTMLElement;
+
+  if (clickedElement.tagName === 'ION-BUTTON') {
+    event.preventDefault();
+  } else {
+    this.router.navigate(['../../player', player.id]);
+  }
+}
 }

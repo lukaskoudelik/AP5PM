@@ -1,37 +1,161 @@
+<ion-menu content-id="teams-content" menu-id="teams-detail-menu" (ionDidOpen)="onMenuOpened()">
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>Oblíbené týmy</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+    <ion-list *ngIf="favoriteTeams.length > 0; else noFavorites">
+      <ion-item *ngFor="let team of favoriteTeams" (click)="onItemClick($event, team)">
+        <ion-thumbnail slot="start" clas="side">
+          <img [src]="team.photoUrl" alt="{{ team.name }}" />
+        </ion-thumbnail>
+        <ion-label>{{ team.name }}</ion-label>
+        <ion-button slot="end" fill="clear" (click)="toggleFavoriteFromMenu(team, 'team')" color="danger">
+          <ion-icon class="heart-icon-active" name="heart"></ion-icon>
+        </ion-button>
+      </ion-item>
+    </ion-list>
+    <ng-template #noFavorites>
+      <p class="ion-padding">Nemáte žádné oblíbené týmy.</p>
+    </ng-template>
+  </ion-content>
+</ion-menu>
+
 <ion-header [translucent]="true">
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button menu="teams-detail-menu"></ion-menu-button>
+    </ion-buttons>
     <ion-title *ngIf="team && !isLoading">{{ team.name }}</ion-title>
     <ion-title *ngIf="isLoading">Načítám tým...</ion-title>
     <ion-buttons slot="end">
-      <ion-button
-          *ngIf="team && !isLoading"
-          slot="end"
-          fill="clear"
-          (click)="toggleFavorite(team, 'team')"
-          [color]="isFavoriteItem('team', team.id) ? 'danger' : 'medium'"
-        >
-          <ion-icon
-          [class]="isFavoriteItem('team', team.id) ? 'heart-icon-active-light' : 'heart-icon-deactive'"
+      <ion-button *ngIf="team && !isLoading" slot="end" fill="clear" (click)="toggleFavorite(team, 'team')"
+        [color]="isFavoriteItem('team', team.id) ? 'danger' : 'medium'">
+        <ion-icon [class]="isFavoriteItem('team', team.id) ? 'heart-icon-active-light' : 'heart-icon-deactive'"
           name="heart"></ion-icon>
-        </ion-button>
+      </ion-button>
       <ion-button (click)="navigateToSearch()">
         <ion-icon slot="icon-only" name="search"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
-</ion-header>
-
-<ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
       <ion-title *ngIf="team && !isLoading" size="large">{{ team.name }}</ion-title>
       <ion-title *ngIf="isLoading" size="large">Načítám tým...</ion-title>
     </ion-toolbar>
   </ion-header>
-</ion-content>
 
+  <ion-content [fullscreen]="true">
+    <ion-card *ngIf="league && team && !isLoading">
+
+      <ion-card-header>
+        <div class="cardhdr">
+          <ion-thumbnail slot="start" class="prf">
+            <img [src]="team.photoUrl" alt="{{ team.name }}" />
+          </ion-thumbnail>
+          <div class="ion-padding">
+            <ion-card-title>{{ team.name }}</ion-card-title>
+            <ion-card-subtitle>{{ league.name }}</ion-card-subtitle>
+          </div>
+        </div>
+      </ion-card-header>
+      <ion-card-content>
+        <!-- Ion Segment pro záložky -->
+        <ion-segment [(ngModel)]="selectedSegment">
+          <ion-segment-button value="results" content-id="result">
+            Výsledky
+          </ion-segment-button>
+          <ion-segment-button value="matches" content-id="matches">
+            Program
+          </ion-segment-button>
+          <ion-segment-button value="table" content-id="table">
+            Tabulka
+          </ion-segment-button>
+        </ion-segment>
+
+
+        <ion-segment-view>
+          <!-- Obsah záložek -->
+          <ion-segment-content id="result">
+            <ion-list *ngIf="gamesPlayed">
+              <ion-item *ngFor="let game of gamesPlayed">
+                <ion-grid fixed="true">
+                  <ion-row>
+                    <ion-col class="ion-text-center ion-padding">
+                      <h2>{{ game.round_number }}. kolo - {{ game.date | date:'dd. MM. yyyy'}}</h2>
+                    </ion-col>
+                  </ion-row>
+                  <ion-row>
+                    <ion-col class="ion-text-left flex-start">
+
+                      <ion-thumbnail class="small fixed home">
+                        <img [src]="game.homeTeam.photoUrl" alt="{{ game.homeTeam.name }}" />
+                      </ion-thumbnail>
+                      <p>{{ game.homeTeam.name }}</p>
+                    </ion-col>
+
+                    <ion-col class="ion-text-center" size="2">
+                      <p class="result">{{ game.result }}</p>
+                    </ion-col>
+
+                    <ion-col class="ion-text-right flex-end">
+                      <p>{{ game.awayTeam.name }}</p>
+
+                      <ion-thumbnail class="small fixed away">
+                        <img [src]="game.awayTeam.photoUrl" alt="{{ game.awayTeam.name }}" />
+                      </ion-thumbnail>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+            </ion-list>
+          </ion-segment-content>
+          <ion-segment-content id="matches">
+            <ion-list *ngIf="gamesToPlay">
+              <ion-item *ngFor="let game of gamesToPlay">
+                <ion-grid fixed="true">
+                  <ion-row>
+                    <ion-col class="ion-text-center ion-padding">
+                      <h2>{{ game.round_number }}. kolo - {{ game.date | date:'dd. MM. yyyy'}}</h2>
+                    </ion-col>
+                  </ion-row>
+                  <ion-row>
+                    <ion-col class="ion-text-left flex-start">
+
+                      <ion-thumbnail class="small fixed home">
+                        <img [src]="game.homeTeam.photoUrl" alt="{{ game.homeTeam.name }}" />
+                      </ion-thumbnail>
+                      <p>{{ game.homeTeam.name }}</p>
+                    </ion-col>
+
+                    <ion-col class="ion-text-center" size="2">
+                      <p class="result">-</p>
+                    </ion-col>
+
+                    <ion-col class="ion-text-right flex-end">
+                      <p>{{ game.awayTeam.name }}</p>
+
+                      <ion-thumbnail class="small fixed away">
+                        <img [src]="game.awayTeam.photoUrl" alt="{{ game.awayTeam.name }}" />
+                      </ion-thumbnail>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+            </ion-list>
+          </ion-segment-content>
+          <ion-segment-content id="table">
+            <!-- Tabulka -->
+          </ion-segment-content>
+        </ion-segment-view>
+      </ion-card-content>
+    </ion-card>
+  </ion-content>
+
+  <!--
 <ion-tabs>
-
   <ion-tab-bar slot="bottom">
     <ion-tab-button (click)="navigateToTab('tab1')">
       <ion-icon aria-hidden="true" name="football-outline"></ion-icon>
@@ -53,5 +177,6 @@
       <ion-label>Nastavení</ion-label>
     </ion-tab-button>
   </ion-tab-bar>
-
 </ion-tabs>
+
+-->

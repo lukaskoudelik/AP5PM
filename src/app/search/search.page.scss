@@ -6,33 +6,6 @@ ion-searchbar {
     --clear-button-color: white;
   }
 
-ion-segment-button {
-    --color: var(--ion-color-dark);
-}
-
-
-
-@media (prefers-color-scheme: dark) {
-    ion-segment-button {
-        --color: var(--ion-color-light);
-        --color-checked: var(--ion-color-secondary);
-    }
-
-    ion-segment.fltr {
-        --background: var(--ion-color-dark);
-    }
-
-}
-
-@media (prefers-color-scheme: light) {
-    ion-segment-button{
-        --color-checked: var(--ion-color-primary);
-    }
-    ion-segment.fltr {
-        --background: var(--ion-color-light);
-    }
-}
-
 ion-item {
     display: flex;
     align-items: center;
@@ -41,5 +14,5 @@ ion-item {
   ion-avatar img {
     width: 40px;
     height: 40px;
-    margin-right: 10px; /* Odstup mezi fotkou a jménem */
+    margin-right: 10px;
   }

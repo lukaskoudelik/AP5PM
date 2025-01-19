@@ -49,3 +49,39 @@
     color: var(--ion-color-secondary);
   }
   
+
+ion-card-title {
+  font-size: 2rem;
+  padding-bottom: 5px;
+}
+
+ion-card-subtitle {
+  font-size: 1.5rem;
+}
+
+ion-segment-button {
+  --color: var(--ion-color-dark);
+}
+
+
+
+@media (prefers-color-scheme: dark) {
+  ion-segment-button {
+      --color: var(--ion-color-light);
+      --color-checked: var(--ion-color-secondary);
+  }
+
+  ion-segment.fltr {
+      --background: var(--ion-color-dark);
+  }
+
+}
+
+@media (prefers-color-scheme: light) {
+  ion-segment-button{
+      --color-checked: var(--ion-color-primary);
+  }
+  ion-segment.fltr {
+      --background: var(--ion-color-light);
+  }
+}

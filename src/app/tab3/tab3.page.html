@@ -11,12 +11,7 @@
           <img [src]="player.photoUrl" alt="{{ player.name }}" />
         </ion-thumbnail>
         <ion-label>{{ player.name }}</ion-label>
-        <ion-button
-          slot="end"
-          fill="clear"
-          (click)="toggleFavorite(player, 'player')"
-          color="danger"
-        >
+        <ion-button slot="end" fill="clear" (click)="toggleFavorite(player, 'player')" color="danger">
           <ion-icon class="heart-icon-active" name="heart"></ion-icon>
         </ion-button>
       </ion-item>
