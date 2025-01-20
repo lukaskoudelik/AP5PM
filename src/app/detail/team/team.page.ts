@@ -22,6 +22,7 @@ export class TeamPage implements OnInit {
   gamesToPlay: any[] = []; 
   opponent: any;
   favoriteTeams: any[] = [];
+  leagueTable: any[] = []; 
 
   constructor(
     private route: ActivatedRoute,
@@ -40,6 +41,7 @@ export class TeamPage implements OnInit {
         this.loadPhotoUrl(this.team.photo_url);
         if (this.team.league_id) {
           this.loadLeagueForTeam(this.team.league_id);   
+          this.loadTable(this.team.league_id);
         }
         this.loadGamesWithTeams();
       }
@@ -185,6 +187,97 @@ export class TeamPage implements OnInit {
       event.preventDefault();
     } else {
       this.router.navigate(['../../team', team.id]);
+    }
+  }
+
+  async loadTable(leagueId: number) {
+    try {
+      this.isLoading = true;
+      this.leagueTable = await this.loadLeagueTable(leagueId);  // Uložení výsledků do proměnné
+    } catch (error) {
+      console.error('Chyba při načítání tabulky ligy:', error);
+    } finally {
+      this.isLoading = false;
+    }
+  }
+
+  async loadLeagueTable(leagueId: number) {
+    try {
+      // Načteme všechny zápasy pro danou ligu
+      const games = await this.supabaseService.getGamesByLeagueId(`${leagueId}`);
+  
+      // Vytvoříme objekt pro uložení informací o týmech s konkrétním typem
+      const teamsStats: { [teamId: number]: { points: number; goalsFor: number; goalsAgainst: number; gamesPlayed: number } } = {};
+  
+      games.forEach(game => {
+        // Extrahujeme výsledek zápasu
+        if (game.result) {
+          const [homeScore, awayScore] = game.result.split('-').map(Number);
+  
+          // Inicializujeme týmy, pokud ještě nejsou v objektu
+          if (!teamsStats[game.home_team_id]) {
+            teamsStats[game.home_team_id] = { points: 0, goalsFor: 0, goalsAgainst: 0, gamesPlayed: 0 };
+          }
+          if (!teamsStats[game.away_team_id]) {
+            teamsStats[game.away_team_id] = { points: 0, goalsFor: 0, goalsAgainst: 0, gamesPlayed: 0 };
+          }
+  
+          // Přičteme skóre
+          teamsStats[game.home_team_id].goalsFor += homeScore;
+          teamsStats[game.home_team_id].goalsAgainst += awayScore;
+          teamsStats[game.away_team_id].goalsFor += awayScore;
+          teamsStats[game.away_team_id].goalsAgainst += homeScore;
+  
+          // Počet odehraných zápasů
+          teamsStats[game.home_team_id].gamesPlayed++;
+          teamsStats[game.away_team_id].gamesPlayed++;
+  
+          // Počítání bodů
+          if (homeScore > awayScore) {
+            teamsStats[game.home_team_id].points += 3;  // Domácí vítězství
+          } else if (awayScore > homeScore) {
+            teamsStats[game.away_team_id].points += 3;  // Hostující vítězství
+          } else {
+            teamsStats[game.home_team_id].points += 1;  // Remíza - domácí dostanou 1 bod
+            teamsStats[game.away_team_id].points += 1;  // Remíza - hosté dostanou 1 bod
+          }
+        }
+      });
+  
+      // Seřadíme týmy podle bodů a pak podle skóre
+      const sortedTeams = Object.keys(teamsStats).map(teamId => ({
+        teamId: Number(teamId), // Ujistíme se, že ID týmu je číslo
+        ...teamsStats[Number(teamId)],
+      })).sort((a, b) => {
+        if (b.points === a.points) {
+          // Pokud mají stejný počet bodů, porovnáme skóre
+          const goalDifferenceB = b.goalsFor - b.goalsAgainst;
+          const goalDifferenceA = a.goalsFor - a.goalsAgainst;
+          return goalDifferenceB - goalDifferenceA;
+        }
+        return b.points - a.points;  // Seřadíme podle bodů
+      });
+  
+      // Načteme týmy a přiřadíme jim názvy
+      const teams = await this.supabaseService.getTeamsByIds(sortedTeams.map(team => team.teamId.toString()));
+  
+      // Vytvoříme výslednou tabulku týmů
+      const leagueTable = sortedTeams.map(teamStat => {
+        const team = teams.find(t => t.id === teamStat.teamId);
+        return {
+          name: team.name,
+          points: teamStat.points,
+          goalsFor: teamStat.goalsFor,
+          goalsAgainst: teamStat.goalsAgainst,
+          gamesPlayed: teamStat.gamesPlayed,
+        };
+      });
+  
+      // Jeden return, který vrací konečnou tabulku
+      return leagueTable;
+    } catch (error) {
+      console.error('Chyba při načítání tabulky ligy:', error);
+      throw error; // Případně vyhození chyby, pokud se něco nepovede
     }
   }
 }

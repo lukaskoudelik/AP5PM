@@ -2,3 +2,51 @@ on-thumbnail.prf {
     height: 100px;
     width: 100px;
 }
+ion-thumbnail.prf {
+    height: 100px;
+    width: 100px;
+}
+
+ion-card {
+    padding: 0;
+    margin: 0;
+}
+
+.cardhdr {
+    display: flex;
+    align-items: left;
+}
+
+
+ion-thumbnail.small {
+    height: 2rem;
+    width: 2rem;
+}
+
+ion-thumbnail.home {
+    margin-right: 10px;
+}
+
+ion-thumbnail.away {
+    margin-left: 10px;
+}
+
+p.result {
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.flex-start {
+    display: flex;
+    justify-content: flex-start;
+  }
+
+.flex-end {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  ion-segment-view {
+    width: 100%;
+    margin: 0;
+  }

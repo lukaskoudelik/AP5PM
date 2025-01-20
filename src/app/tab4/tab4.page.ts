@@ -7,22 +7,17 @@ import { Component, OnInit } from '@angular/core';
   standalone: false,
 })
 export class Tab4Page implements OnInit {
-  prefersDark!: MediaQueryList; // Pro sledování změn preferencí barevného schématu
   isDarkMode!: boolean; // Aktuální stav tmavého režimu
 
-  constructor() {}
+  constructor() { }
 
   ngOnInit() {
-    // Získání preferencí barevného schématu uživatele
-    this.prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
-    this.isDarkMode = this.prefersDark.matches;
-
     // Inicializace podle uživatelských preferencí
-    this.updateDarkMode(this.isDarkMode);
+    this.isDarkMode = document.documentElement.classList.contains('ion-palette-dark');
 
     // Poslouchání změn barevného schématu
-    this.prefersDark.addEventListener('change', (event) => {
-      this.updateDarkMode(event.matches);
+    document.documentElement.addEventListener('classChange', () => {
+      this.isDarkMode = document.documentElement.classList.contains('ion-palette-dark');
     });
   }
 
@@ -34,7 +29,10 @@ export class Tab4Page implements OnInit {
 
   // Aktualizace třídy na elementu <html> pro přepnutí režimu
   private updateDarkMode(isDark: boolean) {
-    this.isDarkMode = isDark;
     document.documentElement.classList.toggle('ion-palette-dark', isDark);
+
+    // Vytvoříme vlastní event pro detekci změny třídy
+    const event = new Event('classChange');
+    document.documentElement.dispatchEvent(event);
   }
 }

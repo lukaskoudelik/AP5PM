@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SupabaseService } from '../services/supabase.service';
-import { Router, NavigationEnd  } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 
 @Component({
   selector: 'app-tab1',
@@ -8,7 +8,7 @@ import { Router, NavigationEnd  } from '@angular/router';
   styleUrls: ['tab1.page.scss'],
   standalone: false,
 })
-export class Tab1Page implements OnInit{
+export class Tab1Page implements OnInit {
 
   favoriteTeams: any[] = []; // Seznam oblíbených týmů
   searchQuery: string = '';
@@ -18,7 +18,7 @@ export class Tab1Page implements OnInit{
   constructor(
     private supabaseService: SupabaseService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.loadFavoriteTeams();
@@ -72,9 +72,9 @@ export class Tab1Page implements OnInit{
     this.loadFavoriteTeams(); // Aktualizace seznamu
   }
 
-   // Zavolá se, když je menu otevřeno
-   onMenuOpened() {
-      this.loadFavoriteTeams();
+  // Zavolá se, když je menu otevřeno
+  onMenuOpened() {
+    this.loadFavoriteTeams();
   }
 
   filterResults() {
@@ -119,7 +119,7 @@ export class Tab1Page implements OnInit{
 
   async formatData(data: any[], type: string) {
     const formattedData = [];
-    
+
     for (const item of data) {
       const photoUrl = await this.supabaseService.getPhotoUrl(item.photo_url);
       formattedData.push({

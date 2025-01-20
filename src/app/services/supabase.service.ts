@@ -85,13 +85,30 @@ export class SupabaseService {
     return data || null;
   }
 
+  async getGameById(gameId: string) {
+    const { data, error } = await this.supabase.from('games').select('*').eq('id', gameId).single();
+    if (error) {
+      console.error(`Chyba při načítání zápasu s ID ${gameId}:`, error.message);
+      return null;
+    }
+    return data || null;
+  }
+
+  async getGoalsByGameId(gameId: string) {
+    const { data, error } = await this.supabase.from('goals').select('*').eq('game_id', gameId);
+    if (error) {
+      console.error(`Chyba při načítání gólů:`, error.message);
+      return [];
+    }
+    return data || [];
+  }
+
   async getGamesByTeamId(teamId: string) {
     const { data, error } = await this.supabase.from('games').select('*').or(`home_team_id.eq.${teamId},away_team_id.eq.${teamId}`);
     if (error) {
       console.error(`Chyba při načítání zápasu:`, error.message);
       return [];
     }
-    console.log(`ID týmu ${data}`)
     return data || [];
   }
 
@@ -133,4 +150,50 @@ export class SupabaseService {
     return { homeTeam, awayTeam };
   }
 
+  async getGamePlayersByPlayerId(playerId: string) {
+    const { data, error } = await this.supabase.from('game_players').select('*').eq('player_id', playerId);
+    if (error) {
+      console.error(`Chyba při načítání zápasu:`, error.message);
+      return [];
+    }
+    return data || [];
+  }
+
+  async getGamesByIds(gameIds: string[]) {
+    try {
+      const { data, error } = await this.supabase
+        .from('games')
+        .select('*')
+        .in('id', gameIds);
+  
+      if (error) {
+        throw error;
+      }
+  
+      return data || [];
+  
+    } catch (error) {
+      console.error('Error fetching games by IDs:', error);
+      throw error;
+    }
+  }
+
+  async getTeamsByIds(teamIds: string[]) {
+    try {
+      const { data, error } = await this.supabase
+        .from('teams')
+        .select('*')
+        .in('id', teamIds);
+  
+      if (error) {
+        throw error;
+      }
+  
+      return data || [];
+  
+    } catch (error) {
+      console.error('Error fetching games by IDs:', error);
+      throw error;
+    }
+  }
 }

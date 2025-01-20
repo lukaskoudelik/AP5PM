@@ -35,9 +35,7 @@
         <ion-icon [class]="isFavoriteItem('team', team.id) ? 'heart-icon-active-light' : 'heart-icon-deactive'"
           name="heart"></ion-icon>
       </ion-button>
-      <ion-button (click)="navigateToSearch()">
-        <ion-icon slot="icon-only" name="search"></ion-icon>
-      </ion-button>
+      <ion-back-button defaultHref="/tabs/tab1"></ion-back-button>
     </ion-buttons>
   </ion-toolbar>
   <ion-header collapse="condense">
@@ -46,6 +44,16 @@
       <ion-title *ngIf="isLoading" size="large">Načítám tým...</ion-title>
     </ion-toolbar>
   </ion-header>
+
+  <div class="ion-page" id="teams-content">
+    <ion-content [fullscreen]="true">
+      <ion-header collapse="condense">
+        <ion-toolbar>
+          <ion-title size="large">Týmy</ion-title>
+        </ion-toolbar>
+      </ion-header>
+    </ion-content>
+  </div>
 
   <ion-content [fullscreen]="true">
     <ion-card *ngIf="league && team && !isLoading">
@@ -147,7 +155,16 @@
             </ion-list>
           </ion-segment-content>
           <ion-segment-content id="table">
-            <!-- Tabulka -->
+            <ion-list *ngIf="!isLoading && leagueTable.length > 0">
+              <ion-item *ngFor="let team of leagueTable; let i = index">
+                <ion-label>
+                  <h2>{{ i + 1 }}. {{ team.name }}</h2>
+                  <p>Body: {{ team.points }} | Skóre: {{ team.goalsFor }} - {{ team.goalsAgainst }} | Zápasy: {{ team.gamesPlayed }}</p>
+                </ion-label>
+              </ion-item>
+            </ion-list>
+          
+            <p *ngIf="!isLoading && leagueTable.length === 0">Žádná data k zobrazení.</p>
           </ion-segment-content>
         </ion-segment-view>
       </ion-card-content>
