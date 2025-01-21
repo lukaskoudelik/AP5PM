@@ -201,6 +201,11 @@ export class TeamPage implements OnInit {
     }
   }
 
+  async loadPhotoToTable(photourl: string){
+      const url = await this.supabaseService.getPhotoUrl(photourl);
+      return(url);
+  }
+
   async loadLeagueTable(leagueId: number) {
     try {
       // Načteme všechny zápasy pro danou ligu
@@ -262,16 +267,18 @@ export class TeamPage implements OnInit {
       const teams = await this.supabaseService.getTeamsByIds(sortedTeams.map(team => team.teamId.toString()));
   
       // Vytvoříme výslednou tabulku týmů
-      const leagueTable = sortedTeams.map(teamStat => {
+      const leagueTable = await Promise.all(sortedTeams.map( async teamStat => {
         const team = teams.find(t => t.id === teamStat.teamId);
+        const photoUrl = await this.supabaseService.getPhotoUrl(team.photo_url);
         return {
           name: team.name,
           points: teamStat.points,
           goalsFor: teamStat.goalsFor,
           goalsAgainst: teamStat.goalsAgainst,
           gamesPlayed: teamStat.gamesPlayed,
+          photoUrl
         };
-      });
+      }));
   
       // Jeden return, který vrací konečnou tabulku
       return leagueTable;

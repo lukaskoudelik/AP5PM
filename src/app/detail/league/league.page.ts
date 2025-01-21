@@ -246,16 +246,18 @@ async loadLeagueTable(leagueId: number) {
     const teams = await this.supabaseService.getTeamsByIds(sortedTeams.map(team => team.teamId.toString()));
 
     // Vytvoříme výslednou tabulku týmů
-    const leagueTable = sortedTeams.map(teamStat => {
+    const leagueTable = await Promise.all(sortedTeams.map( async teamStat => {
       const team = teams.find(t => t.id === teamStat.teamId);
+      const photoUrl = await this.supabaseService.getPhotoUrl(team.photo_url);
       return {
         name: team.name,
         points: teamStat.points,
         goalsFor: teamStat.goalsFor,
         goalsAgainst: teamStat.goalsAgainst,
         gamesPlayed: teamStat.gamesPlayed,
+        photoUrl
       };
-    });
+    }));
 
     return leagueTable;
   } catch (error) {

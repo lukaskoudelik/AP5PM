@@ -36,12 +36,14 @@ export class PlayerPage implements OnInit {
       const data = await this.supabaseService.getPlayerById(id);
       if (data) {
         this.player = data;
-        this.isLoading = false;
         this.loadPhotoUrl(this.player.photo_url);
         if (this.player.team_id) {
           this.loadteamForPlayer(this.player.team_id);   
         }
+        if (this.player.id){
         this.loadGamesWithTeams(this.player.id);
+        }
+        this.isLoading = false;
       }
     }
     this.isFavoriteItem('player', this.player.id);
@@ -166,6 +168,7 @@ export class PlayerPage implements OnInit {
 
   async loadGamesWithTeams(playerId: number) {
     try {
+      this.isLoading = true;
       const gamePlayersData = await this.supabaseService.getGamePlayersByPlayerId(`${playerId}`);
       this.playersGame = gamePlayersData;
       this.games = [];
@@ -193,18 +196,33 @@ export class PlayerPage implements OnInit {
         ? `(${playerGoals.map(goal => `${goal.minute}'`).join(', ')})`
         : '';
 
+        let playerRole: string;
+        if (playerGame?.role == "starter")
+        {
+          playerRole = "základní sestava";
+        }
+        else if (playerGame?.role == "bench")
+        {
+          playerRole = "střídající hráč";
+        }
+        else {
+          playerRole = "mimo sestavu";
+        }
+
+        const role = playerRole;
+
         return {
           ...game,
           homeTeam,
           awayTeam,
-          role: playerGame?.role || null,
+          role,
           playerGoalsCount,
           playerGoalsMinutes
         };
       }));
   
       this.games = gamesWithTeams.filter(game => game.result).sort((a, b) => b.round_number - a.round_number);;
-
+      this.isLoading = false;
   
     } catch (error) {
       console.error('Chyba při načítání zápasů s týmy:', error);

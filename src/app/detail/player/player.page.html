@@ -22,7 +22,7 @@
   </ion-content>
 </ion-menu>
 
-<ion-header [translucent]="true">
+<ion-header [translucent]="true" id="players-content">
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-menu-button menu="players-detail-menu"></ion-menu-button>
@@ -40,81 +40,84 @@
   </ion-toolbar>
 </ion-header>
 
-<div class="ion-page" id="players-content">
-  <ion-content [fullscreen]="true">
-    <ion-header collapse="condense">
-      <ion-toolbar>
-        <ion-title size="large">Hráči</ion-title>
-      </ion-toolbar>
-    </ion-header>
-  </ion-content>
-</div>
-
-<ion-content [fullscreen]="true">
-  <ion-card *ngIf="player && team && playersGame && !isLoading">
-
-    <ion-card-header>
-      <div class="cardhdr">
-        <ion-thumbnail slot="start" class="prf">
-          <img [src]="player.photoUrl" alt="{{ player.second_name }}" />
-        </ion-thumbnail>
-        <div class="ion-padding">
-          <ion-card-title>{{ player.first_name }} {{ player.second_name }}</ion-card-title>
+<ion-content>
+  <ion-card *ngIf="player && team && !isLoading">
+    <ion-grid class="ion-padding">
+      <ion-row class="ion-align-items-center">
+        <ion-col size="6rem">
+          <ion-thumbnail class="prf">
+            <img [src]="player.photoUrl" alt="{{ player.name }}" />
+          </ion-thumbnail>
+        </ion-col>
+        <ion-col class="ion-padding">
+          <ion-card-title>{{ player.first_name}}  {{ player.second_name }}</ion-card-title>
           <ion-card-subtitle>{{ team.name }}</ion-card-subtitle>
-        </div>
-      </div>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-segment [(ngModel)]="selectedSegment">
-        <ion-segment-button value="results" content-id="result">
-          Odehrané zápasy
-        </ion-segment-button>
-      </ion-segment>
-
-      <ion-segment-view>
-        <ion-segment-content id="result">
-          <ion-list *ngIf="games">
-            <ion-item *ngFor="let game of games">
-              <ion-grid fixed="true">
-                <ion-row>
-                  <ion-col class="ion-text-center ion-padding">
-                    <h2>{{ game.round_number }}. kolo - {{ game.date | date:'dd. MM. yyyy'}}</h2>
-                  </ion-col>
-                </ion-row>
-                <ion-row>
-                  <ion-col class="ion-text-left flex-start">
-
-                    <ion-thumbnail class="small fixed home">
-                      <img [src]="game.homeTeam.photoUrl" alt="{{ game.homeTeam.name }}" />
-                    </ion-thumbnail>
-                    <p>{{ game.homeTeam.name }}</p>
-                  </ion-col>
-
-                  <ion-col class="ion-text-center" size="2">
-                    <p class="result">{{ game.result }}</p>
-                  </ion-col>
-
-                  <ion-col class="ion-text-right flex-end">
-                    <p>{{ game.awayTeam.name }}</p>
-
-                    <ion-thumbnail class="small fixed away">
-                      <img [src]="game.awayTeam.photoUrl" alt="{{ game.awayTeam.name }}" />
-                    </ion-thumbnail>
-                  </ion-col>
-                </ion-row>
-                <ion-row>
-                  <ion-col class="ion-text-left ion-padding">
-                    <h2>Role: {{ game.role }}, vstřelené góly: {{ game.playerGoalsCount }} {{ game.playerGoalsMinutes }}
-                    </h2>
-                  </ion-col>
-                </ion-row>
-              </ion-grid>
-            </ion-item>
-          </ion-list>
-        </ion-segment-content>
-      </ion-segment-view>
-    </ion-card-content>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
   </ion-card>
+  <ion-segment [(ngModel)]="selectedSegment">
+    <ion-segment-button value="results">
+      Odehrané zápasy
+    </ion-segment-button>
+  </ion-segment>
+  <div [ngSwitch]="selectedSegment">
+    <div *ngSwitchCase="'results'">
+      <ion-list *ngIf="games && !isLoading">
+        <ion-item *ngFor="let game of games">
+          <ion-label>
+            <ion-grid fixed="true">
+              <ion-row>
+                <ion-col class="ion-text-center ion-padding">
+                  <h2>{{ game.round_number }}. kolo - {{ game.date | date:'dd. MM. yyyy'}}</h2>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col class="ion-text-left flex-start" size="2rem">
+                  <ion-thumbnail class="small fixed home">
+                    <img [src]="game.homeTeam.photoUrl" alt="{{ game.homeTeam.name }}" />
+                  </ion-thumbnail>
+                </ion-col>
+                <ion-col class="ion-text-left flex-start">
+                  <p>{{ game.homeTeam.name }}</p>
+                </ion-col>
+                <ion-col class="ion-text-center" size="2rem">
+                  <p class="result">{{ game.result }}</p>
+                </ion-col>
+                <ion-col class="ion-text-right flex-end">
+                  <p>{{ game.awayTeam.name }}</p>
+                </ion-col>
+                <ion-col class="ion-text-right flex-end" size="2rem">
+                  <ion-thumbnail class="small fixed away">
+                    <img [src]="game.awayTeam.photoUrl" alt="{{ game.awayTeam.name }}" />
+                  </ion-thumbnail>
+                </ion-col>
+              </ion-row>
+
+              <ion-row>
+                <ion-col class="ion-text-left ion-padding" *ngIf="player.team_id != game.away_team_id">
+                  <h2>{{ game.role }}</h2>
+                  <p *ngIf="game.playerGoalsCount == 0">{{ game.playerGoalsCount }} gólů</p>
+                  <p *ngIf="game.playerGoalsCount == 1">{{ game.playerGoalsCount }} gól {{ game.playerGoalsMinutes }}
+                  </p>
+                  <p *ngIf="game.playerGoalsCount > 1">{{ game.playerGoalsCount }} góly {{ game.playerGoalsMinutes }}
+                  </p>
+                </ion-col>
+                <ion-col class="ion-text-right ion-padding" *ngIf="player.team_id == game.away_team_id">
+                  <h2>{{ game.role }}</h2>
+                  <p *ngIf="game.playerGoalsCount == 0">{{ game.playerGoalsCount }} gólů</p>
+                  <p *ngIf="game.playerGoalsCount == 1">{{ game.playerGoalsCount }} gól {{ game.playerGoalsMinutes }}
+                  </p>
+                  <p *ngIf="game.playerGoalsCount > 1">{{ game.playerGoalsCount }} góly {{ game.playerGoalsMinutes }}
+                  </p>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </div>
+  </div>
 </ion-content>
 <!--
 <ion-tabs>

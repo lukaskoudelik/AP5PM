@@ -1,6 +1,6 @@
 ion-thumbnail.prf {
-    height: 100px;
-    width: 100px;
+    height: 6rem;
+    width: 6rem;
 }
 
 ion-card {
@@ -19,14 +19,6 @@ ion-thumbnail.small {
     width: 2rem;
 }
 
-ion-thumbnail.home {
-    margin-right: 10px;
-}
-
-ion-thumbnail.away {
-    margin-left: 10px;
-}
-
 p.result {
     font-size: 1rem;
     font-weight: bold;
@@ -42,7 +34,36 @@ p.result {
     justify-content: flex-end;
   }
 
-  ion-segment-view {
-    width: 100%;
-    margin: 0;
-  }
+  .tabhead {
+    --background: lightgray;
+    font-size: 0.8em;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.tabhead ion-grid {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.nomg {
+    margin-top: 0;
+    padding-top: 0;
+}
+
+.colcol {
+    font-weight: bold;
+    color: var(--ion-color-primary);
+}
+
+.ion-palette-dark {
+    .colcol {
+        color: var(--ion-color-secondary);
+    }
+
+    .tabhead {
+        --background: var(--ion-color-primary);
+    }
+}
