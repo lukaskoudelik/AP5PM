@@ -9,11 +9,8 @@
 <ion-content [fullscreen]="true">
   <ion-list inset="true">
     <ion-item>
-      <ion-toggle
-      [checked]="isDarkMode"
-      (ionChange)="toggleDarkMode($event)"
-      justify="space-between"
-      id="paletteToggle">Dark Mode</ion-toggle>
+      <ion-toggle [checked]="isDarkMode" (ionChange)="toggleDarkMode($event)" justify="space-between"
+        id="paletteToggle">Dark Mode</ion-toggle>
     </ion-item>
   </ion-list>
 </ion-content>

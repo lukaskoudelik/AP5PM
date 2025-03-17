@@ -1,31 +1,7 @@
-<ion-menu content-id="divisions-content" menu-id="divisions-detail-menu" (ionDidOpen)="onMenuOpened()">
-  <ion-header>
-    <ion-toolbar>
-      <ion-title>Oblíbené soutěže</ion-title>
-    </ion-toolbar>
-  </ion-header>
-  <ion-content>
-    <ion-list *ngIf="favoriteLeagues.length > 0; else noFavorites">
-      <ion-item *ngFor="let league of favoriteLeagues" (click)="onItemClick($event, league)">
-        <ion-thumbnail slot="start">
-          <img [src]="league.photoUrl" alt="{{ league.name }}" />
-        </ion-thumbnail>
-        <ion-label>{{ league.name }}</ion-label>
-        <ion-button slot="end" fill="clear" (click)="toggleFavoriteFromMenu(league, 'league')" color="danger">
-          <ion-icon class="heart-icon-active" name="heart"></ion-icon>
-        </ion-button>
-      </ion-item>
-    </ion-list>
-    <ng-template #noFavorites>
-      <p class="ion-padding">Nemáte žádné oblíbené soutěže.</p>
-    </ng-template>
-  </ion-content>
-</ion-menu>
-
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-menu-button menu="divisions-detail-menu"></ion-menu-button>
+      <ion-menu-button menu="dynamic-menu"></ion-menu-button>
     </ion-buttons>
     <ion-title *ngIf="league && !isLoading">{{ league.name }}</ion-title>
     <ion-title *ngIf="isLoading">Načítám ligu...</ion-title>
@@ -35,12 +11,12 @@
         <ion-icon [class]="isFavoriteItem('league', league.id) ? 'heart-icon-active-light' : 'heart-icon-deactive'"
           name="heart"></ion-icon>
       </ion-button>
-      <ion-back-button defaultHref="/tabs/tab2"></ion-back-button>
+      <ion-back-button defaultHref="/tabs/league"></ion-back-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content id="divisions-content">
+<ion-content>
   <ion-card *ngIf="league && !isLoading">
     <ion-grid class="ion-padding">
       <ion-row class="ion-align-items-center">
@@ -167,7 +143,7 @@
             </ion-row>
           </ion-grid>
         </ion-item>
-        <ion-item *ngFor="let team of leagueTable; let i = index">
+        <ion-item *ngFor="let team of leagueTable; let i = index" (click)="onItemClick($event, team, 'team')">
           <ion-grid fixed="true">
             <ion-row class="ion-justify-content-center ion-align-items-center">
               <ion-col size="1.2" class="colcol">
@@ -197,30 +173,3 @@
     </div>
   </div>
 </ion-content>
-<!--
-<ion-tabs>
-
-  <ion-tab-bar slot="bottom">
-    <ion-tab-button (click)="navigateToTab('tab1')">
-      <ion-icon aria-hidden="true" name="football-outline"></ion-icon>
-      <ion-label>Týmy</ion-label>
-    </ion-tab-button>
-
-    <ion-tab-button (click)="navigateToTab('tab2')">
-      <ion-icon aria-hidden="true" name="git-branch-outline"></ion-icon>
-      <ion-label>Soutěže</ion-label>
-    </ion-tab-button>
-
-    <ion-tab-button (click)="navigateToTab('tab3')">
-      <ion-icon aria-hidden="true" name="people-outline"></ion-icon>
-      <ion-label>Hráči</ion-label>
-    </ion-tab-button>
-
-    <ion-tab-button (click)="navigateToTab('tab4')">
-      <ion-icon aria-hidden="true" name="settings-outline"></ion-icon>
-      <ion-label>Nastavení</ion-label>
-    </ion-tab-button>
-  </ion-tab-bar>
-
-</ion-tabs>
--->

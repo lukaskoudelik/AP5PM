@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { SupabaseService } from '../../services/supabase.service';
 import { Router } from '@angular/router';
+import { AppService } from 'src/app/services/app.service';
 
 @Component({
   selector: 'app-league',
@@ -26,7 +27,8 @@ export class LeaguePage implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private supabaseService: SupabaseService,
-    private router: Router
+    private router: Router,
+    private appService: AppService
   ) {}
 
   
@@ -84,27 +86,8 @@ export class LeaguePage implements OnInit {
     }
 
     localStorage.setItem('favorites', JSON.stringify(Array.from(favorites)));
-    this.isFavoriteItem(type, item.id);
-  }
-
-  // Přidání nebo odebrání lig z oblíbených
-  toggleFavoriteFromMenu(league: any, type: string) {
-    const key = `${type}:${league.id}`;
-    const storedFavorites = localStorage.getItem('favorites');
-    let favorites = new Set<string>();
-
-    if (storedFavorites) {
-      favorites = new Set(JSON.parse(storedFavorites));
-    }
-
-    if (favorites.has(key)) {
-      favorites.delete(key);
-    } else {
-      favorites.add(key);
-    }
-
-    localStorage.setItem('favorites', JSON.stringify(Array.from(favorites)));
     this.loadFavoriteLeagues();
+    this.isFavoriteItem(type, item.id);
   }
 
   isFavoriteItem(type: string, id: string): boolean {
@@ -177,14 +160,8 @@ export class LeaguePage implements OnInit {
     this.loadFavoriteLeagues();
 }
 
-onItemClick(event: Event, league: any) {
-  const clickedElement = event.target as HTMLElement;
-
-  if (clickedElement.tagName === 'ION-BUTTON') {
-    event.preventDefault();
-  } else {
-    this.router.navigate(['../../league', league.id]);
-  }
+onItemClick(event: Event, league: any, type: 'league' | 'team' | 'player'){
+  this.appService.onItemClick(event, league, type);
 }
 
 
@@ -250,6 +227,7 @@ async loadLeagueTable(leagueId: number) {
       const team = teams.find(t => t.id === teamStat.teamId);
       const photoUrl = await this.supabaseService.getPhotoUrl(team.photo_url);
       return {
+        id: team.id,
         name: team.name,
         points: teamStat.points,
         goalsFor: teamStat.goalsFor,

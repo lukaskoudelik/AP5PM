@@ -42,13 +42,8 @@ p.result {
     justify-content: flex-end;
 }
 
-ion-segment-view {
-    width: 100%;
-    margin: 0;
-}
 
 .tabhead {
-    --background: lightgray;
     font-size: 0.8em;
     margin-top: 0;
     margin-bottom: 0;
@@ -66,17 +61,3 @@ ion-segment-view {
     padding-top: 0;
 }
 
-.colcol {
-    font-weight: bold;
-    color: var(--ion-color-primary);
-}
-
-.ion-palette-dark {
-    .colcol {
-        color: var(--ion-color-secondary);
-    }
-
-    .tabhead {
-        --background: var(--ion-color-primary);
-    }
-}

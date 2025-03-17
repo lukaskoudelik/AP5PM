@@ -1,0 +1,68 @@
+<ion-app>
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button menu="dynamic-menu"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      {{ activeTab === 'league' ? 'Soutěže' :
+      activeTab === 'team' ? 'Týmy' :
+      'Hráči' }}
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button [routerLink]="'../../search'">
+        <ion-icon slot="icon-only" name="search"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content>
+  <ion-card>
+    <ion-card-header>
+      <ion-searchbar [placeholder]="activeTab === 'league' ? 'Hledat soutěž...' : 
+                      activeTab === 'team' ? 'Hledat tým...' : 
+                      'Hledat hráče...'" [(ngModel)]="searchQuery" (ionInput)="onSearchInput(activeTab)">
+      </ion-searchbar>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list *ngIf="filteredResults.length > 0">
+        <ion-item *ngFor="let result of filteredResults" (click)="onItemClick($event, result, activeTab)">
+          <ion-thumbnail slot="start">
+            <img [src]="result.photoUrl" alt="{{ result.name }}" />
+          </ion-thumbnail>
+          <ion-label>
+            <h2>{{ result.name }}</h2>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title class="ion-text-center">
+        {{ activeTab === 'league' ? 'Oblíbené soutěže' :
+        activeTab === 'team' ? 'Oblíbené týmy' :
+        'Oblíbení hráči' }}
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list *ngIf="favoriteItems[activeTab].length > 0; else noFavorites">
+        <ion-item *ngFor="let item of favoriteItems[activeTab]" (click)="onItemClick($event, item, activeTab)">
+          <ion-thumbnail slot="start">
+            <img [src]="item.photoUrl" alt="{{ item.name }}" />
+          </ion-thumbnail>
+          <ion-label>
+            {{ item.name }}
+          </ion-label>
+        </ion-item>
+      </ion-list>
+      <ng-template #noFavorites>
+        <p class="ion-padding">Nemáte žádné oblíbené položky.</p>
+      </ng-template>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
+</ion-app>

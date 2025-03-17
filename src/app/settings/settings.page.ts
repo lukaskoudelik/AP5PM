@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-tab4',
-  templateUrl: './tab4.page.html',
-  styleUrls: ['./tab4.page.scss'],
+  selector: 'app-settings',
+  templateUrl: './settings.page.html',
+  styleUrls: ['./settings.page.scss'],
   standalone: false,
 })
-export class Tab4Page implements OnInit {
+export class SettingsPage implements OnInit {
   isDarkMode!: boolean; // Aktuální stav tmavého režimu
 
   constructor() { }

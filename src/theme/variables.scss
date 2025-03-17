@@ -58,6 +58,15 @@ ion-segment.fltr {
   color: gray;
 }
 
+.tabhead {
+  --background: lightgray;
+}
+
+.colcol {
+  font-weight: bold;
+  color: var(--ion-color-primary);
+}
+
 .ion-palette-dark {
   ion-segment-button {
     --color: var(--ion-color-light);
@@ -66,14 +75,6 @@ ion-segment.fltr {
 
   ion-segment.fltr {
     --background: var(--ion-color-dark);
-  }
-
-  .colcol {
-    color: var(--ion-color-secondary);
-  }
-
-  .tabhead {
-    --background: var(--ion-color-primary);
   }
 
   .heart-icon-active {
@@ -85,4 +86,13 @@ ion-segment.fltr {
     font-size: 2rem;
     color: gray;
   }
+
+  .colcol {
+    color: var(--ion-color-secondary);
+  }
+
+  .tabhead {
+    --background: var(--ion-color-primary);
+  }
 }
+

@@ -1,3 +1,33 @@
 <ion-app>
-  <ion-router-outlet></ion-router-outlet>
+  <ion-menu content-id="main-content" menu-id="dynamic-menu" (ionDidOpen)="onMenuOpened()">
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>
+          {{ activeTab === 'league' ? 'Oblíbené soutěže' : 
+             activeTab === 'team' ? 'Oblíbené týmy' : 
+             'Oblíbení hráči' }}
+        </ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <ion-list *ngIf="favoriteItems[activeTab].length > 0; else noFavorites">
+        <ion-item *ngFor="let item of favoriteItems[activeTab]" (click)="onItemClick($event, item, activeTab)">
+          <ion-thumbnail slot="start">
+            <img [src]="item.photoUrl" alt="{{ item.name }}" />
+          </ion-thumbnail>
+          <ion-label>
+            {{ item.name }}
+          </ion-label>
+          <ion-button slot="end" fill="clear" (click)="toggleFavorite(item, activeTab)" color="danger">
+            <ion-icon class="heart-icon-active" name="heart"></ion-icon>
+          </ion-button>
+        </ion-item>
+      </ion-list>
+      <ng-template #noFavorites>
+        <p class="ion-padding">Nemáte žádné oblíbené položky.</p>
+      </ng-template>
+    </ion-content>
+  </ion-menu>
+
+  <ion-router-outlet id="main-content"></ion-router-outlet>
 </ion-app>
