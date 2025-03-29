@@ -1,32 +1,7 @@
-<ion-menu content-id="teams-content" menu-id="teams-detail-menu" (ionDidOpen)="onMenuOpened()">
-  <ion-header>
-    <ion-toolbar>
-      <ion-title>Oblíbené týmy</ion-title>
-    </ion-toolbar>
-  </ion-header>
-  <ion-content>
-    <ion-list *ngIf="favoriteTeams.length > 0; else noFavorites">
-      <ion-item *ngFor="let team of favoriteTeams" (click)="onItemClick($event, team)">
-        <ion-thumbnail slot="start" clas="side">
-          <img [src]="team.photoUrl" alt="{{ team.name }}" />
-        </ion-thumbnail>
-        <ion-label>{{ team.name }}</ion-label>
-
-        <ion-button slot="end" fill="clear" (click)="toggleFavoriteFromMenu(team, 'team')" color="danger">
-          <ion-icon class="heart-icon-active" name="heart"></ion-icon>
-        </ion-button>
-      </ion-item>
-    </ion-list>
-    <ng-template #noFavorites>
-      <p class="ion-padding">Nemáte žádné oblíbené týmy.</p>
-    </ng-template>
-  </ion-content>
-</ion-menu>
-
-<ion-header [translucent]="true" id="teams-content">
+<ion-header [translucent]="true">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-menu-button menu="teams-detail-menu"></ion-menu-button>
+      <ion-menu-button menu="dynamic-menu"></ion-menu-button>
     </ion-buttons>
     <ion-title *ngIf="team && !isLoading">{{ team.name }}</ion-title>
     <ion-title *ngIf="isLoading">Načítám tým...</ion-title>
@@ -36,7 +11,7 @@
         <ion-icon [class]="isFavoriteItem('team', team.id) ? 'heart-icon-active-light' : 'heart-icon-deactive'"
           name="heart"></ion-icon>
       </ion-button>
-      <ion-back-button defaultHref="/tabs/tab1"></ion-back-button>
+      <ion-back-button defaultHref="/tabs/team"></ion-back-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>

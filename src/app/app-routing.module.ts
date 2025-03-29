@@ -12,15 +12,15 @@ const routes: Routes = [
   },
   {
     path: 'team/:id',
-    loadComponent: () => import('./detail/team/team.page').then( m => m.TeamPage)
+    loadComponent: () => import('./detail/team-detail/team-detail.page').then( m => m.TeamDetailPage)
   },
   {
     path: 'league/:id',
-    loadComponent: () => import('./detail/league/league.page').then( m => m.LeaguePage)
+    loadComponent: () => import('./detail/league-detail/league-detail.page').then( m => m.LeagueDetailPage)
   },
   {
     path: 'player/:id',
-    loadComponent: () => import('./detail/player/player.page').then( m => m.PlayerPage)
+    loadComponent: () => import('./detail/player-detail/player-detail.page').then( m => m.PlayerDetailPage)
   },
   
 ];

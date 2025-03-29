@@ -43,7 +43,7 @@ export class AppService {
     return this.activeTabSubject.value;
   }
 
-  // Načítání oblíbených lig z localStorage
+  // Načítání oblíbených z localStorage
   async loadFavorites(type: 'league' | 'team' | 'player') {
     const storedFavorites = localStorage.getItem('favorites');
     let favorites = new Set<string>();
@@ -111,6 +111,18 @@ export class AppService {
 
     localStorage.setItem('favorites', JSON.stringify(Array.from(favorites)));
     this.loadFavorites(type);
+  }
+
+  isFavoriteItem(type: 'league' | 'team' | 'player', id: string): boolean {
+    const storedFavorites = localStorage.getItem('favorites');
+    if (!storedFavorites) {
+      return false;
+    }
+
+    const favorites = new Set(JSON.parse(storedFavorites));
+
+    return favorites.has(`${type}:${id}`);
+
   }
 
 }

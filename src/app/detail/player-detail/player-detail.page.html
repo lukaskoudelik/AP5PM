@@ -1,31 +1,7 @@
-<ion-menu content-id="players-content" menu-id="players-detail-menu" (ionDidOpen)="onMenuOpened()">
-  <ion-header>
-    <ion-toolbar>
-      <ion-title>Oblíbení hráči</ion-title>
-    </ion-toolbar>
-  </ion-header>
-  <ion-content>
-    <ion-list *ngIf="favoritePlayers.length > 0; else noFavorites">
-      <ion-item *ngFor="let player of favoritePlayers" (click)="onItemClick($event, player)">
-        <ion-thumbnail slot="start">
-          <img [src]="player.photoUrl" alt="{{ player.name }}" />
-        </ion-thumbnail>
-        <ion-label>{{ player.name }}</ion-label>
-        <ion-button slot="end" fill="clear" (click)="toggleFavoriteFromMenu(player, 'player')" color="danger">
-          <ion-icon class="heart-icon-active" name="heart"></ion-icon>
-        </ion-button>
-      </ion-item>
-    </ion-list>
-    <ng-template #noFavorites>
-      <p class="ion-padding">Nemáte žádné oblíbené hráče.</p>
-    </ng-template>
-  </ion-content>
-</ion-menu>
-
-<ion-header [translucent]="true" id="players-content">
+<ion-header [translucent]="true">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-menu-button menu="players-detail-menu"></ion-menu-button>
+      <ion-menu-button menu="dynamic-menu"></ion-menu-button>
     </ion-buttons>
     <ion-title *ngIf="player && !isLoading">{{ player.first_name }} {{ player.second_name }}</ion-title>
     <ion-title *ngIf="isLoading">Načítám hráče...</ion-title>
@@ -35,7 +11,7 @@
         <ion-icon [class]="isFavoriteItem('player', player.id) ? 'heart-icon-active-light' : 'heart-icon-deactive'"
           name="heart"></ion-icon>
       </ion-button>
-      <ion-back-button defaultHref="/tabs/tab3"></ion-back-button>
+      <ion-back-button defaultHref="/tabs/player"></ion-back-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -119,30 +95,3 @@
     </div>
   </div>
 </ion-content>
-<!--
-<ion-tabs>
-
-  <ion-tab-bar slot="bottom">
-    <ion-tab-button (click)="navigateToTab('tab1')">
-      <ion-icon aria-hidden="true" name="football-outline"></ion-icon>
-      <ion-label>Týmy</ion-label>
-    </ion-tab-button>
-
-    <ion-tab-button (click)="navigateToTab('tab2')">
-      <ion-icon aria-hidden="true" name="git-branch-outline"></ion-icon>
-      <ion-label>Soutěže</ion-label>
-    </ion-tab-button>
-
-    <ion-tab-button (click)="navigateToTab('tab3')">
-      <ion-icon aria-hidden="true" name="people-outline"></ion-icon>
-      <ion-label>Hráči</ion-label>
-    </ion-tab-button>
-
-    <ion-tab-button (click)="navigateToTab('tab4')">
-      <ion-icon aria-hidden="true" name="settings-outline"></ion-icon>
-      <ion-label>Nastavení</ion-label>
-    </ion-tab-button>
-  </ion-tab-bar>
-
-</ion-tabs>
--->
