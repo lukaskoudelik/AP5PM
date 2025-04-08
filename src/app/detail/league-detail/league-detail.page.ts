@@ -19,9 +19,8 @@ export class LeagueDetailPage implements OnInit {
   activeTab: 'league' = 'league';
 
   league: any;
-  isLoading: boolean = true;
   selectedSegment: string = 'results';
-  gamesPlayed: any[] = [];
+  playedGames: any[] = [];
   gamesToPlay: any[] = [];
   favoriteLeagues: any[] = [];
   leagueTable: any[] = [];
@@ -40,7 +39,6 @@ export class LeagueDetailPage implements OnInit {
       const data = await this.supabaseService.getLeagueById(id);
       if (data) {
         this.league = data;
-        this.isLoading = false;
         this.loadPhotoUrl(this.league.photo_url);
         this.loadGamesWithTeams();
         this.loadTable(this.league.id);
@@ -98,7 +96,7 @@ export class LeagueDetailPage implements OnInit {
         };
       }));
 
-      this.gamesPlayed = gamesWithTeams.filter(game => game.result).sort((a, b) => b.round_number - a.round_number);;
+      this.playedGames = gamesWithTeams.filter(game => game.result).sort((a, b) => b.round_number - a.round_number);;
       this.gamesToPlay = gamesWithTeams.filter(game => !game.result);
 
     } catch (error) {
@@ -108,12 +106,10 @@ export class LeagueDetailPage implements OnInit {
 
   async loadTable(leagueId: number) {
     try {
-      this.isLoading = true;
       this.leagueTable = await this.loadLeagueTable(leagueId);
     } catch (error) {
       console.error('Chyba při načítání tabulky ligy:', error);
     } finally {
-      this.isLoading = false;
     }
   }
 

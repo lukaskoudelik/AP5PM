@@ -17,7 +17,6 @@ import { AppService } from 'src/app/services/app.service';
 export class TeamDetailPage implements OnInit {
   team: any;
   league: any;
-  isLoading: boolean = true;
   selectedSegment: string = 'results';
   gamesPlayed: any[] = [];
   gamesToPlay: any[] = []; 
@@ -38,7 +37,6 @@ export class TeamDetailPage implements OnInit {
       const data = await this.supabaseService.getTeamById(id);
       if (data) {
         this.team = data;
-        this.isLoading = false;
         this.loadPhotoUrl(this.team.photo_url);
         if (this.team.league_id) {
           this.loadLeagueForTeam(this.team.league_id);   
@@ -117,12 +115,10 @@ export class TeamDetailPage implements OnInit {
 
   async loadTable(leagueId: number) {
     try {
-      this.isLoading = true;
       this.leagueTable = await this.loadLeagueTable(leagueId);  // Uložení výsledků do proměnné
     } catch (error) {
       console.error('Chyba při načítání tabulky ligy:', error);
     } finally {
-      this.isLoading = false;
     }
   }
 

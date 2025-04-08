@@ -3,10 +3,10 @@
     <ion-buttons slot="start">
       <ion-menu-button menu="dynamic-menu"></ion-menu-button>
     </ion-buttons>
-    <ion-title *ngIf="league && !isLoading">{{ league.name }}</ion-title>
-    <ion-title *ngIf="isLoading">Načítám ligu...</ion-title>
+    <ion-title *ngIf="league">{{ league.name }}</ion-title>
+    <ion-title *ngIf="!league">Načítám ligu...</ion-title>
     <ion-buttons slot="end">
-      <ion-button *ngIf="league && !isLoading" slot="end" fill="clear" (click)="toggleFavorite(league, 'league')"
+      <ion-button *ngIf="league" slot="end" fill="clear" (click)="toggleFavorite(league, 'league')"
         [color]="isFavoriteItem('league', league.id) ? 'danger' : 'medium'">
         <ion-icon [class]="isFavoriteItem('league', league.id) ? 'heart-icon-active-light' : 'heart-icon-deactive'"
           name="heart"></ion-icon>
@@ -17,7 +17,7 @@
 </ion-header>
 
 <ion-content>
-  <ion-card *ngIf="league && !isLoading">
+  <ion-card *ngIf="league">
     <ion-grid class="ion-padding">
       <ion-row class="ion-align-items-center">
         <ion-col size="6rem">
@@ -33,21 +33,21 @@
     </ion-grid>
 </ion-card>
   <ion-segment [(ngModel)]="selectedSegment">
-    <ion-segment-button value="results" content-id="result">
+    <ion-segment-button value="results">
       Výsledky
     </ion-segment-button>
-    <ion-segment-button value="matches" content-id="matches">
+    <ion-segment-button value="matches">
       Program
     </ion-segment-button>
-    <ion-segment-button value="table" content-id="table">
+    <ion-segment-button value="table">
       Tabulka
     </ion-segment-button>
   </ion-segment>
 
   <div [ngSwitch]="selectedSegment">
     <div *ngSwitchCase="'results'">
-      <ion-list *ngIf="gamesPlayed">
-        <ion-item *ngFor="let game of gamesPlayed">
+      <ion-list *ngIf="playedGames.length > 0">
+        <ion-item *ngFor="let game of playedGames">
           <ion-label>
             <ion-grid fixed="true">
               <ion-row>
@@ -80,9 +80,10 @@
           </ion-label>
         </ion-item>
       </ion-list>
+      <h3 *ngIf="playedGames.length == 0" class="ion-text-center ion-padding">Načítám výsledky...</h3>
     </div>
     <div *ngSwitchCase="'matches'">
-      <ion-list *ngIf="gamesToPlay">
+      <ion-list *ngIf="gamesToPlay.length > 0">
         <ion-item *ngFor="let game of gamesToPlay">
           <ion-label>
             <ion-grid fixed="true">
@@ -116,9 +117,10 @@
           </ion-label>
         </ion-item>
       </ion-list>
+      <h3 *ngIf="gamesToPlay.length == 0" class="ion-text-center ion-padding">Načítám zápasy...</h3>
     </div>
     <div *ngSwitchCase="'table'">
-      <ion-list *ngIf="!isLoading && leagueTable.length > 0" class="ion-non-padding nomg">
+      <ion-list *ngIf="leagueTable.length > 0" class="ion-non-padding nomg">
         <ion-item class="ion-non-padding tabhead">
           <ion-grid fixed="true">
             <ion-row class="ion-justify-content-center">
@@ -170,6 +172,7 @@
           </ion-grid>
         </ion-item>
       </ion-list>
+      <h3 *ngIf="leagueTable.length == 0" class="ion-text-center ion-padding">Načítám tabulku...</h3>
     </div>
   </div>
 </ion-content>

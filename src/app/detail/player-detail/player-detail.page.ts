@@ -32,19 +32,14 @@ export class PlayerDetailPage implements OnInit {
   ) { }
 
   async ngOnInit() {
-    const id = this.route.snapshot.paramMap.get('id');
+    const id = await this.route.snapshot.paramMap.get('id');
     if (id) {
       const data = await this.supabaseService.getPlayerById(id);
       if (data) {
         this.player = data;
-        this.loadPhotoUrl(this.player.photo_url);
-        if (this.player.team_id) {
-          this.loadteamForPlayer(this.player.team_id);   
-        }
-        if (this.player.id){
-        this.loadGamesWithTeams(this.player.id);
-        }
-        this.isLoading = false;
+        await this.loadPhotoUrl(this.player.photo_url);
+        await this.loadteamForPlayer(this.player.team_id);
+        await this.loadGamesWithTeams(this.player.id);
       }
     }
     this.isFavoriteItem('player', this.player.id);
