@@ -20,6 +20,10 @@ const routes: Routes = [
         loadChildren: () => import('../player/player.module').then(m => m.PlayerPageModule)
       },
       {
+        path: 'games',
+        loadChildren: () => import('../games/games.module').then(m => m.GamesPageModule)
+      },
+      {
         path: 'settings',
         loadChildren: () => import('../settings/settings.module').then(m => m.SettingsPageModule)
       },
@@ -34,7 +38,8 @@ const routes: Routes = [
     path: '',
     redirectTo: '/tabs/team',
     pathMatch: 'full'
-  }
+  },
+
 ];
 
 @NgModule({

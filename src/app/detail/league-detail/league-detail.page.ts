@@ -34,6 +34,7 @@ export class LeagueDetailPage implements OnInit {
 
 
   async ngOnInit() {
+    this.appService.setActiveTab(this.activeTab);
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       const data = await this.supabaseService.getLeagueById(id);

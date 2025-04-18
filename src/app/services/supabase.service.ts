@@ -44,6 +44,16 @@ export class SupabaseService {
     return data || [];
   }
 
+  // Načítání zápasů
+  async getGames() {
+    const { data, error } = await this.supabase.from('games').select('*');
+    if (error) {
+      console.error('Chyba při načítání zápasů:', error.message);
+      return [];
+    }
+    return data || [];
+  }
+
   async getPhotoUrl(path: string): Promise<string> {
     try {
       const { data } = this.supabase.storage.from('images').getPublicUrl(path);
@@ -195,5 +205,26 @@ export class SupabaseService {
       console.error('Error fetching games by IDs:', error);
       throw error;
     }
+  }
+
+  async getGamesByDate(date: string) {
+    const dayStart = new Date(date);
+    dayStart.setHours(0, 0, 0, 0);
+  
+    const dayEnd = new Date(date);
+    dayEnd.setHours(23, 59, 59, 999);
+  
+    const { data, error } = await this.supabase
+      .from('games')
+      .select('*')
+      .gte('date', dayStart.toISOString())
+      .lt('date', new Date(dayEnd.getTime() + 1).toISOString()); // posun o 1 ms za koncem dne
+  
+    if (error) {
+      console.error('Chyba při načítání zápasů:', error.message);
+      return [];
+    }
+  
+    return data || [];
   }
 }

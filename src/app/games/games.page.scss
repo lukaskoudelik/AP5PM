@@ -1,0 +1,33 @@
+::ng-deep .custom-date-modal {
+    --background: transparent;
+    --backdrop-opacity: 0.4; // tmavý průhledný pozadí za modalem
+    --box-shadow: none;
+  }
+
+.centered-container {
+    display: flex;
+    justify-content: center;
+}
+
+ion-card {
+    padding: 0;
+    margin: 0;
+}
+
+ion-thumbnail.small {
+    height: 2rem;
+    width: 2rem;
+}
+
+ion-thumbnail.home {
+    margin-right: 10px;
+}
+
+ion-thumbnail.away {
+    margin-left: 10px;
+}
+
+p.result {
+    font-size: 1rem;
+    font-weight: bold;
+}

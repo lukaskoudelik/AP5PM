@@ -146,7 +146,7 @@
           </ion-row>
         </ion-grid>
         </ion-item>
-        <ion-item *ngFor="let team of leagueTable; let i = index">
+        <ion-item *ngFor="let team of leagueTable; let i = index" (click)="onItemClick($event, team, 'team')">
           <ion-grid fixed="true">
             <ion-row class="ion-justify-content-center ion-align-items-center">
               <ion-col size="1.2" class="colcol">

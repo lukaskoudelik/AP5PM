@@ -15,6 +15,7 @@ import { AppService } from 'src/app/services/app.service';
   imports: [CommonModule, IonicModule, FormsModule],
 })
 export class TeamDetailPage implements OnInit {
+  activeTab: 'team' = 'team';
   team: any;
   league: any;
   selectedSegment: string = 'results';
@@ -32,6 +33,7 @@ export class TeamDetailPage implements OnInit {
   ) {}
 
   async ngOnInit() {
+    this.appService.setActiveTab(this.activeTab);
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       const data = await this.supabaseService.getTeamById(id);
@@ -197,7 +199,8 @@ export class TeamDetailPage implements OnInit {
           goalsFor: teamStat.goalsFor,
           goalsAgainst: teamStat.goalsAgainst,
           gamesPlayed: teamStat.gamesPlayed,
-          photoUrl
+          photoUrl,
+          id: team.id
         };
       }));
   

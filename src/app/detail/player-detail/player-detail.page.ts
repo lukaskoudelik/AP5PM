@@ -15,6 +15,7 @@ import { AppService } from 'src/app/services/app.service';
   imports: [CommonModule, IonicModule, FormsModule],
 })
 export class PlayerDetailPage implements OnInit {
+  activeTab: 'player' = 'player';
   player: any;
   team: any;
   games: any[] = [];
@@ -32,6 +33,7 @@ export class PlayerDetailPage implements OnInit {
   ) { }
 
   async ngOnInit() {
+    this.appService.setActiveTab(this.activeTab);
     const id = await this.route.snapshot.paramMap.get('id');
     if (id) {
       const data = await this.supabaseService.getPlayerById(id);
