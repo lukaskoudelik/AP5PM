@@ -169,6 +169,20 @@ export class SupabaseService {
     return data || [];
   }
 
+  async getPlayersByGameId(gameId: string) {
+    const { data, error } = await this.supabase
+      .from('game_players')
+      .select('*')
+      .eq('game_id', gameId);
+  
+    if (error) {
+      console.error('Chyba při načítání hráčů:', error.message);
+      return [];
+    }
+  
+    return data;
+  }
+
   async getGamesByIds(gameIds: string[]) {
     try {
       const { data, error } = await this.supabase
@@ -218,7 +232,7 @@ export class SupabaseService {
       .from('games')
       .select('*')
       .gte('date', dayStart.toISOString())
-      .lt('date', new Date(dayEnd.getTime() + 1).toISOString()); // posun o 1 ms za koncem dne
+      .lt('date', new Date(dayEnd.getTime() + 1).toISOString());
   
     if (error) {
       console.error('Chyba při načítání zápasů:', error.message);
@@ -227,4 +241,5 @@ export class SupabaseService {
   
     return data || [];
   }
+
 }

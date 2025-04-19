@@ -1,0 +1,125 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title *ngIf="game">Detail zápasu č. {{ game.id }}</ion-title>
+    <ion-title *ngIf="!game">Načítám zápas...</ion-title>
+    <ion-buttons slot="end">
+      <ion-back-button defaultHref="/tabs/games"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card *ngIf="game && !isLoading">
+    <ion-grid fixed="true">
+      <ion-row>
+        <ion-col class="ion-text-center">
+          <h2>{{ game.league.name}}: {{ game.round_number }}. kolo</h2>
+          <p>{{ game.date | date:'dd. MM. yyyy - HH:mm' }}</p>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col class="ion-text-left flex-start" size="2rem">
+          <ion-thumbnail class="small fixed home">
+            <img [src]="game.homeTeam.photoUrl" alt="{{ game.homeTeam.name }}" />
+          </ion-thumbnail>
+        </ion-col>
+        <ion-col class="ion-text-left flex-start">
+          <p>{{ game.homeTeam.name }}</p>
+        </ion-col>
+        <ion-col class="ion-text-center" size="2rem">
+          <p *ngIf="game.result" class="result">{{ game.result }}</p>
+          <p *ngIf="!game.result" class="result">-</p>
+        </ion-col>
+        <ion-col class="ion-text-right flex-end">
+          <p>{{ game.awayTeam.name }}</p>
+        </ion-col>
+        <ion-col class="ion-text-right flex-end" size="2rem">
+          <ion-thumbnail class="small fixed away">
+            <img [src]="game.awayTeam.photoUrl" alt="{{ game.awayTeam.name }}" />
+          </ion-thumbnail>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <ion-segment [(ngModel)]="selectedSegment">
+      <ion-segment-button value="events">
+        Události
+      </ion-segment-button>
+      <ion-segment-button value="squadlist">
+        Sestavy
+      </ion-segment-button>
+    </ion-segment>
+
+    <div [ngSwitch]="selectedSegment">
+      <div *ngSwitchCase="'events'">
+        <h3>Góly domácí</h3>
+        <ion-list *ngIf="homeGoals.length > 0">
+          <ion-item *ngFor="let goal of homeGoals">
+            <ion-label>
+              <h3>{{ goal.minute }}' - {{ goal.playerName }}</h3>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+        
+        <h3>Góly hosté</h3>
+        <ion-list *ngIf="awayGoals.length > 0">
+          <ion-item *ngFor="let goal of awayGoals">
+            <ion-label>
+              <h3>{{ goal.minute }}' - {{ goal.playerName }}</h3>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+        
+        <h3 *ngIf="homeGoals.length === 0 && awayGoals.length === 0" class="ion-text-center ion-padding">
+          Žádné góly dosud nepadly.
+        </h3>
+      </div>
+      <div *ngSwitchCase="'squadlist'">
+        <h3>Domácí - Základní sestava</h3>
+        <ion-list>
+          <ion-item *ngFor="let player of homeStarters">
+            <ion-label>
+              {{ player.position === 'goalkeeper' ? 'B' : player.position === 'defender' ? 'O' : player.position === 'midfielder' ? 'Z' : player.position === 'attacker' ? 'Ú' : 'N'}} 
+                {{ player.jersey_number }} {{ player.player.first_name }} {{ player.player.second_name }} <span *ngIf="player.captain">(C)</span>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+
+          <h3>Domácí - Náhradníci</h3>
+        <ion-list>
+          <ion-item *ngFor="let player of homeBench">
+            <ion-label>
+              {{ player.position === 'goalkeeper' ? 'B' : player.position === 'defender' ? 'O' : player.position === 'midfielder' ? 'Z' : player.position === 'attacker' ? 'Ú' : 'N'}} 
+                {{ player.jersey_number }} {{ player.player.first_name }} {{ player.player.second_name }} <span *ngIf="player.captain">(C)</span>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+
+      <h3>Hosté - Základní sestava</h3>
+    <ion-list>
+      <ion-item *ngFor="let player of awayStarters">
+        <ion-label>
+          {{ player.position === 'goalkeeper' ? 'B' : player.position === 'defender' ? 'O' : player.position === 'midfielder' ? 'Z' : player.position === 'attacker' ? 'Ú' : 'N'}} 
+            {{ player.jersey_number }} {{ player.player.first_name }} {{ player.player.second_name }} <span *ngIf="player.captain">(C)</span>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+
+      <h3>Hosté - Náhradníci</h3>
+    <ion-list>
+      <ion-item *ngFor="let player of awayBench">
+        <ion-label>
+          {{ player.position === 'goalkeeper' ? 'B' : player.position === 'defender' ? 'O' : player.position === 'midfielder' ? 'Z' : player.position === 'attacker' ? 'Ú' : 'N'}} 
+            {{ player.jersey_number }} {{ player.player.first_name }} {{ player.player.second_name }} <span *ngIf="player.captain">(C)</span>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+    </div>
+    </div>
+
+    <div class="ion-padding">
+      <p>Hřiště: Default Stadium</p>
+      <p>Rozhodčí: Jan Novák</p>
+      <p>Počet Diváků: 100</p>
+    </div>
+  </ion-card>
+</ion-content>

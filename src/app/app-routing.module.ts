@@ -22,6 +22,10 @@ const routes: Routes = [
     path: 'player/:id',
     loadComponent: () => import('./detail/player-detail/player-detail.page').then( m => m.PlayerDetailPage)
   },
+  {
+    path: 'game/:id',
+    loadComponent: () => import('./detail/game-detail/game-detail.page').then( m => m.GameDetailPage)
+  },
   
 ];
 @NgModule({
