@@ -106,16 +106,14 @@ export class PlayerDetailPage implements OnInit {
       // Načtení domácího a venkovního týmu s jejich fotografiemi
       const gamesWithTeams = await Promise.all(games.map(async (game) => {
         const playerGame = this.playersGame.find(pg => pg.game_id === game.id);
-        console.log(playerGame)
         const { homeTeam, awayTeam } = await this.supabaseService.getTeamsWithPhotos(game.home_team_id, game.away_team_id);
 
         const goals = await this.supabaseService.getGoalsByGameId(`${game.id}`); // Načtení všech gólů pro daný zápas
-        console.log(goals);
         const playerGoals = goals.filter(goal => goal.player_id === this.player.id);
 
         const playerGoalsCount = playerGoals.length;
         const playerGoalsMinutes = playerGoalsCount > 0
-        ? `(${playerGoals.map(goal => `${goal.minute}'`).join(', ')})`
+        ? `${playerGoals.map(goal => `${goal.minute}'`).join(', ')}`
         : '';
 
         let playerRole: string;
@@ -149,6 +147,10 @@ export class PlayerDetailPage implements OnInit {
     } catch (error) {
       console.error('Chyba při načítání zápasů s týmy:', error);
     }
+  }
+
+  goToGameDetail(gameId: string) {
+    this.appService.goToGameDetail(gameId);
   }
 
 }

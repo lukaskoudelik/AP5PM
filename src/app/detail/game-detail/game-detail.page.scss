@@ -1,22 +1,36 @@
-ion-card {
-    padding: 0;
-    margin: 0;
-}
 
-ion-thumbnail.small {
+  
+  .square-inner-game {
+    width: 6rem;
+    height: 6rem;
+    text-align: center;
+    font-size: 1em;
+  }
+  
+  .square-double {
+    width: 3.5rem;
     height: 2rem;
-    width: 2rem;
-}
-
-ion-thumbnail.home {
-    margin-right: 10px;
-}
-
-ion-thumbnail.away {
-    margin-left: 10px;
-}
-
-p.result {
-    font-size: 1rem;
-    font-weight: bold;
-}
+  }
+  
+  .square-logo-game {
+    width: 6rem;
+    height: 6rem;
+  }
+  
+  .score-cell {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  ion-thumbnail.big.fixed {
+    width: 6em;
+    height: 6em;
+    object-fit: cover;
+  }
+  
+  ion-thumbnail.big.fixed img {
+    border-radius: 20%;
+  }

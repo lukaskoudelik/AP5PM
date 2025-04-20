@@ -26,7 +26,6 @@ export class AppComponent implements OnInit {
   async onMenuOpened() {
     this.appService.loadFavorites(this.activeTab).then(items => {
       this.favoriteItems[this.activeTab] = items;
-      console.log(this.favoriteItems[this.activeTab])
     });
   }
 

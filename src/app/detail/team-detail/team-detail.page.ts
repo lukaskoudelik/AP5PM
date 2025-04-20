@@ -89,10 +89,6 @@ export class TeamDetailPage implements OnInit {
     }
   }
 
-  onSegmentChange(event: any) {
-    console.log('Selected Segment:', event.detail.value);
-  }
-
   async loadGamesWithTeams() {
     try {
       const games = await this.supabaseService.getGamesByTeamId(this.team.id);
@@ -210,5 +206,9 @@ export class TeamDetailPage implements OnInit {
       console.error('Chyba při načítání tabulky ligy:', error);
       throw error; // Případně vyhození chyby, pokud se něco nepovede
     }
+  }
+
+  goToGameDetail(gameId: string) {
+    this.appService.goToGameDetail(gameId);
   }
 }

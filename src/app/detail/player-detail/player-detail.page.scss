@@ -1,77 +1,47 @@
-ion-thumbnail.prf {
-    height: 6rem;
-    width: 6rem;
+.player-stats {
+    font-size: 0.8rem;
+    padding: 0.2rem 0.5rem 0.2rem 0.5rem;
 }
 
-ion-card {
-    padding: 0;
-    margin: 0;
-}
-
-.cardhdr {
-    display: flex;
-    align-items: left;
-}
-
-
-ion-thumbnail.small {
-    height: 2rem;
-    width: 2rem;
-}
-
-ion-thumbnail.home {
-    margin-right: 10px;
-}
-
-ion-thumbnail.away {
-    margin-left: 10px;
-}
-
-p.result {
+.player-stats ion-icon {
     font-size: 1rem;
-    font-weight: bold;
 }
 
-.flex-start {
+.main-info {
+    margin-bottom: 0;
+    border-bottom: solid 2px var(--ion-color-tertiary);
+}
+
+.stats {
+    background-color: var(--ion-color-white);
+    padding-top: 0.5rem;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.2rem;
+}
+
+.yellow {
+    color: gold;
+}
+
+.red {
+    color: darkred;
+}
+
+.home-flex {
     display: flex;
+    flex-direction: row;
     justify-content: flex-start;
-}
-
-.flex-end {
+    align-items: center;
+    gap: 0.4rem;
+    width: 100%;
+  }
+  
+  .away-flex {
     display: flex;
-    justify-content: flex-end;
-}
-
-.tabhead {
-    --background: lightgray;
-    font-size: 0.8em;
-    margin-top: 0;
-    margin-bottom: 0;
-}
-
-.tabhead ion-grid {
-    margin-top: 0;
-    margin-bottom: 0;
-    padding-top: 0;
-    padding-bottom: 0;
-}
-
-.nomg {
-    margin-top: 0;
-    padding-top: 0;
-}
-
-.colcol {
-    font-weight: bold;
-    color: var(--ion-color-primary);
-}
-
-.ion-palette-dark {
-    .colcol {
-        color: var(--ion-color-secondary);
-    }
-
-    .tabhead {
-        --background: var(--ion-color-primary);
-    }
-}
+    flex-direction: row-reverse;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 0.4rem;
+    width: 100%;
+  }

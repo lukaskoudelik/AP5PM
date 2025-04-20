@@ -26,7 +26,7 @@
           </ion-thumbnail>
         </ion-col>
         <ion-col class="ion-padding" *ngIf="player && team">
-          <ion-card-title>{{ player.first_name}}  {{ player.second_name }}</ion-card-title>
+          <ion-card-title>{{ player.first_name}} {{ player.second_name }}</ion-card-title>
           <ion-card-subtitle>{{ team.name }}</ion-card-subtitle>
         </ion-col>
       </ion-row>
@@ -40,56 +40,79 @@
   <div [ngSwitch]="selectedSegment">
     <div *ngSwitchCase="'results'">
       <ion-list *ngIf="games && !isLoading">
-        <ion-item *ngFor="let game of games">
-          <ion-label>
-            <ion-grid fixed="true">
-              <ion-row>
-                <ion-col class="ion-text-center ion-padding">
-                  <h2>{{ game.round_number }}. kolo - {{ game.date | date:'dd. MM. yyyy'}}</h2>
+        <ion-item *ngFor="let game of games" class="no-border" (click)="goToGameDetail(game.id)">
+          <ion-grid fixed="true" class="p-nomar">
+            <div class="shadow-box">
+              <ion-row class="roundanddate">
+                <ion-col size="6" class="ion-text-left">
+                  <p>{{ game.round_number }}. kolo</p>
                 </ion-col>
-              </ion-row>
-              <ion-row>
-                <ion-col class="ion-text-left flex-start" size="2rem">
-                  <ion-thumbnail class="small fixed home">
-                    <img [src]="game.homeTeam.photoUrl" alt="{{ game.homeTeam.name }}" />
-                  </ion-thumbnail>
+                <ion-col size="6" class="ion-text-right">
+                  <p>{{ game.date | date:'dd. MM. yyyy'}}</p>
                 </ion-col>
-                <ion-col class="ion-text-left flex-start">
-                  <p>{{ game.homeTeam.name }}</p>
-                </ion-col>
-                <ion-col class="ion-text-center" size="2rem">
-                  <p class="result">{{ game.result }}</p>
-                </ion-col>
-                <ion-col class="ion-text-right flex-end">
-                  <p>{{ game.awayTeam.name }}</p>
-                </ion-col>
-                <ion-col class="ion-text-right flex-end" size="2rem">
-                  <ion-thumbnail class="small fixed away">
-                    <img [src]="game.awayTeam.photoUrl" alt="{{ game.awayTeam.name }}" />
-                  </ion-thumbnail>
-                </ion-col>
-              </ion-row>
 
-              <ion-row>
-                <ion-col class="ion-text-left ion-padding" *ngIf="player.team_id != game.away_team_id">
-                  <h2>{{ game.role }}</h2>
-                  <p *ngIf="game.playerGoalsCount == 0">{{ game.playerGoalsCount }} gólů</p>
-                  <p *ngIf="game.playerGoalsCount == 1">{{ game.playerGoalsCount }} gól {{ game.playerGoalsMinutes }}
-                  </p>
-                  <p *ngIf="game.playerGoalsCount > 1">{{ game.playerGoalsCount }} góly {{ game.playerGoalsMinutes }}
-                  </p>
-                </ion-col>
-                <ion-col class="ion-text-right ion-padding" *ngIf="player.team_id == game.away_team_id">
-                  <h2>{{ game.role }}</h2>
-                  <p *ngIf="game.playerGoalsCount == 0">{{ game.playerGoalsCount }} gólů</p>
-                  <p *ngIf="game.playerGoalsCount == 1">{{ game.playerGoalsCount }} gól {{ game.playerGoalsMinutes }}
-                  </p>
-                  <p *ngIf="game.playerGoalsCount > 1">{{ game.playerGoalsCount }} góly {{ game.playerGoalsMinutes }}
-                  </p>
-                </ion-col>
               </ion-row>
-            </ion-grid>
-          </ion-label>
+              <ion-row class="ion-align-items-center main-info">
+
+                <ion-col size="auto">
+                  <div class="square-cell square-logo">
+                    <ion-thumbnail class="small fixed">
+                      <img [src]="game.homeTeam.photoUrl" alt="{{ game.homeTeam.name }}" />
+                    </ion-thumbnail>
+                  </div>
+                </ion-col>
+
+                <ion-col class="team-name-cell">
+                  {{ game.homeTeam.name }}
+                </ion-col>
+
+                <ion-col size="auto">
+                  <div class="square-cell square-double">
+                    <p class="result">{{ game.result }}</p>
+                  </div>
+                </ion-col>
+
+                <ion-col class="team-name-cell tnc-away ion-text-right">
+                  {{ game.awayTeam.name }}
+                </ion-col>
+
+                <ion-col size="auto">
+                  <div class="square-cell square-logo">
+                    <ion-thumbnail class="small fixed">
+                      <img [src]="game.awayTeam.photoUrl" alt="{{ game.awayTeam.name }}" />
+                    </ion-thumbnail>
+                  </div>
+                </ion-col>
+
+              </ion-row>
+              <div class="stats">
+                <ion-row class="player-stats">
+                  <ion-col [ngClass]="player.team_id === game.home_team_id ? 'home-flex' : 'away-flex'">
+                      <ion-icon name="person"></ion-icon>
+                      <span class="text">{{ game.role }}</span>
+                  </ion-col>
+                </ion-row>
+                <ion-row class="player-stats">
+                  <ion-col [ngClass]="player.team_id === game.home_team_id ? 'home-flex' : 'away-flex'">
+                      <ion-icon name="football"></ion-icon>
+                      <span class="text">{{ game.playerGoalsCount > 0 ? game.playerGoalsMinutes : '-' }}</span>
+                  </ion-col>
+                </ion-row>
+                <ion-row class="player-stats">
+                  <ion-col [ngClass]="player.team_id === game.home_team_id ? 'home-flex' : 'away-flex'">
+                      <ion-icon name="tablet-portrait" class="yellow"></ion-icon>
+                      <span class="text">-</span>
+                  </ion-col>
+                </ion-row>
+                <ion-row class="player-stats">
+                  <ion-col [ngClass]="player.team_id === game.home_team_id ? 'home-flex' : 'away-flex'">
+                      <ion-icon name="tablet-portrait" class="red"></ion-icon>
+                      <span class="text">-</span>
+                  </ion-col>
+                </ion-row>
+              </div>
+            </div>
+          </ion-grid>
         </ion-item>
       </ion-list>
       <h3 *ngIf="!games || isLoading" class="ion-text-center ion-padding">Načítám zápasy...</h3>

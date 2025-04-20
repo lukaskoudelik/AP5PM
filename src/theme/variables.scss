@@ -1,13 +1,31 @@
 :root {
   --ion-color-primary: #144330;
   --ion-color-primary-rgb: 20, 67, 48;
-  --ion-color-secondary: #88C996;
-  --ion-color-secondary-rgb: 136, 201, 150;
+  --ion-color-secondary: #a0fabe;
+  --ion-color-secondary-rgb: 160, 250, 150;
   --ion-color-tertiary: #D9D9D9;
   --ion-color-tertiary-rgb: 217, 217, 217;
   --ion-color-light: #f4f5f8;
   --ion-color-dark: #222428;
+  --ion-color-quaternary-rgb: 220, 255, 230;
+  --ion-color-quaternary: #f0f0f0;
 }
+
+.nomp {
+  padding: 0;
+  margin: 0;
+}
+
+.shadow-box {
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.white {
+  color: white;
+}
+
+
+// Tabs and toolbar
 
 ion-tab-bar {
   --background: var(--ion-color-primary);
@@ -25,29 +43,6 @@ ion-toolbar {
   color: var(--ion-color-secondary);
 }
 
-
-ion-card-title {
-  font-size: 2rem;
-  padding-bottom: 5px;
-}
-
-ion-card-subtitle {
-  font-size: 1.5rem;
-}
-
-ion-segment-button {
-  --color: var(--ion-color-dark);
-}
-
-
-ion-segment-button {
-  --color-checked: var(--ion-color-primary);
-}
-
-ion-segment.fltr {
-  --background: var(--ion-color-light);
-}
-
 .heart-icon-active {
   font-size: 2rem;
   color: var(--ion-color-primary);
@@ -58,13 +53,228 @@ ion-segment.fltr {
   color: gray;
 }
 
-.tabhead {
-  --background: lightgray;
+ion-menu-button {
+  color: white;
 }
 
-.colcol {
+ion-back-button {
+  color: white;
+}
+
+
+// Card
+
+ion-card-title {
+  font-size: 2rem;
+  padding-bottom: 5px;
   font-weight: bold;
+}
+
+ion-card-subtitle {
+  font-size: 1.5rem;
+}
+
+ion-card {
+  --background: var(--ion-color-quaternary);
+}
+
+.cardhdr {
+  display: flex;
+  align-items: left;
+}
+
+ion-thumbnail.prf {
+  height: 6rem;
+  width: 6rem;
+}
+
+ion-thumbnail.prf img {
+  border-radius: 20%;
+}
+
+
+// Segment
+
+ion-segment-button {
+  --color: var(--ion-color-dark);
+  --color-checked: var(--ion-color-primary);
+  --background-checked: var(--ion-color-secondary);
+  --indicator-color: var(--ion-color-secondary);
+}
+
+ion-segment {
+  border-bottom: solid 2px var(--ion-color-tertiary);
+  --background: white;
+}
+
+ion-segment.fltr {
+  --background: var(--ion-color-light);
+}
+
+
+// Tabulka
+
+.tabhead {
+  --background: var(--ion-color-quaternary);
   color: var(--ion-color-primary);
+  font-size: 0.8em;
+  border-bottom: solid 2px var(--ion-color-primary);
+}
+
+.tabhead ion-grid {
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+ion-grid {
+  --ion-grid-padding-top: 0;
+
+  --ion-grid-padding-xs: 0;
+  --ion-grid-padding-sm: 0;
+  --ion-grid-padding-md: 0;
+  --ion-grid-padding-lg: 0;
+  --ion-grid-padding-xl: 0;
+
+  --ion-grid-column-padding: 0;
+
+  --ion-grid-column-padding-xs: 0;
+  --ion-grid-column-padding-sm: 0;
+  --ion-grid-column-padding-md: 0;
+  --ion-grid-column-padding-lg: 0;
+  --ion-grid-column-padding-xl: 0;
+}
+
+ion-col.cntr {
+  text-align: center;
+}
+
+.first-team {
+  background-color: var(--ion-color-primary);
+  color: white;
+  border-radius: 20%;
+}
+
+.middle-team {
+  background-color: var(--ion-color-tertiary);
+  border-radius: 20%;
+}
+
+.last-team {
+  background-color: darkred;
+  color: white;
+  border-radius: 20%;
+}
+
+.icon-primary {
+  color: var(--ion-color-primary);
+  border-radius: 20%;
+}
+
+.icon-red {
+  color: darkred;
+}
+
+.table-description {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-left: 16px;
+  padding-bottom: 8px;
+}
+
+.table-description p {
+  margin: 0
+}
+
+.square-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.square-inner {
+  width: 2rem;
+  height: 2rem;
+  text-align: center;
+  font-size: 1em;
+}
+
+.square-double {
+  width: 3.5rem;
+  height: 2rem;
+}
+
+.square-logo {
+  width: 2.5rem;
+  height: 2rem;
+}
+
+.team-name-cell {
+  flex: 1;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  display: flex;
+  align-items: center;
+}
+
+ion-thumbnail.small.fixed {
+  width: 2em;
+  height: 2em;
+  object-fit: cover;
+}
+
+ion-thumbnail.small.fixed img {
+  border-radius: 20%;
+}
+
+// Zápasy
+
+.logo-left {
+  padding-left: 0.5rem;
+}
+
+p.result {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.tnc-away {
+  justify-content: flex-end;
+}
+
+
+ion-thumbnail.home {
+  margin-right: 10px;
+}
+
+ion-thumbnail.away {
+  margin-left: 10px;
+}
+
+.p-nomar p {
+  margin: 0;
+}
+
+.roundanddate {
+  background-color: var(--ion-color-quaternary);
+  padding: 0.8rem 0.5rem 0.5rem 0.5rem;
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
+  border-bottom: solid 2px var(--ion-color-primary);
+}
+
+.main-info {
+  margin-bottom: 0.5rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+// List
+
+.no-border {
+  --inner-border-width: 0;
 }
 
 .ion-palette-dark {

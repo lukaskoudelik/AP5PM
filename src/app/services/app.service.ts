@@ -125,4 +125,8 @@ export class AppService {
 
   }
 
+  goToGameDetail(gameId: string) {
+    this.router.navigate(['/game', gameId]);
+  }
+
 }

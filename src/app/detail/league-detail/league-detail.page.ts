@@ -193,6 +193,8 @@ export class LeagueDetailPage implements OnInit {
     }
   }
 
-
+  goToGameDetail(gameId: string) {
+    this.appService.goToGameDetail(gameId);
+  }
 
 }

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SupabaseService } from '../services/supabase.service';
+import { AppService } from '../services/app.service';
 
 @Component({
   selector: 'app-games',
@@ -16,7 +17,7 @@ export class GamesPage implements OnInit {
   gamesGroupedByLeague: { [key: string]: any[] } = {};
   leaguesMap: { [key: string]: string } = {};
 
-  constructor(private supabaseService: SupabaseService) {}
+  constructor(private supabaseService: SupabaseService, private appService: AppService) {}
 
   async ngOnInit() {
     this.isLoading = true;
@@ -84,5 +85,9 @@ export class GamesPage implements OnInit {
     leagues.forEach(league => {
       this.leaguesMap[league.id] = league.name;
     });
+  }
+
+  goToGameDetail(gameId: string) {
+    this.appService.goToGameDetail(gameId);
   }
 }

@@ -17,7 +17,7 @@
 </ion-header>
 
 <ion-content>
-  <ion-card *ngIf="league">
+  <ion-card class="nomp" *ngIf="league">
     <ion-grid class="ion-padding">
       <ion-row class="ion-align-items-center">
         <ion-col size="6rem">
@@ -31,7 +31,7 @@
         </ion-col>
       </ion-row>
     </ion-grid>
-</ion-card>
+  </ion-card>
   <ion-segment [(ngModel)]="selectedSegment">
     <ion-segment-button value="results">
       Výsledky
@@ -47,131 +47,191 @@
   <div [ngSwitch]="selectedSegment">
     <div *ngSwitchCase="'results'">
       <ion-list *ngIf="playedGames.length > 0">
-        <ion-item *ngFor="let game of playedGames">
-          <ion-label>
-            <ion-grid fixed="true">
-              <ion-row>
-                <ion-col class="ion-text-center ion-padding">
-                  <h2>{{ game.round_number }}. kolo - {{ game.date | date:'dd. MM. yyyy'}}</h2>
+        <ion-item *ngFor="let game of playedGames" class="no-border" (click)="goToGameDetail(game.id)">
+          <ion-grid fixed="true" class="p-nomar">
+            <div class="shadow-box">
+              <ion-row class="roundanddate">
+                <ion-col size="6" class="ion-text-left">
+                  <p>{{ game.round_number }}. kolo</p>
                 </ion-col>
+                <ion-col size="6" class="ion-text-right">
+                  <p>{{ game.date | date:'dd. MM. yyyy'}}</p>
+                </ion-col>
+
               </ion-row>
-              <ion-row>
-                <ion-col class="ion-text-left flex-start" size="2rem">
-                  <ion-thumbnail class="small fixed home">
-                    <img [src]="game.homeTeam.photoUrl" alt="{{ game.homeTeam.name }}" />
-                  </ion-thumbnail>
+              <ion-row class="ion-align-items-center main-info">
+
+                <ion-col size="auto">
+                  <div class="square-cell square-logo">
+                    <ion-thumbnail class="small fixed">
+                      <img [src]="game.homeTeam.photoUrl" alt="{{ game.homeTeam.name }}" />
+                    </ion-thumbnail>
+                  </div>
                 </ion-col>
-                <ion-col class="ion-text-left flex-start">
-                  <p>{{ game.homeTeam.name }}</p>
+
+                <ion-col class="team-name-cell">
+                  {{ game.homeTeam.name }}
                 </ion-col>
-                <ion-col class="ion-text-center" size="2rem">
-                  <p class="result">{{ game.result }}</p>
+
+                <ion-col size="auto">
+                  <div class="square-cell square-double">
+                    <p class="result">{{ game.result}}</p>
+                  </div>
                 </ion-col>
-                <ion-col class="ion-text-right flex-end">
-                  <p>{{ game.awayTeam.name }}</p>
+
+                <ion-col class="team-name-cell tnc-away ion-text-right">
+                  {{ game.awayTeam.name }}
                 </ion-col>
-                <ion-col class="ion-text-right flex-end" size="2rem">
-                  <ion-thumbnail class="small fixed away">
-                    <img [src]="game.awayTeam.photoUrl" alt="{{ game.awayTeam.name }}" />
-                  </ion-thumbnail>
+
+                <ion-col size="auto">
+                  <div class="square-cell square-logo">
+                    <ion-thumbnail class="small fixed">
+                      <img [src]="game.awayTeam.photoUrl" alt="{{ game.awayTeam.name }}" />
+                    </ion-thumbnail>
+                  </div>
                 </ion-col>
+
               </ion-row>
-            </ion-grid>
-          </ion-label>
+            </div>
+          </ion-grid>
         </ion-item>
       </ion-list>
       <h3 *ngIf="playedGames.length == 0" class="ion-text-center ion-padding">Načítám výsledky...</h3>
     </div>
     <div *ngSwitchCase="'matches'">
       <ion-list *ngIf="gamesToPlay.length > 0">
-        <ion-item *ngFor="let game of gamesToPlay">
-          <ion-label>
-            <ion-grid fixed="true">
-              <ion-row>
-                <ion-col class="ion-text-center ion-padding">
-                  <h2>{{ game.round_number }}. kolo - {{ game.date | date:'dd. MM. yyyy'}}</h2>
+        <ion-item *ngFor="let game of gamesToPlay" class="no-border" (click)="goToGameDetail(game.id)">
+          <ion-grid fixed="true" class="p-nomar">
+            <div class="shadow-box">
+              <ion-row class="roundanddate">
+                <ion-col size="6" class="ion-text-left">
+                  <p>{{ game.round_number }}. kolo</p>
                 </ion-col>
+                <ion-col size="6" class="ion-text-right">
+                  <p>{{ game.date | date:'dd. MM. yyyy'}}</p>
+                </ion-col>
+
               </ion-row>
-              <ion-row>
-                <ion-col class="ion-text-left flex-start" size="2rem">
-                  <ion-thumbnail class="small fixed home">
-                    <img [src]="game.homeTeam.photoUrl" alt="{{ game.homeTeam.name }}" />
-                  </ion-thumbnail>
+              <ion-row class="ion-align-items-center main-info">
+
+                <ion-col size="auto">
+                  <div class="square-cell square-logo">
+                    <ion-thumbnail class="small fixed">
+                      <img [src]="game.homeTeam.photoUrl" alt="{{ game.homeTeam.name }}" />
+                    </ion-thumbnail>
+                  </div>
                 </ion-col>
-                <ion-col class="ion-text-left flex-start">
-                  <p>{{ game.homeTeam.name }}</p>
+
+                <ion-col class="team-name-cell">
+                  {{ game.homeTeam.name }}
                 </ion-col>
-                <ion-col class="ion-text-center" size="2rem">
-                  <p class="result">{{ game.date | date:'HH:mm'}}</p>
+
+                <ion-col size="auto">
+                  <div class="square-cell square-double">
+                    <p class="result">{{ game.date | date:'HH:mm'}}</p>
+                  </div>
                 </ion-col>
-                <ion-col class="ion-text-right flex-end">
-                  <p>{{ game.awayTeam.name }}</p>
+
+                <ion-col class="team-name-cell tnc-away ion-text-right">
+                  {{ game.awayTeam.name }}
                 </ion-col>
-                <ion-col class="ion-text-right flex-end" size="2rem">
-                  <ion-thumbnail class="small fixed away">
-                    <img [src]="game.awayTeam.photoUrl" alt="{{ game.awayTeam.name }}" />
-                  </ion-thumbnail>
+
+                <ion-col size="auto">
+                  <div class="square-cell square-logo">
+                    <ion-thumbnail class="small fixed">
+                      <img [src]="game.awayTeam.photoUrl" alt="{{ game.awayTeam.name }}" />
+                    </ion-thumbnail>
+                  </div>
                 </ion-col>
+
               </ion-row>
-            </ion-grid>
-          </ion-label>
+            </div>
+          </ion-grid>
         </ion-item>
       </ion-list>
       <h3 *ngIf="gamesToPlay.length == 0" class="ion-text-center ion-padding">Načítám zápasy...</h3>
     </div>
     <div *ngSwitchCase="'table'">
-      <ion-list *ngIf="leagueTable.length > 0" class="ion-non-padding nomg">
-        <ion-item class="ion-non-padding tabhead">
+      <ion-list *ngIf="leagueTable.length > 0" class="nomg ion-margin-bottom">
+        <ion-item class="tabhead">
           <ion-grid fixed="true">
-            <ion-row class="ion-justify-content-center">
-              <ion-col size="1.2">
-                <p class="ion-text-center">#</p>
+            <ion-row class="ion-align-items-center">
+
+              <ion-col size="auto">
+                <div class="square-cell square-inner">#</div>
               </ion-col>
-              <ion-col size="2rem">
-                <p class="ion-text-center"></p>
+
+              <ion-col size="auto">
+                <div class="square-cell square-logo logo-left"></div>
               </ion-col>
-              <ion-col>
-                <p class="ion-padding-left">Tým</p>
+
+              <ion-col class="team-name-cell">
+                Tým
               </ion-col>
-              <ion-col size="1">
-                <p class="ion-text-center">Z</p>
+
+              <ion-col size="auto">
+                <div class="square-cell square-inner">Z</div>
               </ion-col>
-              <ion-col size="2">
-                <p class="ion-text-center">Skóre</p>
+
+              <ion-col size="auto">
+                <div class="square-cell square-double">Skóre</div>
               </ion-col>
-              <ion-col size="1">
-                <p class="ion-text-center">B</p>
+
+              <ion-col size="auto">
+                <div class="square-cell square-inner">B</div>
               </ion-col>
+
             </ion-row>
           </ion-grid>
         </ion-item>
         <ion-item *ngFor="let team of leagueTable; let i = index" (click)="onItemClick($event, team, 'team')">
           <ion-grid fixed="true">
-            <ion-row class="ion-justify-content-center ion-align-items-center">
-              <ion-col size="1.2" class="colcol">
-                <p class="ion-text-center">{{ i + 1 }}.</p>
+            <ion-row class="ion-align-items-center">
+
+              <ion-col size="auto">
+                <div *ngIf="i == 0" class="square-cell square-inner first-team">{{ i + 1 }}.</div>
+                <div *ngIf="i == 9" class="square-cell square-inner last-team">{{ i + 1 }}.</div>
+                <div *ngIf="i != 0 && i != 9" class="square-cell square-inner middle-team">{{ i + 1 }}.</div>
               </ion-col>
-              <ion-col size="2rem">
-                <ion-thumbnail class="small fixed">
-                  <img [src]="team.photoUrl" alt="{{ team.name }}" />
-                </ion-thumbnail>
+
+              <ion-col size="auto">
+                <div class="square-cell square-logo logo-left">
+                  <ion-thumbnail class="small fixed">
+                    <img [src]="team.photoUrl" alt="{{ team.name }}" />
+                  </ion-thumbnail>
+                </div>
               </ion-col>
-              <ion-col>
-                <p class="ion-padding-left">{{ team.name }}</p>
+
+              <ion-col class="team-name-cell">
+                {{ team.name }}
               </ion-col>
-              <ion-col size="1">
-                <p class="ion-text-center">{{ team.gamesPlayed }}</p>
+
+              <ion-col size="auto">
+                <div class="square-cell square-inner">{{ team.gamesPlayed }}</div>
               </ion-col>
-              <ion-col size="2">
-                <p class="ion-text-center">{{ team.goalsFor }}:{{ team.goalsAgainst }}</p>
+
+              <ion-col size="auto">
+                <div class="square-cell square-double">{{ team.goalsFor }}:{{ team.goalsAgainst }}</div>
               </ion-col>
-              <ion-col size="1">
-                <p class="ion-text-center">{{ team.points }}</p>
+
+              <ion-col size="auto">
+                <div class="square-cell square-inner">{{ team.points }}</div>
               </ion-col>
+
             </ion-row>
           </ion-grid>
         </ion-item>
       </ion-list>
+      <div class="table-description" *ngIf="leagueTable.length > 0">
+        <ion-icon name="square" class="icon-primary"></ion-icon><ion-text>
+          <p>Postup</p>
+        </ion-text>
+      </div>
+      <div class="table-description" *ngIf="leagueTable.length > 0">
+        <ion-icon name="square" class="icon-red"></ion-icon><ion-text>
+          <p>Sestup</p>
+        </ion-text>
+      </div>
       <h3 *ngIf="leagueTable.length == 0" class="ion-text-center ion-padding">Načítám tabulku...</h3>
     </div>
   </div>

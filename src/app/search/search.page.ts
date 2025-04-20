@@ -63,7 +63,6 @@ export class SearchPage implements OnInit, OnDestroy {
       this.filteredResults = [...this.searchResults];
       this.dataLoaded = true;
 
-      console.log('Loaded data:', this.searchResults);
       this.filterResults();
     } catch (error) {
       console.error('Error loading data:', error);
