@@ -33,7 +33,7 @@
       </ion-grid>
   </ion-card>
 
-  <ion-segment [(ngModel)]="selectedSegment">
+  <ion-segment [(ngModel)]="selectedSegment" *ngIf="team">
     <ion-segment-button value="results">
       Výsledky
     </ion-segment-button>
@@ -97,7 +97,7 @@
           </ion-grid>
         </ion-item>
       </ion-list>
-      <h3 *ngIf="gamesPlayed.length == 0" class="ion-text-center ion-padding">Načítám výsledky...</h3>
+      <h3 *ngIf="gamesPlayed.length == 0 && team" class="ion-text-center ion-padding">Načítám výsledky...</h3>
     </div>
     <div *ngSwitchCase="'matches'">
       <ion-list *ngIf="gamesToPlay.length > 0">
@@ -150,10 +150,10 @@
           </ion-grid>
         </ion-item>
       </ion-list>
-      <h3 *ngIf="gamesToPlay.length == 0" class="ion-text-center ion-padding">Načítám zápasy...</h3>
+      <h3 *ngIf="gamesToPlay.length == 0 && team" class="ion-text-center ion-padding">Načítám zápasy...</h3>
     </div>
     <div *ngSwitchCase="'table'">
-      <ion-list *ngIf="leagueTable.length > 0" class="nomg ion-margin-bottom">
+      <ion-list *ngIf="leagueTable.length > 0" class="nomp">
         <ion-item class="tabhead">
           <ion-grid fixed="true">
             <ion-row class="ion-align-items-center">
@@ -223,7 +223,7 @@
           </ion-grid>
         </ion-item>
       </ion-list>
-      <div class="table-description" *ngIf="leagueTable.length > 0">
+      <div class="table-description ion-margin-top" *ngIf="leagueTable.length > 0">
         <ion-icon name="square" class="icon-primary"></ion-icon><ion-text>
           <p>Postup</p>
         </ion-text>
@@ -233,7 +233,7 @@
           <p>Sestup</p>
         </ion-text>
       </div>
-      <h3 *ngIf="leagueTable.length == 0" class="ion-text-center ion-padding">Načítám tabulku...</h3>
+      <h3 *ngIf="leagueTable.length == 0 && team" class="ion-text-center ion-padding">Načítám tabulku...</h3>
     </div>
   </div>
 </ion-content>

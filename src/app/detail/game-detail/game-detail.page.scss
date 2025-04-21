@@ -1,36 +1,151 @@
+.square-inner-game {
+  width: 7rem;
+  height: 7rem;
+  text-align: center;
+  font-size: 1em;
+}
 
-  
-  .square-inner-game {
-    width: 6rem;
-    height: 6rem;
-    text-align: center;
-    font-size: 1em;
-  }
-  
-  .square-double {
-    width: 3.5rem;
-    height: 2rem;
-  }
-  
-  .square-logo-game {
-    width: 6rem;
-    height: 6rem;
-  }
-  
-  .score-cell {
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  ion-thumbnail.big.fixed {
-    width: 6em;
-    height: 6em;
-    object-fit: cover;
-  }
-  
-  ion-thumbnail.big.fixed img {
-    border-radius: 20%;
-  }
+.team-name-game {
+  width: 7rem;
+  text-align: center;
+  font-size: 1.3em;
+  color: var(--ion-color-dark);
+}
+
+.square-double {
+  width: 3.5rem;
+  height: 2rem;
+}
+
+.square-logo-game {
+  width: 7rem;
+  height: 7rem;
+}
+
+.game-header {
+  padding: 0.5rem 1rem 0.5rem 1rem;
+  align-items: center;
+  background-color: var(--ion-color-tertiary);
+  color: var(--ion-color-dark);
+}
+
+.league-row {
+  font-size: 1.2em;
+  background-color: var(--ion-color-light);
+  padding: 0.5em;
+  border-bottom: solid 2px var(--ion-color-primary);
+  color: var(--ion-color-dark);
+  align-items: center;
+}
+
+.score-cell {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5em;
+  font-weight: bold;
+  letter-spacing: 0.3rem;
+  color: var(--ion-color-dark);
+}
+
+ion-thumbnail.big.fixed {
+  width: 6em;
+  height: 6em;
+  object-fit: cover;
+}
+
+ion-thumbnail.big.fixed img {
+  border-radius: 20%;
+}
+
+.goal-home {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0.4rem;
+  width: 100%;
+}
+
+.goal-away {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0.4rem;
+  width: 100%;
+}
+
+.square-squad {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.squad-name-home {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  gap: 0.4rem;
+}
+
+.squad-name-away {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding-right: 0.5rem;
+  padding-left: 0.5rem;
+  gap: 0.4rem;
+  text-align: right;
+}
+
+.goalkeeper {
+  color: darkred;
+}
+
+.defender {
+  color: var(--ion-color-primary);
+}
+
+.midfielder {
+  color: var(--ion-color-secondary);
+}
+
+.attacker {
+  color: dodgerblue;
+}
+
+.unknown {
+  color: gray;
+}
+
+.squad-header {
+  padding: 1rem 1rem 0.5rem 1rem;
+  align-items: center;
+  background-color: var(--ion-color-light);
+  color: var(--ion-color-primary);
+  border-bottom: solid 2px var(--ion-color-primary);
+
+}
+
+.squad-names {
+  background-color: var(--ion-color-light);
+  padding: 0.5rem;
+  align-items: center;
+}
+
+.row-odd {
+  background-color: var(--ion-color-light);
+}
+
+.row-even {
+  background-color: var(--ion-color-quaternary)
+}
+
+.squad-description {
+  margin-top: 1em;
+  font-size: 0.8em;
+}

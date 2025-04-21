@@ -7,8 +7,8 @@
   --ion-color-tertiary-rgb: 217, 217, 217;
   --ion-color-light: #f4f5f8;
   --ion-color-dark: #222428;
-  --ion-color-quaternary-rgb: 220, 255, 230;
-  --ion-color-quaternary: #f0f0f0;
+  --ion-color-quaternary-rgb: 235, 235, 235;
+  --ion-color-quaternary: #ebebeb;
 }
 
 .nomp {
@@ -255,6 +255,10 @@ ion-thumbnail.away {
 
 .p-nomar p {
   margin: 0;
+}
+
+.p-nopad p{
+  padding: 0;
 }
 
 .roundanddate {

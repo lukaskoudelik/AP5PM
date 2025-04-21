@@ -10,138 +10,224 @@
 
 <ion-content>
   <ion-card *ngIf="game && !isLoading" class="nomp">
-    <ion-grid fixed="true" class="p-nomar">
-      <ion-row>
+    <ion-grid class="p-nomar">
+      <ion-row class="league-row" (click)="onItemClick($event, game.league, 'league')">
+        <ion-col size="auto">
+          <div class="square-cell square-logo">
+            <ion-thumbnail class="small fixed">
+              <img [src]="game.leaguePhotoUrl" alt="{{ game.league.name }}" />
+            </ion-thumbnail>
+          </div>
+        </ion-col>
+        <ion-col class="team-name-cell">
+          {{ game.league.name }}
+        </ion-col>
+      </ion-row>
+
+      <ion-row class="game-header">
         <ion-col class="ion-text-left" size="4">
-          {{ game.league.name}}
+          {{ game.date | date:'dd. MM. yyyy' }}
         </ion-col>
         <ion-col class="ion-text-center" size="4">
-          {{ game.date | date:'dd. MM. yyyy - HH:mm' }}
+          {{ game.date | date:'HH:mm' }}
         </ion-col>
         <ion-col class="ion-text-right" size="4">
           {{ game.round_number }}. kolo
         </ion-col>
       </ion-row>
-      <ion-row class="ion-align-items-center">
-        <ion-col size="auto">
-          <div class="square-cell square-logo-game">
-          <ion-thumbnail class="big fixed home">
-            <img [src]="game.homeTeam.photoUrl" alt="{{ game.homeTeam.name }}" />
-          </ion-thumbnail>
-        </div>
-        </ion-col>
-        <ion-col class="score-cell">
-        <p *ngIf="game.result">{{ game.result }}</p>
-        <p *ngIf="!game.result">-</p>
-        </ion-col>
-        <ion-col size="auto">
-          <div class="square-cell square-logo-game">
-          <ion-thumbnail class="big fixed away">
-            <img [src]="game.awayTeam.photoUrl" alt="{{ game.awayTeam.name }}" />
-          </ion-thumbnail>
-        </div>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col class="ion-text-left flex-start">
-          <p>{{ game.homeTeam.name }}</p>
-        </ion-col>
-        <ion-col>
+      <div class="ion-padding">
+        <ion-row class="ion-align-items-center">
+          <ion-col size="auto" (click)="onItemClick($event, game.homeTeam, 'team')">
+            <div class="square-cell square-logo-game">
+              <ion-thumbnail class="big fixed">
+                <img [src]="game.homeTeam.photoUrl" alt="{{ game.homeTeam.name }}" />
+              </ion-thumbnail>
+            </div>
+          </ion-col>
+          <ion-col class="score-cell">
+            <p *ngIf="game.result">{{ game.result }}</p>
+            <p *ngIf="!game.result">-</p>
+          </ion-col>
+          <ion-col size="auto" (click)="onItemClick($event, game.awayTeam, 'team')">
+            <div class="square-cell square-logo-game">
+              <ion-thumbnail class="big fixed">
+                <img [src]="game.awayTeam.photoUrl" alt="{{ game.awayTeam.name }}" />
+              </ion-thumbnail>
+            </div>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <div class="team-name-game">
+            <ion-col size="auto" (click)="onItemClick($event, game.homeTeam, 'team')">
+              <p>{{ game.homeTeam.name }}</p>
+            </ion-col>
+          </div>
+          <ion-col class="score-cell">
 
-        </ion-col>
-        <ion-col class="ion-text-right flex-end">
-          <p>{{ game.awayTeam.name }}</p>
-        </ion-col>
-      </ion-row>
+          </ion-col>
+          <div class="team-name-game">
+            <ion-col size="auto" (click)="onItemClick($event, game.awayTeam, 'team')">
+              <p>{{ game.awayTeam.name }}</p>
+            </ion-col>
+          </div>
+        </ion-row>
+      </div>
     </ion-grid>
-    <ion-segment [(ngModel)]="selectedSegment">
-      <ion-segment-button value="events">
-        Události
-      </ion-segment-button>
-      <ion-segment-button value="squadlist">
-        Sestavy
-      </ion-segment-button>
-    </ion-segment>
+  </ion-card>
+  <ion-segment [(ngModel)]="selectedSegment" *ngIf="game && !isLoading">
+    <ion-segment-button value="events">
+      Události
+    </ion-segment-button>
+    <ion-segment-button value="squadlist">
+      Sestavy
+    </ion-segment-button>
+  </ion-segment>
 
-    <div [ngSwitch]="selectedSegment">
-      <div *ngSwitchCase="'events'">
-        <h3>Góly domácí</h3>
-        <ion-list *ngIf="homeGoals.length > 0">
-          <ion-item *ngFor="let goal of homeGoals">
-            <ion-label>
-              <h3>{{ goal.minute }}' - {{ goal.playerName }}</h3>
-            </ion-label>
-          </ion-item>
-        </ion-list>
-
-        <h3>Góly hosté</h3>
-        <ion-list *ngIf="awayGoals.length > 0">
-          <ion-item *ngFor="let goal of awayGoals">
-            <ion-label>
-              <h3>{{ goal.minute }}' - {{ goal.playerName }}</h3>
-            </ion-label>
-          </ion-item>
-        </ion-list>
-
-        <h3 *ngIf="homeGoals.length === 0 && awayGoals.length === 0" class="ion-text-center ion-padding">
-          Žádné góly dosud nepadly.
+  <div [ngSwitch]="selectedSegment">
+    <div *ngSwitchCase="'events'">
+      <ion-list *ngIf="allGoals.length > 0" class="nomp">
+        <ion-item *ngFor="let goal of allGoals" (click)="onItemClick($event, goal.player, 'player')">
+          <div [ngClass]="goal.homeOrAway === 'home' ? 'goal-home' : 'goal-away'">
+            <span class="text">{{ goal.minute }}'</span>
+            <ion-icon name="football"></ion-icon>
+            <span class="text">{{ goal.playerName }}</span>
+          </div>
+        </ion-item>
+      </ion-list>
+      <!--
+        <h3 *ngIf="allGoals.length === 0 && game && game.result" class="ion-text-center ion-padding">
+          -
         </h3>
-      </div>
-      <div *ngSwitchCase="'squadlist'">
-        <h3>Domácí - Základní sestava</h3>
-        <ion-list>
-          <ion-item *ngFor="let player of homeStarters">
-            <ion-label>
-              {{ player.position === 'goalkeeper' ? 'B' : player.position === 'defender' ? 'O' : player.position ===
-              'midfielder' ? 'Z' : player.position === 'attacker' ? 'Ú' : 'N'}}
-              {{ player.jersey_number }} {{ player.player.first_name }} {{ player.player.second_name }} <span
-                *ngIf="player.captain">(C)</span>
-            </ion-label>
-          </ion-item>
-        </ion-list>
-
-        <h3>Domácí - Náhradníci</h3>
-        <ion-list>
-          <ion-item *ngFor="let player of homeBench">
-            <ion-label>
-              {{ player.position === 'goalkeeper' ? 'B' : player.position === 'defender' ? 'O' : player.position ===
-              'midfielder' ? 'Z' : player.position === 'attacker' ? 'Ú' : 'N'}}
-              {{ player.jersey_number }} {{ player.player.first_name }} {{ player.player.second_name }} <span
-                *ngIf="player.captain">(C)</span>
-            </ion-label>
-          </ion-item>
-        </ion-list>
-
-        <h3>Hosté - Základní sestava</h3>
-        <ion-list>
-          <ion-item *ngFor="let player of awayStarters">
-            <ion-label>
-              {{ player.position === 'goalkeeper' ? 'B' : player.position === 'defender' ? 'O' : player.position ===
-              'midfielder' ? 'Z' : player.position === 'attacker' ? 'Ú' : 'N'}}
-              {{ player.jersey_number }} {{ player.player.first_name }} {{ player.player.second_name }} <span
-                *ngIf="player.captain">(C)</span>
-            </ion-label>
-          </ion-item>
-        </ion-list>
-
-        <h3>Hosté - Náhradníci</h3>
-        <ion-list>
-          <ion-item *ngFor="let player of awayBench">
-            <ion-label>
-              {{ player.position === 'goalkeeper' ? 'B' : player.position === 'defender' ? 'O' : player.position ===
-              'midfielder' ? 'Z' : player.position === 'attacker' ? 'Ú' : 'N'}}
-              {{ player.jersey_number }} {{ player.player.first_name }} {{ player.player.second_name }} <span
-                *ngIf="player.captain">(C)</span>
-            </ion-label>
-          </ion-item>
-        </ion-list>
-      </div>
+-->
+      <h3 *ngIf="allGoals.length === 0 && game && !game.result" class="ion-text-center ion-padding">
+        Informace zatím nejsou k dispozici.
+      </h3>
     </div>
+    <div *ngSwitchCase="'squadlist'">
+      <ion-grid
+        *ngIf="homeStarters.length > 0 && homeBench.length > 0 && awayStarters.length > 0 && awayBench.length > 0"
+        class="nomp">
 
+        <ion-row class="squad-header">
+          <ion-col class="ion-text-center">
+            základní sestava
+          </ion-col>
+        </ion-row>
+
+        <ion-row *ngFor="let i of startersIndexes; let idx = index" class="squad-names"
+          [ngClass]="{ 'row-even': idx % 2 === 0, 'row-odd': idx % 2 !== 0 }">
+          <ion-col size="auto" *ngIf="homeStarters[i]">
+            <div class="square-cell square-squad">
+              <ion-icon [name]="getIconNameByPosition(homeStarters[i].position)"
+                [ngClass]="homeStarters[i].position ? homeStarters[i].position : 'unknown'"></ion-icon>
+            </div>
+          </ion-col>
+          <ion-col size="auto" *ngIf="homeStarters[i]" (click)="onItemClick($event, homeStarters[i].player, 'player')">
+            <div class="square-cell square-squad">
+              {{ homeStarters[i].jersey_number }}
+            </div>
+          </ion-col>
+          <ion-col *ngIf="homeStarters[i]" class="squad-name-home p-nopad p-nomar"
+            (click)="onItemClick($event, homeStarters[i].player, 'player')">
+            <span class="text">{{ homeStarters[i].player.first_name }} {{ homeStarters[i].player.second_name }}</span>
+            <span class="text ion-text-left" *ngIf="homeStarters[i].captain">(C)</span>
+          </ion-col>
+
+          <ion-col *ngIf="awayStarters[i]" class="squad-name-away p-nopad p-nomar"
+            (click)="onItemClick($event, awayStarters[i].player, 'player')">
+            <span class="text ion-text-right" *ngIf="awayStarters[i].captain">(C)</span>
+            <span class="text">{{ awayStarters[i].player.first_name }} {{ awayStarters[i].player.second_name }}</span>
+          </ion-col>
+          <ion-col size="auto" *ngIf="awayStarters[i]" (click)="onItemClick($event, awayStarters[i].player, 'player')">
+            <div class="square-cell square-squad">
+              {{ awayStarters[i].jersey_number }}
+            </div>
+          </ion-col>
+          <ion-col size="auto" *ngIf="awayStarters[i]">
+            <div class="square-cell square-squad">
+              <ion-icon [name]="getIconNameByPosition(awayStarters[i].position)"
+                [ngClass]="awayStarters[i].position ? awayStarters[i].position : 'unknown'"></ion-icon>
+            </div>
+          </ion-col>
+        </ion-row>
+
+        <ion-row class="squad-header">
+          <ion-col class="ion-text-center">
+            náhradníci
+          </ion-col>
+        </ion-row>
+
+        <ion-row *ngFor="let i of benchersIndexes let idx = index" class="squad-names"
+          [ngClass]="{ 'row-even': idx % 2 === 0, 'row-odd': idx % 2 !== 0 }">
+          <ion-col size="auto" *ngIf="homeBench[i]">
+            <div class="square-cell square-squad">
+              <ion-icon [name]="getIconNameByPosition(homeBench[i].position)"
+                [ngClass]="homeBench[i].position ? homeBench[i].position : 'unknown'"></ion-icon>
+            </div>
+          </ion-col>
+          <ion-col size="auto" *ngIf="homeBench[i]" (click)="onItemClick($event, homeBench[i].player, 'player')">
+            <div class="square-cell square-squad">
+              {{ homeBench[i].jersey_number }}
+            </div>
+          </ion-col>
+          <ion-col *ngIf="homeBench[i]" class="squad-name-home"
+            (click)="onItemClick($event, homeBench[i].player, 'player')">
+            {{ homeBench[i].player.first_name }} {{ homeBench[i].player.second_name }}
+          </ion-col>
+
+          <ion-col *ngIf="awayBench[i]" class="squad-name-away"
+            (click)="onItemClick($event, awayBench[i].player, 'player')">
+            {{ awayBench[i].player.first_name }} {{ awayBench[i].player.second_name }}
+          </ion-col>
+          <ion-col size="auto" *ngIf="awayBench[i]" (click)="onItemClick($event, awayBench[i].player, 'player')">
+            <div class="square-cell square-squad">
+              {{ awayBench[i].jersey_number }}
+            </div>
+          </ion-col>
+          <ion-col size="auto" *ngIf="awayBench[i]">
+            <div class="square-cell square-squad">
+              <ion-icon [name]="getIconNameByPosition(awayBench[i].position)"
+                [ngClass]="awayBench[i].position ? awayBench[i].position : 'unknown'"></ion-icon>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+      <div *ngIf="homeStarters.length > 0 && homeBench.length > 0 && awayStarters.length > 0 && awayBench.length > 0"
+        class="squad-description">
+        <div class="table-description" *ngIf="positionCounts.goalkeeper > 0">
+          <ion-icon name="hand-right" class="goalkeeper"></ion-icon>
+          <span class="text">Brankář</span>
+        </div>
+        <div class="table-description" *ngIf="positionCounts.defender > 0">
+          <ion-icon name="shirt" class="defender"></ion-icon>
+          <span class="text">Obránce</span>
+        </div>
+        <div class="table-description" *ngIf="positionCounts.midfielder > 0">
+          <ion-icon name="shirt" class="midfielder"></ion-icon>
+          <span class="text">Záložník</span>
+        </div>
+        <div class="table-description" *ngIf="positionCounts.attacker > 0">
+          <ion-icon name="shirt" class="attacker"></ion-icon>
+          <span class="text">Útočník</span>
+        </div>
+        <div class="table-description" *ngIf="positionCounts.other > 0">
+          <ion-icon name="shirt" class="unknown"></ion-icon>
+          <span class="text">Neuvedeno</span>
+        </div>
+      </div>
+      <h3
+        *ngIf="homeStarters.length === 0 || homeBench.length === 0 || awayStarters.length === 0 || awayBench.length === 0"
+        class="ion-text-center ion-padding">
+        Sestavy nejsou k dispozici.
+      </h3>
+    </div>
+  </div>
+
+  <ion-card *ngIf="game && !isLoading" class="nomp">
     <div class="ion-padding">
       <p>Hřiště: Default Stadium</p>
-      <p>Rozhodčí: Jan Novák</p>
-      <p>Počet Diváků: 100</p>
+      <p *ngIf="game.result">Rozhodčí: Jan Novák</p>
+      <p *ngIf="game.result">Počet Diváků: 100</p>
     </div>
   </ion-card>
 </ion-content>

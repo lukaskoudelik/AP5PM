@@ -32,7 +32,7 @@
       </ion-row>
     </ion-grid>
   </ion-card>
-  <ion-segment [(ngModel)]="selectedSegment">
+  <ion-segment [(ngModel)]="selectedSegment" *ngIf="player">
     <ion-segment-button value="results">
       Odehrané zápasy
     </ion-segment-button>
@@ -115,7 +115,7 @@
           </ion-grid>
         </ion-item>
       </ion-list>
-      <h3 *ngIf="!games || isLoading" class="ion-text-center ion-padding">Načítám zápasy...</h3>
+      <h3 *ngIf="!games || isLoading && player" class="ion-text-center ion-padding">Načítám zápasy...</h3>
     </div>
   </div>
 </ion-content>

@@ -142,7 +142,8 @@ export class SupabaseService {
       homeTeam = {
         ...homeTeamData?.data?.[0],
         photoUrl: homeTeamPhoto,
-        name: homeTeamData?.name
+        name: homeTeamData?.name,
+        id: homeTeamData?.id
       };
   
       // Načtení a úprava venkovního týmu
@@ -151,7 +152,8 @@ export class SupabaseService {
       awayTeam = {
         ...awayTeamData?.data?.[0],
         photoUrl: awayTeamPhoto,
-        name: awayTeamData?.name
+        name: awayTeamData?.name,
+        id: awayTeamData?.id
       };
     } catch (error) {
       console.error('Chyba při načítání týmů:', error);
