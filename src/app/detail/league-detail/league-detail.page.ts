@@ -40,6 +40,7 @@ export class LeagueDetailPage implements OnInit {
       const data = await this.supabaseService.getLeagueById(id);
       if (data) {
         this.league = data;
+        this.league.organization = await this.supabaseService.getOrganizationById(`${this.league.organization_id}`)
         this.loadPhotoUrl(this.league.photo_url);
         this.loadGamesWithTeams();
         this.loadTable(this.league.id);

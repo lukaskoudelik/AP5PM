@@ -54,6 +54,33 @@ export class SupabaseService {
     return data || [];
   }
 
+  async getRegions() {
+    const { data, error } = await this.supabase.from('regions').select('*');
+    if (error) {
+      console.error('Chyba při načítání krajů:', error.message);
+      return [];
+    }
+    return data || [];
+  }
+
+  async getDistricts() {
+    const { data, error } = await this.supabase.from('districts').select('*');
+    if (error) {
+      console.error('Chyba při načítání okresů:', error.message);
+      return [];
+    }
+    return data || [];
+  }
+
+  async getOrganizations() {
+    const { data, error } = await this.supabase.from('organization').select('*');
+    if (error) {
+      console.error('Chyba při načítání organizací:', error.message);
+      return [];
+    }
+    return data || [];
+  }
+
   async getPhotoUrl(path: string): Promise<string> {
     try {
       const { data } = this.supabase.storage.from('images').getPublicUrl(path);
@@ -104,10 +131,46 @@ export class SupabaseService {
     return data || null;
   }
 
+  async getOrganizationById(organizationId: string) {
+    const { data, error } = await this.supabase.from('organization').select('*').eq('id', organizationId).single();
+    if (error) {
+      console.error(`Chyba při načítání organizace s ID ${organizationId}:`, error.message);
+      return null;
+    }
+    return data || null;
+  }
+
   async getGoalsByGameId(gameId: string) {
     const { data, error } = await this.supabase.from('goals').select('*').eq('game_id', gameId);
     if (error) {
       console.error(`Chyba při načítání gólů:`, error.message);
+      return [];
+    }
+    return data || [];
+  }
+
+  async getLeaguesByOrganization(organizationId: string) {
+    const { data, error } = await this.supabase.from('leagues').select('*').eq('organization_id', organizationId);
+    if (error) {
+      console.error(`Chyba při načítání lig:`, error.message);
+      return [];
+    }
+    return data || [];
+  }
+
+  async getLeaguesByRegion(regionId: string) {
+    const { data, error } = await this.supabase.from('leagues').select('*').eq('region_id', regionId);
+    if (error) {
+      console.error(`Chyba při načítání lig:`, error.message);
+      return [];
+    }
+    return data || [];
+  }
+
+  async getLeaguesByDistrict(districtId: string) {
+    const { data, error } = await this.supabase.from('leagues').select('*').eq('district_id', districtId);
+    if (error) {
+      console.error(`Chyba při načítání lig:`, error.message);
       return [];
     }
     return data || [];

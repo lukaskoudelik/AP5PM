@@ -1,7 +1,7 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title *ngIf="game">Detail zápasu č. {{ game.id }}</ion-title>
-    <ion-title *ngIf="!game">Načítám zápas...</ion-title>
+    <ion-title *ngIf="game && game.homeTeam && game.awayTeam">{{ game.homeTeam.name }} - {{ game.awayTeam.name }}</ion-title>
+    <ion-title *ngIf="!game || !game.homeTeam || !game.awayTeam">Načítám zápas...</ion-title>
     <ion-buttons slot="end">
       <ion-back-button defaultHref="/tabs/games"></ion-back-button>
     </ion-buttons>
@@ -99,7 +99,7 @@
           -
         </h3>
 -->
-      <h3 *ngIf="allGoals.length === 0 && game && !game.result" class="ion-text-center ion-padding">
+      <h3 *ngIf="allGoals.length === 0 && game && game.homeTeam && game.awayTeam && !game.result" class="ion-text-center ion-padding">
         Informace zatím nejsou k dispozici.
       </h3>
     </div>
@@ -216,7 +216,7 @@
         </div>
       </div>
       <h3
-        *ngIf="homeStarters.length === 0 || homeBench.length === 0 || awayStarters.length === 0 || awayBench.length === 0"
+        *ngIf="game && game.homeTeam && game.awayTeam && homeStarters.length === 0 || homeBench.length === 0 || awayStarters.length === 0 || awayBench.length === 0"
         class="ion-text-center ion-padding">
         Sestavy nejsou k dispozici.
       </h3>

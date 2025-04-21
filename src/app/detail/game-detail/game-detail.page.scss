@@ -12,11 +12,6 @@
   color: var(--ion-color-dark);
 }
 
-.square-double {
-  width: 3.5rem;
-  height: 2rem;
-}
-
 .square-logo-game {
   width: 7rem;
   height: 7rem;
@@ -44,9 +39,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2.5em;
+  font-size: 2.4em;
   font-weight: bold;
-  letter-spacing: 0.3rem;
+  letter-spacing: 0.2rem;
   color: var(--ion-color-dark);
 }
 
@@ -111,7 +106,7 @@ ion-thumbnail.big.fixed img {
 }
 
 .midfielder {
-  color: var(--ion-color-secondary);
+  color: orange;
 }
 
 .attacker {
@@ -135,6 +130,7 @@ ion-thumbnail.big.fixed img {
   background-color: var(--ion-color-light);
   padding: 0.5rem;
   align-items: center;
+  font-size: 0.8em;
 }
 
 .row-odd {

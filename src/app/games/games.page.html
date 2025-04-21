@@ -5,7 +5,7 @@
 </ion-header>
 
 <ion-content>
-  <ion-card>
+  <ion-card class="nomp">
     <ion-card-header>
       <ion-button (click)="isDateModalOpen = true">
         <ion-icon slot="start" name="calendar-outline"></ion-icon>
@@ -13,12 +13,13 @@
       </ion-button>
     </ion-card-header>
     <ion-spinner *ngIf="isLoading" name="crescent" class="ion-padding"></ion-spinner>
+  </ion-card>
     <ng-container *ngIf="!isLoading">
       <ng-container *ngIf="gamesGroupedByLeague | keyvalue as leagues">
         <ng-container *ngFor="let league of leagues">
-          <h2 class="ion-text-center">{{ league.key }}</h2>
+          <div class="ion-text-center tabhead">{{ league.key }}</div>
           <ion-list>
-            <ion-item *ngFor="let game of league.value" class="no-border" (click)="goToGameDetail(game.id)">
+            <ion-item *ngFor="let game of league.value" class="no-border bg-color" (click)="goToGameDetail(game.id)">
               <ion-grid fixed="true" class="p-nomar">
                 <div class="shadow-box">
                   <ion-row class="roundanddate">
@@ -74,7 +75,6 @@
     <h3 *ngIf="hasNoGames" class="ion-text-center ion-padding">
       Tento den se nehrají žádná utkání.
     </h3>
-  </ion-card>
 </ion-content>
 
 <ion-modal [isOpen]="isDateModalOpen" (didDismiss)="isDateModalOpen = false" cssClass="custom-date-modal">
