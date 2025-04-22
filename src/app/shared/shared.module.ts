@@ -4,6 +4,9 @@ import { IonicModule } from '@ionic/angular';
 import { SharedContentComponent } from '../components/shared-content/shared-content.component';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { LeagueNavigatorComponent } from '../components/league-navigator/league-navigator.component';
+import { PlayerNavigatorComponent } from '../components/player-navigator/player-navigator.component';
+import { TeamNavigatorComponent } from '../components/team-navigator/team-navigator.component';
 
 
 @NgModule({
@@ -12,7 +15,10 @@ import { FormsModule } from '@angular/forms';
     CommonModule,
     IonicModule,
     RouterModule,
-    FormsModule
+    FormsModule,
+    LeagueNavigatorComponent,
+    PlayerNavigatorComponent,
+    TeamNavigatorComponent
   ],
   exports: [SharedContentComponent]
 })

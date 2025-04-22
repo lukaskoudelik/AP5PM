@@ -176,6 +176,15 @@ export class SupabaseService {
     return data || [];
   }
 
+  async getTeamsByLeague(leagueId: string) {
+    const { data, error } = await this.supabase.from('teams').select('*').eq('league_id', leagueId);
+    if (error) {
+      console.error(`Chyba při načítání lig:`, error.message);
+      return [];
+    }
+    return data || [];
+  }
+
   async getGamesByTeamId(teamId: string) {
     const { data, error } = await this.supabase.from('games').select('*').or(`home_team_id.eq.${teamId},away_team_id.eq.${teamId}`);
     if (error) {

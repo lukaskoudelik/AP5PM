@@ -8,3 +8,18 @@
     display: flex;
     justify-content: center;
 }
+
+ion-list {
+  background-color: var(--ion-color-quaternary);
+}
+
+ion-picker {
+  --background: var(--ion-color-light);
+}
+
+ion-datetime {
+  --wheel-highlight-background: var(--ion-color-quaternary);
+  --background: var(--ion-color-light);
+
+  --wheel-fade-background: var(--ion-color-light);
+}

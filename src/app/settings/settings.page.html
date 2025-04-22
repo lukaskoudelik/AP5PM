@@ -6,11 +6,62 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content>
   <ion-list inset="true">
     <ion-item>
-      <ion-toggle [checked]="isDarkMode" (ionChange)="toggleDarkMode($event)" justify="space-between"
+      <ion-toggle disabled [checked]="isDarkMode" (ionChange)="toggleDarkMode($event)" justify="space-between"
         id="paletteToggle">Dark Mode</ion-toggle>
     </ion-item>
   </ion-list>
+
+  <!-- VYMAZAT -->
+  <h2 class="tabhead ion-text-center">TO DO LIST</h2>
+  <ion-list>
+    <ion-item>
+      Menu zápasu - dnešní zápasy oblíbených
+    </ion-item>
+    <ion-item>
+      Search page design + postupné načítání
+    </ion-item>
+    <ion-item>
+      Loading spinner
+    </ion-item>
+    <ion-item>
+      Ukládat nastavení dark mode
+    </ion-item>
+    <ion-item>
+      Barvy podle modu
+    </ion-item>
+    <ion-item>
+      Efekt kliknutí
+    </ion-item>
+    <ion-item>
+      Oblíbené ukládat do 3d pole
+    </ion-item>
+    <ion-item>
+      Při přidání do oblíbených zobrazit info (toast)
+    </ion-item>
+    <ion-item>
+      Css sjednotit + barvy (light, dark)
+    </ion-item>
+    <ion-item>
+      Responzivita pro nejmenší zařízení
+    </ion-item>
+    <ion-item>
+      Player-detail: statistiky (dle soutěží)
+    </ion-item>
+    <ion-item>
+      Databáze: střelci gólů nesedí týmům
+    </ion-item>
+    <ion-item>
+      Databáze: přidat rozhodčí, stadion a počet diváků k zápasům s result
+    </ion-item>
+    <ion-item>
+      Databáze: přidat karty a střídání
+    </ion-item>
+    <ion-item>
+      Zápasy a tabulka jako samostatná komponenta
+    </ion-item>
+  </ion-list>
+
 </ion-content>

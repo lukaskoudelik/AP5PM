@@ -72,9 +72,9 @@
         </ng-container>
       </ng-container>
     </ng-container>
-    <h3 *ngIf="hasNoGames" class="ion-text-center ion-padding">
+    <p *ngIf="hasNoGames" class="ion-text-center ion-padding">
       Tento den se nehrají žádná utkání.
-    </h3>
+    </p>
 </ion-content>
 
 <ion-modal [isOpen]="isDateModalOpen" (didDismiss)="isDateModalOpen = false" cssClass="custom-date-modal">

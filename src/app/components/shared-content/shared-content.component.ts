@@ -7,7 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   selector: 'app-shared-content',
   templateUrl: './shared-content.component.html',
   styleUrls: ['./shared-content.component.scss'],
-  standalone: false
+  standalone: false,
 })
 export class SharedContentComponent  implements OnInit, OnChanges {
 
@@ -19,10 +19,6 @@ export class SharedContentComponent  implements OnInit, OnChanges {
   searchedResults: any[] = [];
   @Input() favoriteItems: { league: any[], team: any[], player: any[] } = { league: [], team: [], player: [] };
   itemsData: any[] = [];
-  organizations: any[] = [];
-  regions: any[] = [];
-  districts: any[] = [];
-  leagues: any[] = [];
 
   async ngOnInit() {
     this.activatedRoute.url.subscribe(urlSegments => {
@@ -36,10 +32,7 @@ export class SharedContentComponent  implements OnInit, OnChanges {
     });
 
     this.appService.loadAllFavorites();
-    this.organizations = await this.supabaseService.getOrganizations();
-    this.regions = await this.supabaseService.getRegions();
-    this.districts = await this.supabaseService.getDistricts();
-    this.leagues = await this.supabaseService.getLeagues();
+
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -112,65 +105,6 @@ export class SharedContentComponent  implements OnInit, OnChanges {
   onItemClick(event: Event, league: any, type: 'league' | 'team' | 'player'){
     this.appService.onItemClick(event, league, type);
   }
-
-
-  isOrgOpen = false;
-openOrgs: Record<number, boolean> = {}; // Mapování organizace -> otevřeno/uzavřeno
-openRegions: Record<number, boolean> = {}; // Mapování regionu -> otevřeno/uzavřeno
-openRegionsUnderOrg: Record<number, boolean> = {};
-openDistricts: Record<number, boolean> = {}; // Mapování okresu -> otevřeno/uzavřeno
-
-
-specialOrganizations = ['Celostátní', 'Čechy', 'Morava a Slezsko']; // Speciální organizace
-
-toggleOrganizations() {
-  this.isOrgOpen = !this.isOrgOpen;
-}
-
-// Funkce pro otevření organizace
-toggleOrg(orgId: number, orgName: string) {
-  if (this.specialOrganizations.includes(orgName)) {
-    this.openOrgs[orgId] = !this.openOrgs[orgId];
-  } else {
-    // Organizace "Kraj" nebo "Okres"
-    this.openOrgs[orgId] = !this.openOrgs[orgId];
-    if (this.openOrgs[orgId]) {
-      this.openRegionsUnderOrg[orgId] = true;
-    } else {
-      this.openRegionsUnderOrg[orgId] = false;
-    }
-  }
-}
-
-// Funkce pro otevření regionu (kraj)
-toggleRegion(regionId: number) {
-  this.openRegions[regionId] = !this.openRegions[regionId];
-}
-
-// Funkce pro otevření okresu
-toggleDistrict(districtId: number) {
-  this.openDistricts[districtId] = !this.openDistricts[districtId];
-}
-
-// Získání soutěží podle regionu
-getLeaguesByRegion(regionId: number) {
-  return this.leagues.filter(l => l.region_id === regionId);
-}
-
-// Získání okresů podle regionu
-getDistrictsByRegion(regionId: number) {
-  return this.districts.filter(d => d.region_id === regionId);
-}
-
-// Získání soutěží podle okresu
-getLeaguesByDistrict(districtId: number) {
-  return this.leagues.filter(l => l.district_id === districtId);
-}
-
-// Získání soutěží podle organizace
-getLeaguesByOrganization(orgId: number) {
-  return this.leagues.filter(l => l.organization_id === orgId);
-}
 
 
 }

@@ -12,15 +12,28 @@
     <ion-content>
       <ion-list *ngIf="favoriteItems[activeTab].length > 0; else noFavorites">
         <ion-item *ngFor="let item of favoriteItems[activeTab]" (click)="onItemClick($event, item, activeTab)">
-          <ion-thumbnail slot="start">
+          <ion-grid class="nomp">
+            <ion-row class="league-row">
+              <ion-col size="auto">
+                <div class="square-cell square-logo">
+          <ion-thumbnail slot="start" class="small fixed">
             <img [src]="item.photoUrl" alt="{{ item.name }}" />
           </ion-thumbnail>
-          <ion-label>
+        </div>
+      </ion-col>
+      <ion-col class="team-name-cell">
             {{ item.name }}
-          </ion-label>
-          <ion-button slot="end" fill="clear" (click)="toggleFavorite(item, activeTab)" color="danger">
+
+        </ion-col>
+        <ion-col size="auto">
+        <div class="square-cell square-inner">
+          <ion-button fill="clear" (click)="toggleFavorite(item, activeTab)" color="danger">
             <ion-icon class="heart-icon-active" name="heart"></ion-icon>
           </ion-button>
+        </div>
+        </ion-col>
+      </ion-row>
+        </ion-grid>
         </ion-item>
       </ion-list>
       <ng-template #noFavorites>

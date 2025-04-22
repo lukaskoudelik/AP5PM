@@ -99,9 +99,9 @@
           -
         </h3>
 -->
-      <h3 *ngIf="allGoals.length === 0 && game && game.homeTeam && game.awayTeam && !game.result" class="ion-text-center ion-padding">
+      <p *ngIf="allGoals.length === 0 && game && game.homeTeam && game.awayTeam && !game.result" class="ion-text-center ion-padding">
         Informace zatím nejsou k dispozici.
-      </h3>
+      </p>
     </div>
     <div *ngSwitchCase="'squadlist'">
       <ion-grid
@@ -215,11 +215,11 @@
           <span class="text">Neuvedeno</span>
         </div>
       </div>
-      <h3
+      <p
         *ngIf="game && game.homeTeam && game.awayTeam && homeStarters.length === 0 || homeBench.length === 0 || awayStarters.length === 0 || awayBench.length === 0"
         class="ion-text-center ion-padding">
         Sestavy nejsou k dispozici.
-      </h3>
+    </p>
     </div>
   </div>
 

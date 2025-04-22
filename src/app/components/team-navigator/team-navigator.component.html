@@ -1,0 +1,238 @@
+<!-- Organizace -->
+<ng-container>
+  <div class="navigator-item level1" (click)="toggleOrganizations()">
+    <ion-label>Soutěže</ion-label>
+    <ion-icon [name]="isOrgOpen ? 'chevron-up' : 'chevron-down'" slot="end"></ion-icon>
+  </div>
+
+  <!-- Výpis organizací -->
+  <ng-container *ngIf="isOrgOpen">
+    <ng-container *ngFor="let org of organizations">
+
+      <!-- Speciální organizace (Celostátní, Čechy, Morava) -->
+      <ng-container *ngIf="specialOrganizations.includes(org.name)">
+        <div class="navigator-item level2" (click)="toggleOrg(org.id)">
+          <ion-label>{{ org.name }}</ion-label>
+          <ion-icon [name]="openOrgs[org.id] ? 'chevron-up' : 'chevron-down'" slot="end">
+          </ion-icon>
+        </div>
+
+        <!-- Soutěže pod organizací Celostátní, Čechy, Morava -->
+        <ng-container *ngIf="openOrgs[org.id]">
+          <ng-container *ngFor="let league of getLeaguesByOrganization(org.id)">
+            <div class="navigator-item level3" (click)="toggleLeague(league.id)">
+              <ion-label>{{ league.name }}</ion-label>
+              <ion-icon [name]="openLeague[league.id] ? 'chevron-up' : 'chevron-down'" slot="end">
+              </ion-icon>
+            </div>
+
+            <!-- Týmy -->
+            <ng-container *ngIf="openLeague[league.id]">
+              <ion-list>
+                <div *ngFor="let team of getTeamsByLeague(league.id)" (click)="onItemClick($event, team, 'team')"
+                  class="level4 team-grid">
+                  <ion-item>
+                    <ion-grid class="nomp">
+                      <ion-row class="league-row">
+                        <ion-col size="auto">
+                          <div class="square-cell square-logo">
+                            <ion-thumbnail class="small fixed">
+                              <img [src]="team.photoUrl" alt="{{ team.name }}" />
+                            </ion-thumbnail>
+                          </div>
+                        </ion-col>
+                        <ion-col class="team-name-cell">
+                          {{ team.name }}
+                        </ion-col>
+                      </ion-row>
+                    </ion-grid>
+                  </ion-item>
+                </div>
+              </ion-list>
+            </ng-container>
+
+          </ng-container>
+        </ng-container>
+      </ng-container>
+
+      <!-- Kraj -->
+      <ng-container *ngIf="!specialOrganizations.includes(org.name) && org.name === 'Kraj'">
+        <div class="navigator-item level2" (click)="toggleOrg(org.id)">
+          <ion-label>Krajské</ion-label>
+          <ion-icon [name]="openOrgs[org.id] ? 'chevron-up' : 'chevron-down'" slot="end">
+          </ion-icon>
+        </div>
+
+        <!-- Kraje -->
+        <ng-container *ngIf="openOrgs[org.id]">
+          <ng-container *ngFor="let region of regions">
+            <div class="navigator-item level3" (click)="toggleRegion(region.id)">
+              <ion-label>{{ region.name }}</ion-label>
+              <ion-icon [name]="openRegions[region.id] ? 'chevron-up' : 'chevron-down'" slot="end">
+              </ion-icon>
+            </div>
+
+            <!-- Soutěže v kraji -->
+            <ng-container *ngIf="openRegions[region.id] && org.name === 'Kraj'">
+              <ng-container *ngFor="let league of getLeaguesByRegion(region.id)">
+                <div class="navigator-item level4" (click)="toggleLeague(league.id)">
+                  <ion-label>{{ league.name }}</ion-label>
+                  <ion-icon [name]="openLeague[league.id] ? 'chevron-up' : 'chevron-down'" slot="end">
+                  </ion-icon>
+                </div>
+
+                <!-- Týmy -->
+                <ng-container *ngIf="openLeague[league.id]">
+                  <ion-list>
+                    <div *ngFor="let team of getTeamsByLeague(league.id)" (click)="onItemClick($event, team, 'team')"
+                      class="level5 team-grid">
+                      <ion-item>
+                        <ion-grid class="nomp">
+                          <ion-row class="league-row">
+                            <ion-col size="auto">
+                              <div class="square-cell square-logo">
+                                <ion-thumbnail class="small fixed">
+                                  <img [src]="team.photoUrl" alt="{{ team.name }}" />
+                                </ion-thumbnail>
+                              </div>
+                            </ion-col>
+                            <ion-col class="team-name-cell">
+                              {{ team.name }}
+                            </ion-col>
+                          </ion-row>
+                        </ion-grid>
+                      </ion-item>
+                    </div>
+                  </ion-list>
+                </ng-container>
+
+              </ng-container>
+            </ng-container>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+
+      <!-- Okres -->
+      <ng-container *ngIf="!specialOrganizations.includes(org.name) && org.name === 'Okres'">
+        <div class="navigator-item level2" (click)="toggleOrg(org.id)">
+          <ion-label>Okresní</ion-label>
+          <ion-icon [name]="openOrgs[org.id] ? 'chevron-up' : 'chevron-down'" slot="end">
+          </ion-icon>
+        </div>
+
+        <!-- Kraje -->
+        <ng-container *ngIf="openOrgs[org.id]">
+          <ng-container *ngFor="let region of regions">
+            <div class="navigator-item level3" (click)="toggleRegionUnderDistrict(region.id)">
+              <ion-label>{{ region.name }}</ion-label>
+              <ion-icon [name]="openRegionsUnderDistrict[region.id] ? 'chevron-up' : 'chevron-down'" slot="end">
+              </ion-icon>
+            </div>
+
+            <!-- Okresy v kraji -->
+            <ng-container *ngIf="openRegionsUnderDistrict[region.id] && org.name === 'Okres'">
+              <ng-container *ngFor="let district of getDistrictsByRegion(region.id)">
+                <div class="navigator-item level4" (click)="toggleDistrict(district.id)">
+                  <ion-label>{{ district.name }}</ion-label>
+                  <ion-icon [name]="openDistricts[district.id] ? 'chevron-up' : 'chevron-down'" slot="end">
+                  </ion-icon>
+                </div>
+
+                <!-- Soutěže pod okresy -->
+                <ng-container *ngIf="openDistricts[district.id]">
+                  <ng-container *ngFor="let league of getLeaguesByDistrict(district.id)">
+                    <div class="navigator-item level5" (click)="toggleLeague(league.id)">
+                      <ion-label>{{ league.name }}</ion-label>
+                      <ion-icon [name]="openLeague[league.id] ? 'chevron-up' : 'chevron-down'" slot="end">
+                      </ion-icon>
+                    </div>
+
+                    <!-- Týmy -->
+                    <ng-container *ngIf="openLeague[league.id]">
+                      <ion-list>
+                        <div *ngFor="let team of getTeamsByLeague(league.id)"
+                          (click)="onItemClick($event, team, 'team')" class="level6 team-grid">
+                          <ion-item>
+                            <ion-grid class="nomp">
+                              <ion-row class="league-row">
+                                <ion-col size="auto">
+                                  <div class="square-cell square-logo">
+                                    <ion-thumbnail class="small fixed">
+                                      <img [src]="team.photoUrl" alt="{{ team.name }}" />
+                                    </ion-thumbnail>
+                                  </div>
+                                </ion-col>
+                                <ion-col class="team-name-cell">
+                                  {{ team.name }}
+                                </ion-col>
+                              </ion-row>
+                            </ion-grid>
+                          </ion-item>
+                        </div>
+                      </ion-list>
+                    </ng-container>
+
+                  </ng-container>
+                </ng-container>
+              </ng-container>
+            </ng-container>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+    </ng-container>
+  </ng-container>
+
+  <!-- Lokace -->
+  <div class="navigator-item level1" (click)="toggleLocations()">
+    <ion-label>Lokace</ion-label>
+    <ion-icon [name]="isLocationsOpen ? 'chevron-up' : 'chevron-down'" slot="end"></ion-icon>
+  </div>
+
+  <!-- Kraje -->
+  <ng-container *ngIf="isLocationsOpen">
+    <ng-container *ngFor="let region of regions">
+      <div class="navigator-item level2" (click)="toggleLocRegion(region.id)">
+        <ion-label>{{ region.name }}</ion-label>
+        <ion-icon [name]="openLocRegion[region.id] ? 'chevron-up' : 'chevron-down'" slot="end">
+        </ion-icon>
+      </div>
+
+      <!-- Okresy -->
+      <ng-container *ngIf="openLocRegion[region.id]">
+        <ng-container *ngFor="let district of getDistrictsByRegion(region.id)">
+          <div class="navigator-item level3" (click)="toggleLocDistrict(district.id)">
+            <ion-label>{{ district.name }}</ion-label>
+            <ion-icon [name]="openLocDistrict[district.id] ? 'chevron-up' : 'chevron-down'" slot="end">
+            </ion-icon>
+          </div>
+
+          <!-- Týmy -->
+          <ng-container *ngIf="openLocDistrict[district.id]">
+            <ion-list>
+              <div *ngFor="let team of getTeamsByDistrict(district.id)" (click)="onItemClick($event, team, 'team')"
+                class="level4 team-grid">
+                <ion-item>
+                  <ion-grid class="nomp">
+                    <ion-row class="league-row">
+                      <ion-col size="auto">
+                        <div class="square-cell square-logo">
+                          <ion-thumbnail class="small fixed">
+                            <img [src]="team.photoUrl" alt="{{ team.name }}" />
+                          </ion-thumbnail>
+                        </div>
+                      </ion-col>
+                      <ion-col class="team-name-cell">
+                        {{ team.name }}
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                </ion-item>
+              </div>
+            </ion-list>
+          </ng-container>
+
+        </ng-container>
+      </ng-container>
+    </ng-container>
+  </ng-container>
+</ng-container>

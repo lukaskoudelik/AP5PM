@@ -11,7 +11,7 @@
       </ion-title>
       <ion-buttons slot="end">
         <ion-button [routerLink]="'../../search'">
-          <ion-icon slot="icon-only" name="search" class="white"></ion-icon>
+          <ion-icon slot="icon-only" name="search" class="color-light"></ion-icon>
         </ion-button>
       </ion-buttons>
     </ion-toolbar>
@@ -19,133 +19,74 @@
 
 
   <ion-content>
-    <ion-card class="nomp">
-      <h2 class="tabhead nomp ion-text-center">vyhledávání podle názvu</h2>
-      <ion-card-header>
-        <ion-searchbar [placeholder]="activeTab === 'league' ? 'Hledat soutěž...' : 
+    <h2 class="tabhead nomp ion-text-center">vyhledávání podle názvu</h2>
+    <div class="custom-mp bg-ligt">
+        <ion-searchbar class="search-color" [placeholder]="activeTab === 'league' ? 'Hledat soutěž...' : 
                       activeTab === 'team' ? 'Hledat tým...' : 
                       'Hledat hráče...'" [(ngModel)]="searchQuery" (ionInput)="onSearchInput(activeTab)">
         </ion-searchbar>
-      </ion-card-header>
-      <ion-card-content *ngIf="filteredResults.length > 0">
-        <ion-list *ngIf="filteredResults.length > 0">
+        <ion-list *ngIf="filteredResults.length > 0" >
           <ion-item *ngFor="let result of filteredResults" (click)="onItemClick($event, result, activeTab)">
-            <ion-thumbnail slot="start">
-              <img [src]="result.photoUrl" alt="{{ result.name }}" />
-            </ion-thumbnail>
-            <ion-label>
-              <h2>{{ result.name }}</h2>
-            </ion-label>
+            <ion-grid class="nomp">
+              <ion-row class="league-row">
+                <ion-col size="auto">
+                  <div class="square-cell square-logo">
+                    <ion-thumbnail slot="start" class="small fixed">
+                      <img [src]="result.photoUrl" alt="{{ result.name }}" />
+                    </ion-thumbnail>
+                  </div>
+                </ion-col>
+                <ion-col class="team-name-cell">
+                  {{ result.name }}
+                </ion-col>
+              </ion-row>
+            </ion-grid>
           </ion-item>
         </ion-list>
-      </ion-card-content>
-      <h2 class="tabhead nomp ion-text-center">
-        {{ activeTab === 'league' ? 'vyhledávání podle organizace' :
-        activeTab === 'team' ? 'vyhledávání podle lokace nebo soutěže' :
-        'vyhledávání podle týmu' }}</h2>
+    </div>
+    <h2 class="tabhead nomp ion-text-center">
+      {{ activeTab === 'league' ? 'vyhledávání podle organizace' :
+      activeTab === 'team' ? 'vyhledávání podle lokace nebo soutěže' :
+      'vyhledávání podle týmu' }}</h2>
 
-
-<!-- Hlavní přepínač pro všechny organizace -->
-<ion-item (click)="toggleOrganizations()">
-  <ion-label>Organizace</ion-label>
-  <ion-icon [name]="isOrgOpen ? 'chevron-up' : 'chevron-down'" slot="end"></ion-icon>
-</ion-item>
-
-<!-- Výpis organizací -->
-<ng-container *ngIf="isOrgOpen">
-  <ng-container *ngFor="let org of organizations">
-
-    <!-- Speciální organizace s rozbalováním soutěží (Celostátní, Čechy, Morava) -->
-    <ng-container *ngIf="specialOrganizations.includes(org.name)">
-      <ion-item (click)="toggleOrg(org.id, org.name)">
-        <ion-label>{{ org.name }}</ion-label>
-        <ion-icon
-          [name]="openOrgs[org.id] ? 'chevron-up' : 'chevron-down'"
-          slot="end">
-        </ion-icon>
+    <div class="bg-light custom-mp">
+      <div *ngIf="activeTab === 'league'">
+        <app-league-navigator>
+        </app-league-navigator>
+      </div>
+      <div *ngIf="activeTab === 'team'">
+        <app-team-navigator>
+        </app-team-navigator>
+      </div>
+      <div *ngIf="activeTab === 'player'">
+        <app-player-navigator>
+        </app-player-navigator>
+      </div>
+    </div>
+    <h2 class="tabhead nomp ion-text-center">
+      {{ activeTab === 'league' ? 'oblíbené soutěže' :
+      activeTab === 'team' ? 'oblíbené týmy' :
+      'oblíbení hráči' }}</h2>
+    <ion-list *ngIf="favoriteItems[activeTab].length > 0; else noFavorites">
+      <ion-item *ngFor="let item of favoriteItems[activeTab]" (click)="onItemClick($event, item, activeTab)">
+        <ion-grid class="nomp">
+          <ion-row class="league-row">
+            <ion-col size="auto">
+              <div class="square-cell square-logo">
+                <ion-thumbnail slot="start" class="small fixed">
+                  <img [src]="item.photoUrl" alt="{{ item.name }}" />
+                </ion-thumbnail>
+              </div>
+            </ion-col>
+            <ion-col class="team-name-cell">
+              {{ item.name }}
+            </ion-col>
+          </ion-row>
+        </ion-grid>
       </ion-item>
-
-      <!-- Soutěže pod organizací Celostátní, Čechy, Morava -->
-      <ng-container *ngIf="openOrgs[org.id]">
-        <ion-item *ngFor="let league of getLeaguesByOrganization(org.id)" (click)="onItemClick($event, league, 'league')">
-          <ion-label>-{{ league.name }}</ion-label>
-        </ion-item>
-      </ng-container>
-    </ng-container>
-
-    <!-- Pro Kraj a Okres -->
-    <ng-container *ngIf="!specialOrganizations.includes(org.name)">
-      <ion-item (click)="toggleOrg(org.id, org.name)">
-        <ion-label>{{ org.name }}</ion-label>
-        <ion-icon
-          [name]="openOrgs[org.id] ? 'chevron-up' : 'chevron-down'"
-          slot="end">
-        </ion-icon>
-      </ion-item>
-
-      <!-- Pro organizaci "Kraj" a "Okres" zobrazíme kraje -->
-      <ng-container *ngIf="openOrgs[org.id] && openRegionsUnderOrg[org.id]">
-        <!-- Kraje pod organizací "Kraj" nebo "Okres" -->
-        <ng-container *ngFor="let region of regions">
-          <ion-item (click)="toggleRegion(region.id)">
-            <ion-label>-{{ region.name }}</ion-label>
-            <ion-icon
-              [name]="openRegions[region.id] ? 'chevron-up' : 'chevron-down'"
-              slot="end">
-            </ion-icon>
-          </ion-item>
-      
-          <!-- Soutěže v kraji (pro "Kraj" org) -->
-          <ng-container *ngIf="openRegions[region.id] && org.name === 'Kraj'">
-            <ion-item *ngFor="let league of getLeaguesByRegion(region.id)" (click)="onItemClick($event, league, 'league')">
-              <ion-label>--{{ league.name }}</ion-label>
-            </ion-item>
-          </ng-container>
-      
-          <!-- Okresy v kraji (pro "Okres" org) -->
-          <ng-container *ngIf="openRegions[region.id] && org.name === 'Okres'">
-            <ng-container *ngFor="let district of getDistrictsByRegion(region.id)">
-              <ion-item (click)="toggleDistrict(district.id)">
-                <ion-label>--{{ district.name }}</ion-label>
-                <ion-icon
-                  [name]="openDistricts[district.id] ? 'chevron-up' : 'chevron-down'"
-                  slot="end">
-                </ion-icon>
-              </ion-item>
-      
-              <!-- Soutěže pod okresy -->
-              <ng-container *ngIf="openDistricts[district.id]">
-                <ion-item *ngFor="let league of getLeaguesByDistrict(district.id)" (click)="onItemClick($event, league, 'league')">
-                  <ion-label>---{{ league.name }}</ion-label>
-                </ion-item>
-              </ng-container>
-            </ng-container>
-          </ng-container>
-        </ng-container>
-      </ng-container>
-    </ng-container>
-
-  </ng-container>
-</ng-container>
-
-
-      <h2 class="tabhead nomp ion-text-center">
-        {{ activeTab === 'league' ? 'oblíbené soutěže' :
-        activeTab === 'team' ? 'oblíbené týmy' :
-        'oblíbení hráči' }}</h2>
-      <ion-list *ngIf="favoriteItems[activeTab].length > 0; else noFavorites">
-        <ion-item *ngFor="let item of favoriteItems[activeTab]" (click)="onItemClick($event, item, activeTab)">
-          <ion-thumbnail slot="start">
-            <img [src]="item.photoUrl" alt="{{ item.name }}" />
-          </ion-thumbnail>
-          <ion-label>
-            {{ item.name }}
-          </ion-label>
-        </ion-item>
-      </ion-list>
-      <ng-template #noFavorites>
-        <p class="ion-padding">Nemáte žádné oblíbené položky.</p>
-      </ng-template>
-    </ion-card>
+    </ion-list>
+    <ng-template #noFavorites>
+      <p class="ion-padding ion-text-center">Nemáte žádné oblíbené položky.</p>
+    </ng-template>
   </ion-content>
 </ion-app>

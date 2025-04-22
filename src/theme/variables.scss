@@ -5,10 +5,9 @@
   --ion-color-secondary-rgb: 160, 250, 150;
   --ion-color-tertiary: #D9D9D9;
   --ion-color-tertiary-rgb: 217, 217, 217;
-  --ion-color-light: #f4f5f8;
+  --ion-color-light: #f5f8f5;
   --ion-color-dark: #222428;
-  --ion-color-quaternary-rgb: 235, 235, 235;
-  --ion-color-quaternary: #ebebeb;
+  --ion-color-quaternary: #ebf5eb;
 
   --ion-font-family: 'RecursoSansRegular';
   --background : var(--ion-color-light);
@@ -28,9 +27,8 @@
 }
 
 ion-app, ion-card, ion-content, ion-list, ion-item {
- --background : var(--ion-color-light);
+ --background: var(--ion-color-light);
 }
-
 
 // Tabs and toolbar
 
