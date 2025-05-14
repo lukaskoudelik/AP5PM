@@ -1,7 +1,7 @@
 :root {
   --ion-color-primary: #144330;
   --ion-color-primary-rgb: 20, 67, 48;
-  --ion-color-secondary: #a0fabe;
+  --ion-color-secondary: #a0faaa;
   --ion-color-secondary-rgb: 160, 250, 150;
   --ion-color-tertiary: #D9D9D9;
   --ion-color-tertiary-rgb: 217, 217, 217;
@@ -24,6 +24,8 @@
 
 .shadow-box {
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  border-bottom-right-radius: 1em;
+  border-bottom-left-radius: 1em;
 }
 
 ion-app, ion-card, ion-content, ion-list, ion-item {
@@ -77,6 +79,7 @@ ion-card-title {
 
 ion-card-subtitle {
   font-size: 1.5rem;
+  color: var(--ion-color-primary);
 }
 
 ion-card {
@@ -91,10 +94,16 @@ ion-card {
 ion-thumbnail.prf {
   height: 6rem;
   width: 6rem;
+  border-radius: 20%;
+  background-color: var(--ion-color-quaternary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 ion-thumbnail.prf img {
-  border-radius: 20%;
+  height: 80%;
+  width: 80%;
 }
 
 
@@ -120,12 +129,11 @@ ion-segment.fltr {
 // Tabulka
 
 .tabhead {
-  padding: 1rem 0.5rem 0.5rem 0.5rem;
+  padding: 0.6rem 0.5rem 0.5rem 0.5rem;
   align-items: center;
-  background-color: var(--ion-color-light);
-  color: var(--ion-color-primary);
-  border-bottom: solid 2px var(--ion-color-primary);
-  font-size: 0.9rem;
+  background-color: var(--ion-color-primary);
+  color: var(--ion-color-light);
+  font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
 }
@@ -259,13 +267,19 @@ ion-thumbnail.small.fixed img {
   border-radius: 20%;
 }
 
+
 .row-odd {
   background-color: var(--ion-color-light);
 }
 
 .row-even {
-  background-color: var(--ion-color-quaternary)
+  background-color: var(--ion-color-quaternary);
 }
+
+.highlighted-club {
+  background-color: var(--ion-color-secondary);
+}
+
 
 .symbol-description {
   margin-top: 1em;
@@ -301,18 +315,24 @@ ion-thumbnail.away {
 }
 
 .roundanddate {
-  background-color: var(--ion-color-quaternary);
-  padding: 0.8rem 0.5rem 0.5rem 0.5rem;
+  background-color: var(--ion-color-primary);
+  color: var(--ion-color-light);
+  padding: 0.8rem 1rem 0.5rem 1rem;
   font-size: 0.8rem;
   margin-top: 0.5rem;
-  border-bottom: solid 2px var(--ion-color-primary);
+  border-top-right-radius: 1em;
+  border-top-left-radius: 1em;
 }
 
 .main-info {
   margin-bottom: 0.5rem;
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
+  font-size: 0.8rem;
+  padding-right: 0.5rem;
+  padding-left: 0.5rem;
 }
+
 
 // List
 
@@ -345,7 +365,7 @@ ion-thumbnail.away {
   }
 
   .tabhead {
-    --background: var(--ion-color-primary);
+    background-color: var(--ion-color-primary);
   }
 }
 

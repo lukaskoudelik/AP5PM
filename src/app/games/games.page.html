@@ -22,6 +22,7 @@
             <ion-item *ngFor="let game of league.value" class="no-border bg-color" (click)="goToGameDetail(game.id)">
               <ion-grid fixed="true" class="p-nomar">
                 <div class="shadow-box">
+                  <div class="rounded-item">
                   <ion-row class="roundanddate">
                     <ion-col size="6" class="ion-text-left">
                       <p>{{ game.round_number }}. kolo</p>
@@ -66,7 +67,9 @@
     
                   </ion-row>
                 </div>
+              </div>
               </ion-grid>
+            
             </ion-item>
           </ion-list>
         </ng-container>

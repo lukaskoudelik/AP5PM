@@ -43,6 +43,9 @@
     <ion-segment-button value="table">
       Tabulka
     </ion-segment-button>
+    <ion-segment-button value="playerslist">
+      Soupiska
+    </ion-segment-button>
   </ion-segment>
 
   <div [ngSwitch]="selectedSegment">
@@ -232,6 +235,27 @@
         </div>
       </div>
       <h3 *ngIf="leagueTable.length == 0 && team" class="ion-text-center ion-padding">Načítám tabulku...</h3>
+    </div>
+    <div *ngSwitchCase="'playerslist'">
+      <ion-list *ngIf="players.length > 0" class="nomp">
+        <ion-item *ngFor="let player of players" (click)="onItemClick($event, player, 'player')">
+          <ion-grid class="nomp">
+            <ion-row class="league-row">
+              <ion-col size="auto">
+                <div class="square-cell square-logo">
+                  <ion-thumbnail slot="start" class="small fixed">
+                    <img [src]="player.photoUrl" alt="{{ player.first_name }} {{ player.second_name }}" />
+                  </ion-thumbnail>
+                </div>
+              </ion-col>
+              <ion-col class="team-name-cell">
+                {{ player.first_name }} {{ player.second_name }}
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-item>
+      </ion-list>
+    <h3 *ngIf="players.length == 0 && team" class="ion-text-center ion-padding">Tým nemá na soupisce žádného hráče.</h3>
     </div>
   </div>
 </ion-content>

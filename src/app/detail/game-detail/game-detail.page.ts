@@ -26,6 +26,7 @@ export class GameDetailPage implements OnInit {
   homeGoals: any = [];
   awayGoals: any = [];
   allGoals: any = [];
+  leagueTable: any[] = [];
 
   starters: number = 0;
   benchers: number = 0;
@@ -60,6 +61,7 @@ export class GameDetailPage implements OnInit {
         await this.loadGameWithTeams(this.game.id);
         await this.loadLineups(this.game.id);
         await this.loadGoals(this.game.id);
+        await this.loadTable(this.game.league_id);
       }
     }
   }
@@ -78,14 +80,27 @@ export class GameDetailPage implements OnInit {
       const league = await this.supabaseService.getLeagueById(`${game.league_id}`)
       const leaguePhotoUrl = await this.supabaseService.getPhotoUrl(league.photo_url);
 
+      let score_home = null;
+      let score_away = null;
+
+      if (game.result) {
+        const [home, away] = game.result.split('-').map(Number);
+        score_home = home !== null ? home : null;
+        score_away = away !== null ? away : null;
+      }
+
       this.game = {
         ...game,
         homeTeam,
         awayTeam,
         league,
         leaguePhotoUrl,
+        score_home,
+        score_away
       };
 
+      console.log(homeTeam.id)
+      console.log(awayTeam.id)
       this.isLoading = false;
 
     } catch (error) {
@@ -251,6 +266,94 @@ export class GameDetailPage implements OnInit {
           break;
       }
     });
+  }
+
+  async loadTable(leagueId: number) {
+    try {
+      this.leagueTable = await this.loadLeagueTable(leagueId);
+    } catch (error) {
+      console.error('Chyba při načítání tabulky ligy:', error);
+    } finally {
+    }
+  }
+
+  async loadLeagueTable(leagueId: number) {
+    try {
+      // Načteme všechny zápasy pro danou ligu
+      const games = await this.supabaseService.getGamesByLeagueId(`${leagueId}`);
+      const teamsStats: { [teamId: number]: { points: number; goalsFor: number; goalsAgainst: number; gamesPlayed: number } } = {};
+
+      games.forEach(game => {
+        if (game.result) {
+          const [homeScore, awayScore] = game.result.split('-').map(Number);
+
+          // Inicializujeme týmy, pokud ještě nejsou v objektu
+          if (!teamsStats[game.home_team_id]) {
+            teamsStats[game.home_team_id] = { points: 0, goalsFor: 0, goalsAgainst: 0, gamesPlayed: 0 };
+          }
+          if (!teamsStats[game.away_team_id]) {
+            teamsStats[game.away_team_id] = { points: 0, goalsFor: 0, goalsAgainst: 0, gamesPlayed: 0 };
+          }
+
+          // Přičteme skóre
+          teamsStats[game.home_team_id].goalsFor += homeScore;
+          teamsStats[game.home_team_id].goalsAgainst += awayScore;
+          teamsStats[game.away_team_id].goalsFor += awayScore;
+          teamsStats[game.away_team_id].goalsAgainst += homeScore;
+
+          // Počet odehraných zápasů
+          teamsStats[game.home_team_id].gamesPlayed++;
+          teamsStats[game.away_team_id].gamesPlayed++;
+
+          // Počítání bodů
+          if (homeScore > awayScore) {
+            teamsStats[game.home_team_id].points += 3;
+          } else if (awayScore > homeScore) {
+            teamsStats[game.away_team_id].points += 3;
+          } else {
+            teamsStats[game.home_team_id].points += 1;
+            teamsStats[game.away_team_id].points += 1;
+          }
+        }
+      });
+
+      // Seřadíme týmy podle bodů a pak podle skóre
+      const sortedTeams = Object.keys(teamsStats).map(teamId => ({
+        teamId: Number(teamId),
+        ...teamsStats[Number(teamId)],
+      })).sort((a, b) => {
+        if (b.points === a.points) {
+          // Pokud mají stejný počet bodů, porovnáme skóre
+          const goalDifferenceB = b.goalsFor - b.goalsAgainst;
+          const goalDifferenceA = a.goalsFor - a.goalsAgainst;
+          return goalDifferenceB - goalDifferenceA;
+        }
+        return b.points - a.points;  // Seřadíme podle bodů
+      });
+
+      // Načteme týmy a přiřadíme jim názvy
+      const teams = await this.supabaseService.getTeamsByIds(sortedTeams.map(team => team.teamId.toString()));
+
+      // Vytvoříme výslednou tabulku týmů
+      const leagueTable = await Promise.all(sortedTeams.map(async teamStat => {
+        const team = teams.find(t => t.id === teamStat.teamId);
+        const photoUrl = await this.supabaseService.getPhotoUrl(team.photo_url);
+        return {
+          id: team.id,
+          name: team.name,
+          points: teamStat.points,
+          goalsFor: teamStat.goalsFor,
+          goalsAgainst: teamStat.goalsAgainst,
+          gamesPlayed: teamStat.gamesPlayed,
+          photoUrl
+        };
+      }));
+
+      return leagueTable;
+    } catch (error) {
+      console.error('Chyba při načítání tabulky ligy:', error);
+      throw error;
+    }
   }
   
 }

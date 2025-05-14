@@ -23,7 +23,8 @@ export class TeamDetailPage implements OnInit {
   gamesToPlay: any[] = []; 
   opponent: any;
   favoriteTeams: any[] = [];
-  leagueTable: any[] = []; 
+  leagueTable: any[] = [];
+  players: any[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -45,6 +46,7 @@ export class TeamDetailPage implements OnInit {
           this.loadTable(this.team.league_id);
         }
         this.loadGamesWithTeams();
+        this.getPlayersWithPhotos(this.team.id);
       }
     }
     this.isFavoriteItem('team', this.team.id);
@@ -210,5 +212,20 @@ export class TeamDetailPage implements OnInit {
 
   goToGameDetail(gameId: string) {
     this.appService.goToGameDetail(gameId);
+  }
+
+  async getPlayersWithPhotos(teamId: number) {
+    try {
+      const players = await this.supabaseService.getPlayersByTeamId(`${teamId}`);
+
+      const playersWithPhotos = await Promise.all(players.map(async (player: any) => {
+          const photoUrl = await this.supabaseService.getPhotoUrl(player.photo_url);
+          return { ...player, photoUrl };
+      }));
+
+      this.players = playersWithPhotos;
+  } catch (error) {
+      console.error('Chyba při načítání hráčů s fotkami:', error);
+  }
   }
 }

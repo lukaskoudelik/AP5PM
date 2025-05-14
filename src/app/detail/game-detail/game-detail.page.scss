@@ -1,26 +1,14 @@
-.square-inner-game {
-  width: 8rem;
-  height: 8rem;
-  text-align: center;
-  font-size: 1em;
-}
-
 .team-name-game {
-  width: 8rem;
   text-align: center;
-  font-size: 1rem;
-  color: var(--ion-color-dark);
-}
-
-.square-logo-game {
-  width: 8rem;
-  height: 8rem;
+  font-size: 0.9rem;
+  color: var(--ion-color-primary);
+  flex: 1;
 }
 
 .game-header {
-  padding: 0.5rem 1rem 0.5rem 1rem;
+  padding: 0;
   align-items: center;
-  background-color: var(--ion-color-secondary);
+  background-color: var(--ion-color-quaternary);
   color: var(--ion-color-primary);
 }
 
@@ -28,31 +16,77 @@
   font-size: 1.2em;
   background-color: var(--ion-color-light);
   padding: 0.5em;
-  border-bottom: solid 2px var(--ion-color-primary);
   color: var(--ion-color-dark);
   align-items: center;
 }
 
 .score-cell {
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2.4em;
+  font-size: 1.8em;
   font-weight: bold;
-  letter-spacing: 0.2rem;
   color: var(--ion-color-dark);
 }
 
+.single-score-cell {
+  width: 2.5rem;
+  height: 2.5rem;
+  background-color: var(--ion-color-primary);
+  margin: 0.2rem;
+  border-radius: 20%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ion-color-light);
+}
+
+.double-dots {
+  width: 1rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-small {
+  padding: 0;
+  margin: 0;
+}
+
+.icon-small {
+  font-size: 4px;
+}
+
+.square-logo-game {
+  width: 7rem;
+  height: 6.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+
+.middle-sc {
+  flex: 0 0 7rem;
+  color: var(--ion-color-primary);
+}
+
 ion-thumbnail.big.fixed {
-  width: 7em;
-  height: 7em;
+  width: 6em;
+  height: 6em;
   object-fit: cover;
+  //border: solid 0.2rem var(--ion-color-primary);
+  // background-color: var(--ion-color-light);
+  border-radius: 20%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 ion-thumbnail.big.fixed img {
-  border-radius: 20%;
+  width: 80%;
+  height: 80%;
 }
 
 .goal-home {
@@ -99,6 +133,11 @@ ion-thumbnail.big.fixed img {
   text-align: right;
 }
 
+.league-round {
+  font-size: 0.9rem;
+  color: var(--ion-color-primary);
+}
+
 .goalkeeper {
   color: darkred;
 }
@@ -142,7 +181,11 @@ ion-thumbnail.big.fixed img {
 }
 
 .row-even {
-  background-color: var(--ion-color-quaternary)
+  background-color: var(--ion-color-quaternary);
+}
+
+.highlighted-club {
+  background-color: var(--ion-color-secondary);
 }
 
 .squad-description {
@@ -150,12 +193,25 @@ ion-thumbnail.big.fixed img {
   font-size: 0.8em;
 }
 
-@media screen and (max-width: 375px) {
-  .square-logo-game {
-    width: 6rem;
-    height: 6rem;
+.half-padding {
+  padding: 0.5rem;
+}
 
-  }
+.date-time-cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2em;
+}
+
+.date-time-inner-cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5em;
+}
+
+@media screen and (max-width: 375px) {
 
   .team-name-game {
     width: 6rem;
@@ -165,17 +221,17 @@ ion-thumbnail.big.fixed img {
   }
   
   .square-logo-game {
-    width: 6rem;
-    height: 6rem;
+    width: 5.5rem;
+    height: 5.5rem;
   }
 
   ion-thumbnail.big.fixed {
-    width: 5rem;
-    height: 5rem;
+    width: 4.5rem;
+    height: 4.5rem;
     object-fit: cover;
   }
 
   .score-cell {
-    font-size: 2rem;
+    font-size: 1.2rem;
   }
 }

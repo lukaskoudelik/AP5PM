@@ -18,6 +18,14 @@ ion-list {
 
 .tabhead {
     background-color: var(--ion-color-quaternary);
+    color: var(--ion-color-primary);
+    font-family: 'RecursoSansRegular';
+    font-weight: 900;
+    border: 0;
+    font-size: 1em;
+    text-align: left;
+    padding: 1.5rem 1rem 1rem 1rem;
+    letter-spacing: 0.1em;
 }
 
 ion-searchbar.search-color {
