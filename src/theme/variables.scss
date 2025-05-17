@@ -8,9 +8,10 @@
   --ion-color-light: #f5f8f5;
   --ion-color-dark: #222428;
   --ion-color-quaternary: #ebf5eb;
+  --ion-color-lightblack: #333333;
 
   --ion-font-family: 'RecursoSansRegular';
-  --background : var(--ion-color-light);
+  --background: var(--ion-color-light);
 }
 
 .nomp {
@@ -19,7 +20,7 @@
 }
 
 .bg-color {
-  --background : var(--ion-color-light);
+  --background: var(--ion-color-light);
 }
 
 .shadow-box {
@@ -28,8 +29,12 @@
   border-bottom-left-radius: 1em;
 }
 
-ion-app, ion-card, ion-content, ion-list, ion-item {
- --background: var(--ion-color-light);
+ion-app,
+ion-card,
+ion-content,
+ion-list,
+ion-item {
+  --background: var(--ion-color-light);
 }
 
 // Tabs and toolbar
@@ -196,9 +201,16 @@ ion-col.cntr {
 .table-description {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding-left: 16px;
-  padding-bottom: 8px;
+  gap: 0.5rem;
+  padding: 0.2rem;
+}
+
+.symbol-description {
+  font-size: 0.8em;
+  margin: 0.5rem;
+  border-radius: 1rem;
+  padding: 0.5rem;
+  opacity: 0.8;
 }
 
 .table-description p {
@@ -280,12 +292,6 @@ ion-thumbnail.small.fixed img {
   background-color: var(--ion-color-secondary);
 }
 
-
-.symbol-description {
-  margin-top: 1em;
-  font-size: 0.8em;
-}
-
 // Zápasy
 
 p.result {
@@ -310,7 +316,7 @@ ion-thumbnail.away {
   margin: 0;
 }
 
-.p-nopad p{
+.p-nopad p {
   padding: 0;
 }
 
@@ -369,3 +375,8 @@ ion-thumbnail.away {
   }
 }
 
+@media screen and (max-width: 375px) {
+  .table-team {
+    font-size: 0.8em;
+  }
+}

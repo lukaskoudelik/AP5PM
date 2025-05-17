@@ -57,7 +57,7 @@ export class PlayerDetailPage implements OnInit {
     this.router.navigate([`../search/`]);
   }
 
-  toggleFavorite(item: any, type: 'league' | 'team' | 'player'){
+  toggleFavorite(item: any, type: 'league' | 'team' | 'player') {
     this.appService.toggleFavorite(item, type);
   }
 
@@ -102,7 +102,7 @@ export class PlayerDetailPage implements OnInit {
       }
 
       const games = this.games;
-  
+
       // Načtení domácího a venkovního týmu s jejich fotografiemi
       const gamesWithTeams = await Promise.all(games.map(async (game) => {
         const playerGame = this.playersGame.find(pg => pg.game_id === game.id);
@@ -113,16 +113,34 @@ export class PlayerDetailPage implements OnInit {
 
         const playerGoalsCount = playerGoals.length;
         const playerGoalsMinutes = playerGoalsCount > 0
-        ? `${playerGoals.map(goal => `${goal.minute}'`).join(', ')}`
-        : '';
+          ? `${playerGoals.map(goal => `${goal.minute}'`).join(', ')}`
+          : '';
+
+        const cards = await this.supabaseService.getCardsByGameId(`${game.id}`);
+
+        const playerCards = cards.filter(card => card.player_id === playerId);
+
+        const yellowCards = playerCards.filter(card => card.type === 'yellow');
+        const secondYellowCards = playerCards.filter(card => card.type === 'second_yellow');
+        const redCards = playerCards.filter(card => card.type === 'red');
+
+        const yellowCardMinutes = yellowCards.length > 0
+          ? `${yellowCards.map(card => `${card.minute}'`).join(', ')}`
+          : '';
+
+        const secondYellowCardMinutes = secondYellowCards.length > 0
+          ? `${secondYellowCards.map(card => `${card.minute}'`).join(', ')}`
+          : '';
+
+        const redCardMinutes = redCards.length > 0
+          ? `${redCards.map(card => `${card.minute}'`).join(', ')}`
+          : '';
 
         let playerRole: string;
-        if (playerGame?.role == "starter")
-        {
+        if (playerGame?.role == "starter") {
           playerRole = "základní sestava";
         }
-        else if (playerGame?.role == "bench")
-        {
+        else if (playerGame?.role == "bench") {
           playerRole = "střídající hráč";
         }
         else {
@@ -137,13 +155,19 @@ export class PlayerDetailPage implements OnInit {
           awayTeam,
           role,
           playerGoalsCount,
-          playerGoalsMinutes
+          playerGoalsMinutes,
+          yellowCardCount: yellowCards.length,
+          yellowCardMinutes,
+          secondYellowCardCount: secondYellowCards.length,
+          secondYellowCardMinutes,
+          redCardCount: redCards.length,
+          redCardMinutes
         };
       }));
-  
+
       this.games = gamesWithTeams.filter(game => game.result).sort((a, b) => b.round_number - a.round_number);;
       this.isLoading = false;
-  
+
     } catch (error) {
       console.error('Chyba při načítání zápasů s týmy:', error);
     }

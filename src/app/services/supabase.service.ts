@@ -140,10 +140,37 @@ export class SupabaseService {
     return data || null;
   }
 
+  async getStadiumById(stadiumId: string) {
+    const { data, error } = await this.supabase.from('stadiums').select('*').eq('id', stadiumId).single();
+    if (error) {
+      console.error(`Chyba při načítání stadionu s ID ${stadiumId}:`, error.message);
+      return null;
+    }
+    return data || null;
+  }
+
+  async getRefereeById(refereeId: string) {
+    const { data, error } = await this.supabase.from('referees').select('*').eq('id', refereeId).single();
+    if (error) {
+      console.error(`Chyba při načítání rozhodčího s ID ${refereeId}:`, error.message);
+      return null;
+    }
+    return data || null;
+  }
+
   async getGoalsByGameId(gameId: string) {
     const { data, error } = await this.supabase.from('goals').select('*').eq('game_id', gameId);
     if (error) {
       console.error(`Chyba při načítání gólů:`, error.message);
+      return [];
+    }
+    return data || [];
+  }
+
+  async getCardsByGameId(gameId: string) {
+    const { data, error } = await this.supabase.from('cards').select('*').eq('game_id', gameId);
+    if (error) {
+      console.error(`Chyba při načítání karet:`, error.message);
       return [];
     }
     return data || [];
@@ -157,6 +184,7 @@ export class SupabaseService {
     }
     return data || [];
   }
+  
 
   async getLeaguesByOrganization(organizationId: string) {
     const { data, error } = await this.supabase.from('leagues').select('*').eq('organization_id', organizationId);
@@ -224,7 +252,8 @@ export class SupabaseService {
         ...homeTeamData?.data?.[0],
         photoUrl: homeTeamPhoto,
         name: homeTeamData?.name,
-        id: homeTeamData?.id
+        id: homeTeamData?.id,
+        stadium_id: homeTeamData?.stadium_id,
       };
   
       // Načtení a úprava venkovního týmu
@@ -234,7 +263,7 @@ export class SupabaseService {
         ...awayTeamData?.data?.[0],
         photoUrl: awayTeamPhoto,
         name: awayTeamData?.name,
-        id: awayTeamData?.id
+        id: awayTeamData?.id,
       };
     } catch (error) {
       console.error('Chyba při načítání týmů:', error);

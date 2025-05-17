@@ -27,6 +27,18 @@ export class GameDetailPage implements OnInit {
   awayGoals: any = [];
   allGoals: any = [];
   leagueTable: any[] = [];
+  homeYellowCards: any = [];
+  homeSecondYellowCards: any = [];
+  homeRedCards: any = [];
+  awayYellowCards: any = [];
+  awaySecondYellowCards: any = [];
+  awayRedCards: any = [];
+  allYellowCards: any = [];
+  allSecondYellowCards: any = [];
+  allRedCards: any = [];
+  allEvents: any = [];
+  firstHalfEvents : any = [];
+  secondHalfEvents : any = [];
 
   starters: number = 0;
   benchers: number = 0;
@@ -40,12 +52,12 @@ export class GameDetailPage implements OnInit {
     attacker: number;
     other: number;
   } = {
-    goalkeeper: 0,
-    defender: 0,
-    midfielder: 0,
-    attacker: 0,
-    other: 0
-  };
+      goalkeeper: 0,
+      defender: 0,
+      midfielder: 0,
+      attacker: 0,
+      other: 0
+    };
 
   constructor(private route: ActivatedRoute,
     private supabaseService: SupabaseService,
@@ -60,7 +72,7 @@ export class GameDetailPage implements OnInit {
         this.game = data;
         await this.loadGameWithTeams(this.game.id);
         await this.loadLineups(this.game.id);
-        await this.loadGoals(this.game.id);
+        await this.loadGoalsAndCards(this.game.id);
         await this.loadTable(this.game.league_id);
       }
     }
@@ -89,6 +101,19 @@ export class GameDetailPage implements OnInit {
         score_away = away !== null ? away : null;
       }
 
+      let stadiumName = null;
+      if (game.stadium_id) {
+        const stadium = await this.supabaseService.getStadiumById(`${game.stadium_id}`);
+        stadiumName = stadium ? stadium.name : null;
+      } else {
+        const stadium = await this.supabaseService.getStadiumById(`${homeTeam.stadium_id}`)
+        stadiumName = stadium ? stadium.name : null;
+      }
+
+      const referee = await this.supabaseService.getRefereeById(`${game.referee_id}`);
+      const first_ar = await this.supabaseService.getRefereeById(`${game.first_assistant_id}`);
+      const second_ar = await this.supabaseService.getRefereeById(`${game.second_assistant_id}`);
+
       this.game = {
         ...game,
         homeTeam,
@@ -96,11 +121,13 @@ export class GameDetailPage implements OnInit {
         league,
         leaguePhotoUrl,
         score_home,
-        score_away
+        score_away,
+        stadiumName,
+        referee,
+        first_ar,
+        second_ar,
       };
 
-      console.log(homeTeam.id)
-      console.log(awayTeam.id)
       this.isLoading = false;
 
     } catch (error) {
@@ -173,12 +200,13 @@ export class GameDetailPage implements OnInit {
     }
   }
 
-  async loadGoals(gameId: number) {
+  async loadGoalsAndCards(gameId: number) {
     try {
       // Načteme góly pro daný zápas
       const goals = await this.supabaseService.getGoalsByGameId(`${gameId}`);
+      const cards = await this.supabaseService.getCardsByGameId(`${gameId}`);
 
-      // Enrich hráče pro každý gól (přidání jména hráče)
+      // Enrich hráče pro každý gól
       const enrichedGoals = await Promise.all(
         goals.map(async (goal) => {
           const player = await this.supabaseService.getPlayerById(goal.player_id);
@@ -191,16 +219,52 @@ export class GameDetailPage implements OnInit {
         })
       );
 
+      // Enrich hráče pro každou kartu
+      const enrichedCards = await Promise.all(
+        cards.map(async (card) => {
+          const player = await this.supabaseService.getPlayerById(card.player_id);
+          return {
+            ...card,
+            playerName: `${player.first_name} ${player.second_name}`,
+            homeOrAway: card.home_or_away,
+            player
+          };
+        })
+      );
+
       // Rozdělení gólů na domácí a venkovní
       this.homeGoals = enrichedGoals.filter(goal => goal.homeOrAway === 'home');
       this.awayGoals = enrichedGoals.filter(goal => goal.homeOrAway === 'away');
 
+      // Rozdělení karet na domácí a venkovní
+      this.homeYellowCards = enrichedCards.filter(card => card.type === 'yellow' && card.homeOrAway === 'home');
+      this.awayYellowCards = enrichedCards.filter(card => card.type === 'yellow' && card.homeOrAway === 'away');
+
+      this.homeSecondYellowCards = enrichedCards.filter(card => card.type === 'second_yellow' && card.homeOrAway === 'home');
+      this.awaySecondYellowCards = enrichedCards.filter(card => card.type === 'second_yellow' && card.homeOrAway === 'away');
+
+      this.homeRedCards = enrichedCards.filter(card => card.type === 'red' && card.homeOrAway === 'home');
+      this.awayRedCards = enrichedCards.filter(card => card.type === 'red' && card.homeOrAway === 'away');
+
       this.allGoals = enrichedGoals.sort((a, b) => a.minute - b.minute);
 
-      
+      this.allYellowCards = enrichedCards.filter(card => card.type === 'yellow').sort((a, b) => a.minute - b.minute);
+      this.allSecondYellowCards = enrichedCards.filter(card => card.type === 'second_yellow').sort((a, b) => a.minute - b.minute);
+      this.allRedCards = enrichedCards.filter(card => card.type === 'red').sort((a, b) => a.minute - b.minute);
+
+      const goalsWithType = enrichedGoals.map(goal => ({
+        ...goal,
+        type: 'goal'
+      }));
+
+      const allEvents = [...goalsWithType, ...enrichedCards];
+      this.allEvents = allEvents.sort((a, b) => a.minute - b.minute);
+
+      this.firstHalfEvents = this.allEvents.filter((event: any) => event.minute <= 45);
+      this.secondHalfEvents = this.allEvents.filter((event: any) => event.minute > 45);
 
     } catch (error) {
-      console.error('Chyba při načítání gólů:', error);
+      console.error('Chyba při načítání gólů a karet:', error);
     }
   }
 
@@ -238,14 +302,14 @@ export class GameDetailPage implements OnInit {
       attacker: 0,
       other: 0
     };
-  
+
     const allPlayers = [
       ...this.homeStarters,
       ...this.homeBench,
       ...this.awayStarters,
       ...this.awayBench
     ];
-  
+
     allPlayers.forEach(player => {
       const pos = player.position;
       switch (pos) {
@@ -355,5 +419,5 @@ export class GameDetailPage implements OnInit {
       throw error;
     }
   }
-  
+
 }

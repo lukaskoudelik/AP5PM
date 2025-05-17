@@ -36,6 +36,9 @@
     <ion-segment-button value="results">
       Odehrané zápasy
     </ion-segment-button>
+    <ion-segment-button value="info">
+      Informace
+    </ion-segment-button>
   </ion-segment>
   <div [ngSwitch]="selectedSegment">
     <div *ngSwitchCase="'results'">
@@ -48,66 +51,76 @@
                   <p>{{ game.round_number }}. kolo</p>
                 </ion-col>
                 <ion-col size="6" class="ion-text-right">
-                  <p>{{ game.date | date:'dd. MM. yyyy'}}</p>
+                  <p>{{ game.date | date:'d. M. yyyy'}}</p>
                 </ion-col>
 
               </ion-row>
-              <ion-row class="ion-align-items-center main-info">
+              <div class="main-info">
+                <ion-row class="ion-align-items-center">
 
-                <ion-col size="auto">
-                  <div class="square-cell square-logo">
-                    <ion-thumbnail class="small fixed">
-                      <img [src]="game.homeTeam.photoUrl" alt="{{ game.homeTeam.name }}" />
-                    </ion-thumbnail>
-                  </div>
-                </ion-col>
+                  <ion-col size="auto">
+                    <div class="square-cell square-logo">
+                      <ion-thumbnail class="small fixed">
+                        <img [src]="game.homeTeam.photoUrl" alt="{{ game.homeTeam.name }}" />
+                      </ion-thumbnail>
+                    </div>
+                  </ion-col>
 
-                <ion-col class="team-name-cell">
-                  {{ game.homeTeam.name }}
-                </ion-col>
+                  <ion-col class="team-name-cell">
+                    {{ game.homeTeam.name }}
+                  </ion-col>
 
-                <ion-col size="auto">
-                  <div class="square-cell square-double">
-                    <p class="result">{{ game.result }}</p>
-                  </div>
-                </ion-col>
+                  <ion-col size="auto">
+                    <div class="square-cell square-double">
+                      <p class="result">{{ game.result }}</p>
+                    </div>
+                  </ion-col>
 
-                <ion-col class="team-name-cell tnc-away ion-text-right">
-                  {{ game.awayTeam.name }}
-                </ion-col>
+                  <ion-col class="team-name-cell tnc-away ion-text-right">
+                    {{ game.awayTeam.name }}
+                  </ion-col>
 
-                <ion-col size="auto">
-                  <div class="square-cell square-logo">
-                    <ion-thumbnail class="small fixed">
-                      <img [src]="game.awayTeam.photoUrl" alt="{{ game.awayTeam.name }}" />
-                    </ion-thumbnail>
-                  </div>
-                </ion-col>
+                  <ion-col size="auto">
+                    <div class="square-cell square-logo">
+                      <ion-thumbnail class="small fixed">
+                        <img [src]="game.awayTeam.photoUrl" alt="{{ game.awayTeam.name }}" />
+                      </ion-thumbnail>
+                    </div>
+                  </ion-col>
 
-              </ion-row>
-              <div class="stats">
-                <ion-row class="player-stats">
+                </ion-row>
+
+                <ion-row class="player-stats stats-start">
                   <ion-col [ngClass]="player.team_id === game.home_team_id ? 'home-flex' : 'away-flex'">
-                      <ion-icon name="person"></ion-icon>
-                      <span class="text">{{ game.role }}</span>
+                    <ion-icon name="person"></ion-icon>
+                    <span class="text">{{ game.role }}</span>
                   </ion-col>
                 </ion-row>
-                <ion-row class="player-stats">
+                <ion-row class="player-stats" *ngIf="game.playerGoalsCount > 0">
                   <ion-col [ngClass]="player.team_id === game.home_team_id ? 'home-flex' : 'away-flex'">
-                      <ion-icon name="football"></ion-icon>
-                      <span class="text">{{ game.playerGoalsCount > 0 ? game.playerGoalsMinutes : '-' }}</span>
+                    <ion-icon name="football"></ion-icon>
+                    <span class="text">{{ game.playerGoalsMinutes }}</span>
                   </ion-col>
                 </ion-row>
-                <ion-row class="player-stats">
+                <ion-row class="player-stats" *ngIf="game.yellowCardCount > 0">
                   <ion-col [ngClass]="player.team_id === game.home_team_id ? 'home-flex' : 'away-flex'">
-                      <ion-icon name="tablet-portrait" class="yellow"></ion-icon>
-                      <span class="text">-</span>
+                    <ion-icon name="tablet-portrait" class="yellow"></ion-icon>
+                    <span class="text">{{ game.yellowCardMinutes }}</span>
                   </ion-col>
                 </ion-row>
-                <ion-row class="player-stats">
+                <ion-row class="player-stats" *ngIf="game.secondYellowCardCount > 0">
                   <ion-col [ngClass]="player.team_id === game.home_team_id ? 'home-flex' : 'away-flex'">
-                      <ion-icon name="tablet-portrait" class="red"></ion-icon>
-                      <span class="text">-</span>
+                    <div class="icon-wrapper">
+                      <ion-icon name="tablet-portrait" class="top-half yellow"></ion-icon>
+                      <ion-icon name="tablet-portrait" class="bottom-half red"></ion-icon>
+                    </div>
+                    <span class="text">{{ game.secondYellowCardMinutes }}</span>
+                  </ion-col>
+                </ion-row>
+                <ion-row class="player-stats" *ngIf="game.redCardCount > 0">
+                  <ion-col [ngClass]="player.team_id === game.home_team_id ? 'home-flex' : 'away-flex'">
+                    <ion-icon name="tablet-portrait" class="red"></ion-icon>
+                    <span class="text">{{ game.redCardMinutes }}</span>
                   </ion-col>
                 </ion-row>
               </div>
@@ -116,6 +129,9 @@
         </ion-item>
       </ion-list>
       <h3 *ngIf="!games || isLoading && player" class="ion-text-center ion-padding">Načítám zápasy...</h3>
+    </div>
+    <div *ngSwitchCase="'info'">
+
     </div>
   </div>
 </ion-content>
