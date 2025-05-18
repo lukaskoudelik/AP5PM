@@ -62,7 +62,7 @@ ion-toolbar {
 
 .heart-icon-deactive {
   font-size: 2rem;
-  color: gray;
+  color: var(--ion-color-light);
 }
 
 ion-menu-button {
@@ -77,13 +77,14 @@ ion-back-button {
 // Card
 
 ion-card-title {
-  font-size: 2rem;
-  padding-bottom: 5px;
-  font-weight: bold;
+  font-size: 1.6rem;
+  padding-bottom: 0.5rem;
+  font-family: "RecursoSansBold";
+  color: var(--ion-color-primary);
 }
 
 ion-card-subtitle {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   color: var(--ion-color-primary);
 }
 
@@ -115,21 +116,40 @@ ion-thumbnail.prf img {
 // Segment
 
 ion-segment-button {
-  --color: var(--ion-color-dark);
-  --color-checked: var(--ion-color-primary);
-  --background-checked: var(--ion-color-secondary);
-  --indicator-color: var(--ion-color-secondary);
+  --background: var(--ion-color-light);
+  --color: var(--ion-color-primary);
+  --background-checked: var(--ion-color-primary);
+  --color-checked: var(--ion-color-light);
+  --indicator-color: transparent;
+  box-shadow: 0;
+  font-family: 'RecursoSansBold';
+  border: solid 1px var(--ion-color-primary);
+  box-shadow: none;
+}
+
+ion-segment-button {
+  padding: 0;
+  margin: 0 0.5rem 1rem 0.5rem;
+  border-radius: 1rem;
 }
 
 ion-segment {
-  border-bottom: solid 2px var(--ion-color-tertiary);
-  --background: var(--ion-color-light);
+  --border-width: 0;
+  box-shadow: none;
+  border: none;
+  --background: var(--ion-color-quaternary);
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
 }
 
-ion-segment.fltr {
-  --background: var(--ion-color-light);
+ion-card {
+  border: none;
+  box-shadow: none;
 }
 
+.center-toast {
+  text-align: center;
+}
 
 // Tabulka
 
@@ -141,13 +161,25 @@ ion-segment.fltr {
   font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
+  font-family: "RecursoSansBold";
 }
 
 .table-team {
   background-color: var(--ion-color-light);
-  padding: 0.5rem;
   align-items: center;
   font-size: 0.9em;
+}
+
+.ripple-wrapper {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.half-padding {
+  padding: 0.5rem;
 }
 
 ion-grid {
@@ -172,21 +204,29 @@ ion-col.cntr {
   text-align: center;
 }
 
+.first-team,
+.middle-team,
+.last-team {
+  border-radius: 20%;
+  font-family: "RecursoSansBold";
+}
+
+.points {
+  font-family: "RecursoSansBold";
+}
+
 .first-team {
   background-color: var(--ion-color-primary);
   color: white;
-  border-radius: 20%;
 }
 
 .middle-team {
   background-color: var(--ion-color-tertiary);
-  border-radius: 20%;
 }
 
 .last-team {
   background-color: darkred;
   color: white;
-  border-radius: 20%;
 }
 
 .icon-primary {
@@ -275,10 +315,6 @@ ion-thumbnail.small.fixed {
   object-fit: cover;
 }
 
-ion-thumbnail.small.fixed img {
-  border-radius: 20%;
-}
-
 
 .row-odd {
   background-color: var(--ion-color-light);
@@ -313,6 +349,10 @@ ion-thumbnail.away {
 }
 
 .p-nomar p {
+  margin: 0;
+}
+
+p.nomar {
   margin: 0;
 }
 
@@ -363,7 +403,7 @@ ion-thumbnail.away {
 
   .heart-icon-deactive {
     font-size: 2rem;
-    color: gray;
+    color: var(--ion-color-light);
   }
 
   .colcol {

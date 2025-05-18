@@ -24,6 +24,7 @@ export class PlayerDetailPage implements OnInit {
   favoritePlayers: any[] = [];
   selectedSegment: string = 'results';
   role: any;
+  motherClubData: { club: any; name: string; logoUrl: string } | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -42,6 +43,7 @@ export class PlayerDetailPage implements OnInit {
         await this.loadPhotoUrl(this.player.photo_url);
         await this.loadteamForPlayer(this.player.team_id);
         await this.loadGamesWithTeams(this.player.id);
+        await this.getMotherClub(this.player.mother_club_id);
       }
     }
     this.isFavoriteItem('player', this.player.id);
@@ -149,11 +151,14 @@ export class PlayerDetailPage implements OnInit {
 
         const role = playerRole;
 
+        const homeOrAway = playerGame?.home_or_away;
+
         return {
           ...game,
           homeTeam,
           awayTeam,
           role,
+          homeOrAway,
           playerGoalsCount,
           playerGoalsMinutes,
           yellowCardCount: yellowCards.length,
@@ -177,4 +182,29 @@ export class PlayerDetailPage implements OnInit {
     this.appService.goToGameDetail(gameId);
   }
 
+  getPlayerAge(birthDate: string): number {
+  const birth = new Date(birthDate);
+  const today = new Date();
+  let age = today.getFullYear() - birth.getFullYear();
+  const monthDiff = today.getMonth() - birth.getMonth();
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+    age--;
+  }
+  return age;
+}
+
+async getMotherClub(clubId: number) {
+  try {
+    const motherClub = await this.supabaseService.getTeamById(`${clubId}`);
+    const logoUrl = await this.supabaseService.getPhotoUrl(motherClub.photo_url)
+
+    this.motherClubData = {
+      club: motherClub,
+      name: motherClub.name,
+      logoUrl: logoUrl
+    };
+  } catch (error) {
+    console.error("Chyba při načítání mateřského klubu:", error);
+  }
+}
 }

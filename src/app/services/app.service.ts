@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { SupabaseService } from './supabase.service';
-import { Router, NavigationEnd } from '@angular/router';
+import { Router} from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
+import { ToastController } from '@ionic/angular';
 
 @Injectable({
   providedIn: 'root'
@@ -18,12 +19,12 @@ export class AppService {
     team: [],
     player: []
   });
-  private activeTabSubject = new BehaviorSubject<'league' | 'team' | 'player'>('league');
+  private activeTabSubject = new BehaviorSubject<'league' | 'team' | 'player'>('team');
 
   favoriteItems$ = this.favoriteItemsSubject.asObservable();
   activeTab$ = this.activeTabSubject.asObservable();
 
-  constructor(private supabaseService: SupabaseService, private router: Router) {}
+  constructor(private supabaseService: SupabaseService, private router: Router, private toastController: ToastController) {}
 
   onItemClick(event: Event, item: any, type: 'league' | 'team' | 'player') {
     const clickedElement = event.target as HTMLElement;
@@ -105,8 +106,10 @@ export class AppService {
 
     if (favorites.has(key)) {
       favorites.delete(key);
+      this.showToast('Odstraněno z oblíbených.');
     } else {
       favorites.add(key);
+      this.showToast('Přidáno do oblíbených.');
     }
 
     localStorage.setItem('favorites', JSON.stringify(Array.from(favorites)));
@@ -127,6 +130,17 @@ export class AppService {
 
   goToGameDetail(gameId: string) {
     this.router.navigate(['/game', gameId]);
+  }
+  
+   async showToast(message: string) {
+    const toast = await this.toastController.create({
+      message,
+      duration: 2000,
+      position: 'bottom',
+      color: 'primary',
+      cssClass: 'center-toast'
+    });
+    toast.present();
   }
 
 }

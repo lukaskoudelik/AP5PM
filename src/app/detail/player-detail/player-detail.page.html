@@ -9,7 +9,7 @@
       <ion-button *ngIf="player" slot="end" fill="clear" (click)="toggleFavorite(player, 'player')"
         [color]="isFavoriteItem('player', player.id) ? 'danger' : 'medium'">
         <ion-icon [class]="isFavoriteItem('player', player.id) ? 'heart-icon-active-light' : 'heart-icon-deactive'"
-          name="heart"></ion-icon>
+          [name]="isFavoriteItem('player', player.id) ? 'heart-circle' : 'heart-circle-outline'"></ion-icon>
       </ion-button>
       <ion-back-button defaultHref="/tabs/player"></ion-back-button>
     </ion-buttons>
@@ -32,9 +32,9 @@
       </ion-row>
     </ion-grid>
   </ion-card>
-  <ion-segment [(ngModel)]="selectedSegment" *ngIf="player">
+  <ion-segment [(ngModel)]="selectedSegment" *ngIf="player" scrollable="true">
     <ion-segment-button value="results">
-      Odehrané zápasy
+      Zápasy
     </ion-segment-button>
     <ion-segment-button value="info">
       Informace
@@ -43,7 +43,7 @@
   <div [ngSwitch]="selectedSegment">
     <div *ngSwitchCase="'results'">
       <ion-list *ngIf="games && !isLoading">
-        <ion-item *ngFor="let game of games" class="no-border" (click)="goToGameDetail(game.id)">
+        <ion-item *ngFor="let game of games" class="no-border" (click)="goToGameDetail(game.id)" button>
           <ion-grid fixed="true" class="p-nomar">
             <div class="shadow-box">
               <ion-row class="roundanddate">
@@ -91,7 +91,7 @@
                 </ion-row>
 
                 <ion-row class="player-stats stats-start">
-                  <ion-col [ngClass]="player.team_id === game.home_team_id ? 'home-flex' : 'away-flex'">
+                  <ion-col [ngClass]="game.homeOrAway === 'home' ? 'home-flex' : 'away-flex'">
                     <ion-icon name="person"></ion-icon>
                     <span class="text">{{ game.role }}</span>
                   </ion-col>
@@ -131,7 +131,35 @@
       <h3 *ngIf="!games || isLoading && player" class="ion-text-center ion-padding">Načítám zápasy...</h3>
     </div>
     <div *ngSwitchCase="'info'">
+      <h2 class="tabhead nomp ion-text-center">Datum narození</h2>
+      <p class="nomar ion-padding">{{ player.birth_date | date:'d. M. yyyy' }}</p>
+      <h2 class="tabhead nomp ion-text-center">Věk</h2>
+      <p class="nomar ion-padding">{{ getPlayerAge(player.birth_date) }} let</p>
+      <h2 class="tabhead nomp ion-text-center">Datum registrace</h2>
+      <p class="nomar ion-padding">{{ player.registration_date | date:'d. M. yyyy' }}</p>
+      <h2 class="tabhead nomp ion-text-center">Člen</h2>
+      <p class="nomar ion-padding">{{ player.active ? 'Aktivní' : 'Neaktivní' }}</p>
+      <h2 class="tabhead nomp ion-text-center">Status</h2>
+      <p class="nomar ion-padding">{{ player.status }}</p>
+      <h2 class="tabhead nomp ion-text-center">Mateřský klub</h2>
+        <ion-grid class="nomp" *ngIf="motherClubData">
+          <ion-row class="table-team" (click)="onItemClick($event, motherClubData.club, 'team')">
+            <div class="ripple-wrapper ion-activatable ripple-parent half-padding">
+            <ion-col size="auto">
+              <div class="square-cell square-logo">
+                <ion-thumbnail class="small fixed">
+                  <img [src]="motherClubData.logoUrl" alt="{{ motherClubData.name }}" />
+                </ion-thumbnail>
+              </div>
+            </ion-col>
 
+            <ion-col class="team-name-cell">
+              {{ motherClubData.name }}
+            </ion-col>
+            <ion-ripple-effect></ion-ripple-effect>
+          </div>
+          </ion-row>
+        </ion-grid>
     </div>
   </div>
 </ion-content>

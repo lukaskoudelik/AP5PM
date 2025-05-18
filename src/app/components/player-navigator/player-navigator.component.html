@@ -40,7 +40,7 @@
                   <ion-list>
                     <div *ngFor="let player of getPlayersByTeam(team.id)"
                       (click)="onItemClick($event, player, 'player')" class="level5 team-grid">
-                      <ion-item>
+                      <ion-item button>
                         <ion-grid class="nomp">
                           <ion-row class="league-row">
                             <ion-col size="auto">
@@ -108,7 +108,7 @@
                       <ion-list>
                         <div *ngFor="let player of getPlayersByTeam(team.id)"
                           (click)="onItemClick($event, player, 'player')" class="level6 team-grid">
-                          <ion-item>
+                          <ion-item button>
                             <ion-grid class="nomp">
                               <ion-row class="league-row">
                                 <ion-col size="auto">
@@ -189,7 +189,7 @@
                           <ion-list>
                             <div *ngFor="let player of getPlayersByTeam(team.id)"
                               (click)="onItemClick($event, player, 'player')" class="level7 team-grid">
-                              <ion-item>
+                              <ion-item button>
                                 <ion-grid class="nomp">
                                   <ion-row class="league-row">
                                     <ion-col size="auto">
@@ -266,7 +266,7 @@
                 <ion-list>
                   <div *ngFor="let player of getPlayersByTeam(team.id)" (click)="onItemClick($event, player, 'player')"
                     class="level5 team-grid">
-                    <ion-item>
+                    <ion-item button>
                       <ion-grid class="nomp">
                         <ion-row class="league-row">
                           <ion-col size="auto">
@@ -303,7 +303,7 @@
     <ion-list>
       <div *ngFor="let player of getPlayersWithoutTeam()" (click)="onItemClick($event, player, 'player')"
         class="level2 team-grid">
-        <ion-item>
+        <ion-item button>
           <ion-grid class="nomp">
             <ion-row class="league-row">
               <ion-col size="auto">

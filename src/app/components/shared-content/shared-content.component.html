@@ -26,7 +26,7 @@
                       'Hledat hráče...'" [(ngModel)]="searchQuery" (ionInput)="onSearchInput(activeTab)">
         </ion-searchbar>
         <ion-list *ngIf="filteredResults.length > 0" >
-          <ion-item *ngFor="let result of filteredResults" (click)="onItemClick($event, result, activeTab)">
+          <ion-item button *ngFor="let result of filteredResults" (click)="onItemClick($event, result, activeTab)">
             <ion-grid class="nomp">
               <ion-row class="league-row">
                 <ion-col size="auto">
@@ -68,7 +68,7 @@
       activeTab === 'team' ? 'oblíbené týmy' :
       'oblíbení hráči' }}</h2>
     <ion-list *ngIf="favoriteItems[activeTab].length > 0; else noFavorites">
-      <ion-item *ngFor="let item of favoriteItems[activeTab]" (click)="onItemClick($event, item, activeTab)">
+      <ion-item button *ngFor="let item of favoriteItems[activeTab]" (click)="onItemClick($event, item, activeTab)">
         <ion-grid class="nomp">
           <ion-row class="league-row">
             <ion-col size="auto">
@@ -86,7 +86,9 @@
       </ion-item>
     </ion-list>
     <ng-template #noFavorites>
-      <p class="ion-padding ion-text-center">Nemáte žádné oblíbené položky.</p>
+      <p class="ion-padding ion-text-center">Nemáte žádné oblíbené {{ activeTab === 'league' ? 'soutěže' :
+      activeTab === 'team' ? 'týmy' :
+      'hráče' }}.</p>
     </ng-template>
   </ion-content>
 </ion-app>

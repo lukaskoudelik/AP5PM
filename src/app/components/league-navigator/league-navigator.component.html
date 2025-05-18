@@ -14,7 +14,7 @@
       <ion-list>
         <div *ngFor="let league of getLeaguesByOrganization(org.id)" (click)="onItemClick($event, league, 'league')"
           class="level2 team-grid">
-          <ion-item>
+          <ion-item button>
             <ion-grid class="nomp">
               <ion-row class="league-row">
                 <ion-col size="auto">
@@ -57,7 +57,7 @@
           <ion-list>
             <div *ngFor="let league of getLeaguesByRegion(region.id)" (click)="onItemClick($event, league, 'league')"
               class="level3 team-grid">
-              <ion-item>
+              <ion-item button>
                 <ion-grid class="nomp">
                   <ion-row class="league-row">
                     <ion-col size="auto">
@@ -111,7 +111,7 @@
               <ion-list>
                 <div *ngFor="let league of getLeaguesByDistrict(district.id)"
                   (click)="onItemClick($event, league, 'league')" class="level4 team-grid">
-                  <ion-item>
+                  <ion-item button>
                     <ion-grid class="nomp">
                       <ion-row class="league-row">
                         <ion-col size="auto">

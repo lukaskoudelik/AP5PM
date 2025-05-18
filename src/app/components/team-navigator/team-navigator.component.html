@@ -31,7 +31,7 @@
               <ion-list>
                 <div *ngFor="let team of getTeamsByLeague(league.id)" (click)="onItemClick($event, team, 'team')"
                   class="level4 team-grid">
-                  <ion-item>
+                  <ion-item button class="ion-activatable ripple-parent">
                     <ion-grid class="nomp">
                       <ion-row class="league-row">
                         <ion-col size="auto">
@@ -46,6 +46,7 @@
                         </ion-col>
                       </ion-row>
                     </ion-grid>
+                    <ion-ripple-effect></ion-ripple-effect>
                   </ion-item>
                 </div>
               </ion-list>
@@ -86,7 +87,7 @@
                   <ion-list>
                     <div *ngFor="let team of getTeamsByLeague(league.id)" (click)="onItemClick($event, team, 'team')"
                       class="level5 team-grid">
-                      <ion-item>
+                      <ion-item button>
                         <ion-grid class="nomp">
                           <ion-row class="league-row">
                             <ion-col size="auto">
@@ -152,7 +153,7 @@
                       <ion-list>
                         <div *ngFor="let team of getTeamsByLeague(league.id)"
                           (click)="onItemClick($event, team, 'team')" class="level6 team-grid">
-                          <ion-item>
+                          <ion-item button>
                             <ion-grid class="nomp">
                               <ion-row class="league-row">
                                 <ion-col size="auto">
@@ -211,7 +212,7 @@
             <ion-list>
               <div *ngFor="let team of getTeamsByDistrict(district.id)" (click)="onItemClick($event, team, 'team')"
                 class="level4 team-grid">
-                <ion-item>
+                <ion-item button>
                   <ion-grid class="nomp">
                     <ion-row class="league-row">
                       <ion-col size="auto">

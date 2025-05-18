@@ -3,42 +3,141 @@
     <ion-header>
       <ion-toolbar>
         <ion-title>
-          {{ activeTab === 'league' ? 'Oblíbené soutěže' : 
-             activeTab === 'team' ? 'Oblíbené týmy' : 
-             'Oblíbení hráči' }}
+          Oblíbené
         </ion-title>
       </ion-toolbar>
     </ion-header>
     <ion-content>
-      <ion-list *ngIf="favoriteItems[activeTab].length > 0; else noFavorites">
-        <ion-item *ngFor="let item of favoriteItems[activeTab]" (click)="onItemClick($event, item, activeTab)">
-          <ion-grid class="nomp">
-            <ion-row class="league-row">
-              <ion-col size="auto">
-                <div class="square-cell square-logo">
-          <ion-thumbnail slot="start" class="small fixed">
-            <img [src]="item.photoUrl" alt="{{ item.name }}" />
-          </ion-thumbnail>
-        </div>
-      </ion-col>
-      <ion-col class="team-name-cell">
-            {{ item.name }}
+      <div class="navigator-item level1" (click)="toggleTab(activeTab)">
+        <ion-label>{{ activeTab === 'league' ? 'Soutěže' :
+          activeTab === 'team' ? 'Týmy' :
+          'Hráči' }}</ion-label>
+        <ion-icon [name]="openTab[activeTab] ? 'chevron-up' : 'chevron-down'" slot="end" class="arrow">
+        </ion-icon>
+      </div>
+      <ng-container *ngIf="openTab[activeTab]">
+        <ion-list *ngIf="favoriteItems[activeTab].length > 0; else noFavorites">
+          <ion-menu-toggle auto-hide="true">
+            <ion-item button *ngFor="let item of favoriteItems[activeTab]" (click)="onItemClick($event, item, activeTab)">
+              <ion-grid class="nomp">
+                <ion-row class="league-row">
+                  <ion-col size="auto">
+                    <div class="square-cell square-logo">
+                      <ion-thumbnail slot="start" class="small fixed">
+                        <img [src]="item.photoUrl" alt="{{ item.name }}" />
+                      </ion-thumbnail>
+                    </div>
+                  </ion-col>
+                  <ion-col class="team-name-cell">
+                    {{ item.name }}
 
-        </ion-col>
-        <ion-col size="auto">
-        <div class="square-cell square-inner">
-          <ion-button fill="clear" (click)="toggleFavorite(item, activeTab)" color="danger">
-            <ion-icon class="heart-icon-active" name="heart"></ion-icon>
-          </ion-button>
-        </div>
-        </ion-col>
-      </ion-row>
-        </ion-grid>
-        </ion-item>
-      </ion-list>
-      <ng-template #noFavorites>
-        <p class="ion-padding">Nemáte žádné oblíbené položky.</p>
-      </ng-template>
+                  </ion-col>
+                  <ion-col size="auto">
+                    <div class="square-cell square-inner">
+                      <ion-button fill="clear" (click)="toggleFavorite(item, activeTab)" color="danger">
+                        <ion-icon class="heart-icon-active" name="heart-circle"></ion-icon>
+                      </ion-button>
+                    </div>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-item>
+          </ion-menu-toggle>
+        </ion-list>
+        <ng-template #noFavorites>
+          <p class="ion-padding no-favorites">Nemáte žádné oblíbené {{ activeTab === 'league' ? 'soutěže' :
+          activeTab === 'team' ? 'týmy' :
+          'hráče' }}.</p>
+        </ng-template>
+      </ng-container>
+
+      <div class="navigator-item level1" (click)="toggleTab(otherTabs.firstTab)">
+        <ion-label>{{ otherTabs.firstTab === 'league' ? 'Soutěže' :
+          otherTabs.firstTab === 'team' ? 'Týmy' :
+          'Hráči' }}</ion-label>
+        <ion-icon [name]="openTab[otherTabs.firstTab] ? 'chevron-up' : 'chevron-down'" slot="end" class="arrow">
+        </ion-icon>
+      </div>
+      <ng-container *ngIf="openTab[otherTabs.firstTab]">
+        <ion-list *ngIf="favoriteItems[otherTabs.firstTab].length > 0; else noFavorites2">
+          <ion-menu-toggle auto-hide="true">
+            <ion-item button *ngFor="let item of favoriteItems[otherTabs.firstTab]"
+              (click)="onItemClick($event, item, otherTabs.firstTab)">
+              <ion-grid class="nomp">
+                <ion-row class="league-row">
+                  <ion-col size="auto">
+                    <div class="square-cell square-logo">
+                      <ion-thumbnail slot="start" class="small fixed">
+                        <img [src]="item.photoUrl" alt="{{ item.name }}" />
+                      </ion-thumbnail>
+                    </div>
+                  </ion-col>
+                  <ion-col class="team-name-cell">
+                    {{ item.name }}
+
+                  </ion-col>
+                  <ion-col size="auto">
+                    <div class="square-cell square-inner">
+                      <ion-button fill="clear" (click)="toggleFavorite(item, otherTabs.firstTab)" color="danger">
+                        <ion-icon class="heart-icon-active" name="heart-circle"></ion-icon>
+                      </ion-button>
+                    </div>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-item>
+          </ion-menu-toggle>
+        </ion-list>
+        <ng-template #noFavorites2>
+          <p class="ion-padding no-favorites">Nemáte žádné oblíbené {{ otherTabs.firstTab === 'league' ? 'soutěže' :
+          otherTabs.firstTab === 'team' ? 'týmy' :
+          'hráče' }}.</p>
+        </ng-template>
+      </ng-container>
+
+      <div class="navigator-item level1" (click)="toggleTab(otherTabs.secondTab)">
+        <ion-label>{{ otherTabs.secondTab === 'league' ? 'Soutěže' :
+          otherTabs.secondTab === 'team' ? 'Týmy' :
+          'Hráči' }}</ion-label>
+        <ion-icon [name]="openTab[otherTabs.secondTab] ? 'chevron-up' : 'chevron-down'" slot="end" class="arrow">
+        </ion-icon>
+      </div>
+      <ng-container *ngIf="openTab[otherTabs.secondTab]">
+        <ion-list *ngIf="favoriteItems[otherTabs.secondTab].length > 0; else noFavorites3">
+          <ion-menu-toggle auto-hide="true">
+            <ion-item button *ngFor="let item of favoriteItems[otherTabs.secondTab]"
+              (click)="onItemClick($event, item, otherTabs.secondTab)">
+              <ion-grid class="nomp">
+                <ion-row class="league-row">
+                  <ion-col size="auto">
+                    <div class="square-cell square-logo">
+                      <ion-thumbnail slot="start" class="small fixed">
+                        <img [src]="item.photoUrl" alt="{{ item.name }}" />
+                      </ion-thumbnail>
+                    </div>
+                  </ion-col>
+                  <ion-col class="team-name-cell">
+                    {{ item.name }}
+
+                  </ion-col>
+                  <ion-col size="auto">
+                    <div class="square-cell square-inner">
+                      <ion-button fill="clear" (click)="toggleFavorite(item, otherTabs.secondTab)" color="danger">
+                        <ion-icon class="heart-icon-active" name="heart-circle"></ion-icon>
+                      </ion-button>
+                    </div>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-item>
+          </ion-menu-toggle>
+        </ion-list>
+        <ng-template #noFavorites3>
+          <p class="ion-padding no-favorites">Nemáte žádné oblíbené {{ otherTabs.secondTab === 'league' ? 'soutěže' :
+          otherTabs.secondTab === 'team' ? 'týmy' :
+          'hráče' }}.</p>
+        </ng-template>
+      </ng-container>
     </ion-content>
   </ion-menu>
 

@@ -54,3 +54,8 @@ ion-item {
 .row-even {
     background-color: var(--ion-color-quaternary);
 }
+
+.ripple-parent {
+  display: inline-block;
+  position: relative;
+}

@@ -11,9 +11,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class SharedContentComponent  implements OnInit, OnChanges {
 
-  constructor(private supabaseService: SupabaseService, private appService: AppService, private activatedRoute: ActivatedRoute, private router: Router) { }
+  constructor(private supabaseService: SupabaseService, private appService: AppService, private activatedRoute: ActivatedRoute) { }
   
-  @Input() activeTab: 'league' | 'team' | 'player' = 'league';
+  @Input() activeTab: 'league' | 'team' | 'player' = 'team';
   @Input() searchQuery: string = '';
   @Input() filteredResults: any[] = [];
   searchedResults: any[] = [];
@@ -21,12 +21,6 @@ export class SharedContentComponent  implements OnInit, OnChanges {
   itemsData: any[] = [];
 
   async ngOnInit() {
-    this.activatedRoute.url.subscribe(urlSegments => {
-      const tab = urlSegments[1]?.path;
-      if (tab === 'league' || tab === 'team' || tab === 'player') {
-        this.setActiveTab(tab);
-      }
-    });
     this.appService.favoriteItems$.subscribe(items => {
       this.favoriteItems = items;
     });

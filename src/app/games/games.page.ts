@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, } from '@angular/core';
 import { SupabaseService } from '../services/supabase.service';
 import { AppService } from '../services/app.service';
 
@@ -17,13 +17,19 @@ export class GamesPage implements OnInit {
   gamesGroupedByLeague: { [key: string]: any[] } = {};
   leaguesMap: { [key: string]: string } = {};
 
-  constructor(private supabaseService: SupabaseService, private appService: AppService) {}
+  constructor(private supabaseService: SupabaseService, private appService: AppService) { }
+
 
   async ngOnInit() {
     this.isLoading = true;
+    this.appService.setActiveTab('team');
     await this.loadLeagues();
     await this.loadGamesWithTeams();
     this.isLoading = false;
+  }
+
+  ionViewWillEnter() {
+    this.appService.setActiveTab('team');
   }
 
   async onDateChange(event: any) {
@@ -36,11 +42,11 @@ export class GamesPage implements OnInit {
     try {
       this.isLoading = true;
       const games = await this.supabaseService.getGamesByDate(this.selectedDate);
-  
+
       const gamesWithTeams = await Promise.all(games.map(async (game) => {
         const { homeTeam, awayTeam } = await this.supabaseService.getTeamsWithPhotos(game.home_team_id, game.away_team_id);
         const leagueName = this.leaguesMap[game.league_id] || 'Neznámá liga';
-  
+
         return {
           ...game,
           homeTeam,
@@ -48,7 +54,7 @@ export class GamesPage implements OnInit {
           leagueName
         };
       }));
-  
+
       // Seskupení podle leagueName
       this.gamesGroupedByLeague = {};
       for (const game of gamesWithTeams) {
@@ -58,16 +64,16 @@ export class GamesPage implements OnInit {
         }
         this.gamesGroupedByLeague[leagueName].push(game);
       }
-  
+
       // Seřazení zápasů v každé lize podle času
       for (const league in this.gamesGroupedByLeague) {
         this.gamesGroupedByLeague[league].sort((a, b) =>
           new Date(a.date).getTime() - new Date(b.date).getTime()
         );
       }
-  
+
       this.isLoading = false;
-  
+
     } catch (error) {
       console.error('Chyba při načítání zápasů s týmy:', error);
       this.isLoading = false;
@@ -80,7 +86,7 @@ export class GamesPage implements OnInit {
 
   async loadLeagues() {
     const leagues = await this.supabaseService.getLeagues();
-  
+
     this.leaguesMap = {};
     leagues.forEach(league => {
       this.leaguesMap[league.id] = league.name;
