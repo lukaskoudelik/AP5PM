@@ -106,7 +106,7 @@ export class AppService {
 
     if (favorites.has(key)) {
       favorites.delete(key);
-      this.showToast('Odstraněno z oblíbených.');
+      this.showToast('Odebráno z oblíbených.');
     } else {
       favorites.add(key);
       this.showToast('Přidáno do oblíbených.');

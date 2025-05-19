@@ -1,12 +1,12 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-searchbar placeholder="Hledat..." [(ngModel)]="searchQuery" (ionInput)="onSearchInput()">
+    <ion-searchbar placeholder="Hledat..." [(ngModel)]="searchQuery" (ionInput)="onSearchInput(searchQuery, filter)">
     </ion-searchbar>
     <ion-buttons slot="end">
       <ion-back-button defaultHref="/tabs/team"></ion-back-button>
     </ion-buttons>
   </ion-toolbar>
-  <ion-segment class="fltr" [(ngModel)]="filter" (ionChange)="onFilterChange()">
+  <ion-segment class="fltr" [(ngModel)]="filter" (ionChange)="loadData(searchQuery, filter)" scrollable="true">
     <ion-segment-button value="all">
       VŠE
     </ion-segment-button>
@@ -23,21 +23,176 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-list *ngIf="filteredResults.length > 0">
-    <ion-item *ngFor="let result of filteredResults" (click)="onItemClick($event, result)">
-      <ion-thumbnail slot="start">
-        <img [src]="result.photoUrl" alt="{{ result.name }}" />
-      </ion-thumbnail>
-      <ion-label>
-        <h2>{{ result.name }}</h2>
-      </ion-label>
-      <ion-button slot="end" fill="clear" (click)="toggleFavorite(result, result.type)"
-        [color]="result.isFavorite ? 'danger' : 'medium'">
-        <ion-icon name="heart" [class]="result.isFavorite ? 'heart-icon-active' : 'heart-icon-deactive'"></ion-icon>
-      </ion-button>
-    </ion-item>
-  </ion-list>
-  <ion-item *ngIf="filteredResults.length === 0 && searchQuery !== ''">
-    Žádné výsledky nenalezeny.
-  </ion-item>
+  <div [ngSwitch]="filter">
+    <div *ngSwitchCase="'all'">
+      <ion-list *ngIf="filteredResults.all.length > 0">
+        <ion-item *ngFor="let result of filteredResults.all" (click)="onItemClick($event, result, result.type)" button>
+          <ion-grid class="nomp">
+            <ion-row class="league-row">
+              <ion-col size="auto">
+                <div class="square-cell square-logo">
+                  <ion-thumbnail slot="start" class="small fixed">
+                    <img [src]="result.photoUrl" alt="{{ result.name }}" />
+                  </ion-thumbnail>
+                </div>
+              </ion-col>
+              <ion-col class="team-name-cell">
+                {{ result.name }}
+              </ion-col>
+              <ion-col size="auto">
+                <div class="square-cell square-inner">
+                  <ion-button slot="end" fill="clear" (click)="toggleFavorite(result, result.type)"
+                    [color]="result.isFavorite ? 'danger' : 'medium'">
+                    <ion-icon
+                      [class]="isFavoriteItem(result.type, result.id) ? 'heart-icon-active' : 'heart-icon-deactive-light'"
+                      [name]="isFavoriteItem(result.type, result.id) ? 'heart-circle' : 'heart-circle-outline'"></ion-icon>
+                  </ion-button>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-item>
+      </ion-list>
+      <p class="ion-padding ion-text-center"
+        *ngIf="filteredResults.all.length === 0 && searchQuery !== '' && !loadingMore.all">
+        Žádné výsledky nenalezeny.
+      </p>
+      <ng-container *ngIf="isInfiniteScrollVisible">
+        <ion-infinite-scroll *ngIf="!noMoreData.all" (ionInfinite)="loadNextPage(searchQuery, 'all', $event)">
+          <ion-infinite-scroll-content loadingSpinner="bubbles"
+            loadingText="Načítám další..."></ion-infinite-scroll-content>
+        </ion-infinite-scroll>
+      </ng-container>
+    </div>
+  </div>
+
+  <div [ngSwitch]="filter">
+    <div *ngSwitchCase="'team'">
+      <ion-list *ngIf="filteredResults.team.length > 0">
+        <ion-item *ngFor="let result of filteredResults.team" (click)="onItemClick($event, result, result.type)" button>
+          <ion-grid class="nomp">
+            <ion-row class="league-row">
+              <ion-col size="auto">
+                <div class="square-cell square-logo">
+                  <ion-thumbnail slot="start" class="small fixed">
+                    <img [src]="result.photoUrl" alt="{{ result.name }}" />
+                  </ion-thumbnail>
+                </div>
+              </ion-col>
+              <ion-col class="team-name-cell">
+                {{ result.name }}
+              </ion-col>
+              <ion-col size="auto">
+                <div class="square-cell square-inner">
+                  <ion-button slot="end" fill="clear" (click)="toggleFavorite(result, result.type)"
+                    [color]="result.isFavorite ? 'danger' : 'medium'">
+                    <ion-icon
+                      [class]="isFavoriteItem(result.type, result.id) ? 'heart-icon-active' : 'heart-icon-deactive-light'"
+                      [name]="isFavoriteItem(result.type, result.id) ? 'heart-circle' : 'heart-circle-outline'"></ion-icon>
+                  </ion-button>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-item>
+      </ion-list>
+      <p class="ion-padding ion-text-center"
+        *ngIf="filteredResults.team.length === 0 && searchQuery !== '' && !loadingMore.team">
+        Žádné výsledky nenalezeny.
+      </p>
+      <ng-container *ngIf="isInfiniteScrollVisible">
+        <ion-infinite-scroll *ngIf="!noMoreData.team" (ionInfinite)="loadNextPage(searchQuery, 'team', $event)">
+          <ion-infinite-scroll-content loadingSpinner="bubbles"
+            loadingText="Načítám další..."></ion-infinite-scroll-content>
+        </ion-infinite-scroll>
+      </ng-container>
+    </div>
+  </div>
+
+  <div [ngSwitch]="filter">
+    <div *ngSwitchCase="'league'">
+      <ion-list *ngIf="filteredResults.league.length > 0">
+        <ion-item *ngFor="let result of filteredResults.league" (click)="onItemClick($event, result, result.type)" button>
+          <ion-grid class="nomp">
+            <ion-row class="league-row">
+              <ion-col size="auto">
+                <div class="square-cell square-logo">
+                  <ion-thumbnail slot="start" class="small fixed">
+                    <img [src]="result.photoUrl" alt="{{ result.name }}" />
+                  </ion-thumbnail>
+                </div>
+              </ion-col>
+              <ion-col class="team-name-cell">
+                {{ result.name }}
+              </ion-col>
+              <ion-col size="auto">
+                <div class="square-cell square-inner">
+                  <ion-button slot="end" fill="clear" (click)="toggleFavorite(result, result.type)"
+                    [color]="result.isFavorite ? 'danger' : 'medium'">
+                    <ion-icon
+                      [class]="isFavoriteItem(result.type, result.id) ? 'heart-icon-active' : 'heart-icon-deactive-light'"
+                      [name]="isFavoriteItem(result.type, result.id) ? 'heart-circle' : 'heart-circle-outline'"></ion-icon>
+                  </ion-button>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-item>
+      </ion-list>
+      <p class="ion-padding ion-text-center"
+        *ngIf="filteredResults.league.length === 0 && searchQuery !== '' && !loadingMore.league">
+        Žádné výsledky nenalezeny.
+      </p>
+      <ng-container *ngIf="isInfiniteScrollVisible">
+        <ion-infinite-scroll *ngIf="!noMoreData.league" (ionInfinite)="loadNextPage(searchQuery, 'league', $event)">
+          <ion-infinite-scroll-content loadingSpinner="bubbles"
+            loadingText="Načítám další..."></ion-infinite-scroll-content>
+        </ion-infinite-scroll>
+      </ng-container>
+    </div>
+  </div>
+
+  <div [ngSwitch]="filter">
+    <div *ngSwitchCase="'player'">
+      <ion-list *ngIf="filteredResults.player.length > 0">
+        <ion-item *ngFor="let result of filteredResults.player" (click)="onItemClick($event, result, result.type)" button>
+          <ion-grid class="nomp">
+            <ion-row class="league-row">
+              <ion-col size="auto">
+                <div class="square-cell square-logo">
+                  <ion-thumbnail slot="start" class="small fixed">
+                    <img [src]="result.photoUrl" alt="{{ result.name }}" />
+                  </ion-thumbnail>
+                </div>
+              </ion-col>
+              <ion-col class="team-name-cell">
+                {{ result.name }}
+              </ion-col>
+              <ion-col size="auto">
+                <div class="square-cell square-inner">
+                  <ion-button slot="end" fill="clear" (click)="toggleFavorite(result, result.type)"
+                    [color]="result.isFavorite ? 'danger' : 'medium'">
+                    <ion-icon
+                      [class]="isFavoriteItem(result.type, result.id) ? 'heart-icon-active' : 'heart-icon-deactive-light'"
+                      [name]="isFavoriteItem(result.type, result.id) ? 'heart-circle' : 'heart-circle-outline'"></ion-icon>
+                  </ion-button>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-item>
+      </ion-list>
+      <p class="ion-padding ion-text-center"
+        *ngIf="filteredResults.player.length === 0 && searchQuery !== '' && !loadingMore.player">
+        Žádné výsledky nenalezeny.
+      </p>
+      <ng-container *ngIf="isInfiniteScrollVisible">
+        <ion-infinite-scroll *ngIf="!noMoreData.player" (ionInfinite)="loadNextPage(searchQuery, 'player', $event)">
+          <ion-infinite-scroll-content loadingSpinner="bubbles"
+            loadingText="Načítám další..."></ion-infinite-scroll-content>
+        </ion-infinite-scroll>
+      </ng-container>
+    </div>
+  </div>
+
 </ion-content>

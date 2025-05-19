@@ -5,8 +5,10 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { SupabaseService } from '../services/supabase.service';
-import { Subject } from 'rxjs';
+import { Subject, from } from 'rxjs';
 import { Router } from '@angular/router';
+import { AppService } from '../services/app.service';
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 
 
 @Component({
@@ -17,55 +19,161 @@ import { Router } from '@angular/router';
   imports: [CommonModule, IonicModule, FormsModule, RouterModule],
 })
 export class SearchPage implements OnInit, OnDestroy {
+
   searchQuery: string = '';
-  searchResults: any[] = [];
-  filteredResults: any[] = [];
-  filter: string = 'all';
+  filter: 'all' | 'team' | 'player' | 'league' = 'all';
+  isInfiniteScrollVisible = true;
+  newItemsCount = 0;
+
+  filteredResults: {
+  all: any[];
+  team: any[];
+  player: any[];
+  league: any[];
+  } = { all: [], team: [], player: [], league: [] };
+
+  loadingMore: {
+  all: boolean;
+  team: boolean;
+  player: boolean;
+  league: boolean;
+  } = { all: false, team: false, player: false, league: false };
+
+  noMoreData: {
+  all: boolean;
+  team: boolean;
+  player: boolean;
+  league: boolean;
+  } = { all: false, team: false, player: false, league: false };
+
   favorites: Set<string> = new Set();
   private destroy$: Subject<void> = new Subject<void>();
-  private dataLoaded = false;
 
-  constructor(private navController: NavController, private supabaseService: SupabaseService, private router: Router) {}
+  currentPage: {
+    all: number;
+  team: number;
+  player: number;
+  league: number;
+  } = { all: 0, team: 0, player: 0, league: 0 };
+  itemsPerPage = 20;
 
-  ionViewWillEnter() {
-    if (!this.dataLoaded) {
-      this.loadAllData();
-    }
-  }
+  dataLoaded: {
+  all: boolean;
+  team: boolean;
+  player: boolean;
+  league: boolean;
+  } = { all: false, team: false, player: false, league: false };
 
-  ionViewWillLeave() {
-    this.filteredResults = [];
-  }
+  private searchSubject = new Subject<{query: string, filter: 'all' | 'team' | 'player' | 'league'}>();
+
+  constructor(private navController: NavController, private supabaseService: SupabaseService, private router: Router, private appService: AppService) { }
 
   ngOnInit() {
-    if (!this.dataLoaded) {
-      this.loadAllData();
+    this.searchSubject.pipe(
+      debounceTime(300),
+      distinctUntilChanged((prev, curr) => prev.query === curr.query && prev.filter === curr.filter),
+      switchMap(({ query, filter }) => {
+        return from(this.loadData(query, filter));
+      })
+    ).subscribe();
+
+    if (!this.dataLoaded[this.filter]) {
+      this.searchSubject.next({ query: this.searchQuery, filter: this.filter });
     }
   }
 
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
+    this.searchSubject.complete();
   }
 
-  // Funkce pro načítání lig, týmů a hráčů
-  async loadAllData() {
+  onSearchInput(searchQuery: string, filter: 'all' | 'team' | 'player' | 'league') {
+    this.searchSubject.next({ query: searchQuery, filter: filter });
+  }
+
+  async loadData(searchQuery: string, filter: 'all' | 'team' | 'player' | 'league') {
     try {
-      const leaguesData = await this.supabaseService.getLeagues();
-      const teamsData = await this.supabaseService.getTeams();
-      const playersData = await this.supabaseService.getPlayers();
 
-      const formattedLeagues = await this.formatData(leaguesData, 'league');
-      const formattedTeams = await this.formatData(teamsData, 'team');
-      const formattedPlayers = await this.formatData(playersData, 'player');
+  this.isInfiniteScrollVisible = false;
+    setTimeout(() => {
+      this.isInfiniteScrollVisible = true;
+    }, 0);
 
-      this.searchResults = [...formattedLeagues, ...formattedTeams, ...formattedPlayers];
-      this.filteredResults = [...this.searchResults];
-      this.dataLoaded = true;
+      this.currentPage[filter] = 0;
+      this.filteredResults[filter] = [];
+      this.dataLoaded[filter] = false;
+      this.loadingMore[filter] = false;
+      this.noMoreData[filter] = false;
 
-      this.filterResults();
+      await this.loadNextPage(searchQuery, filter);
+      this.dataLoaded[filter] = true;
     } catch (error) {
       console.error('Error loading data:', error);
+    }
+  }
+
+  async loadNextPage(searchQuery: string, filter: 'all' | 'team' | 'player' | 'league', event?: any) {
+    try {
+      if (this.loadingMore[filter]) return;
+      this.loadingMore[filter] = true;
+
+      this.newItemsCount = 0;
+
+      if (filter === 'team') {
+        const teamsData = await this.supabaseService.getTeamsWithOffset(searchQuery, this.currentPage[filter], this.itemsPerPage);
+        const formattedTeams = await this.formatData(teamsData, 'team');
+        this.filteredResults.team = [...this.filteredResults.team, ...formattedTeams]
+
+        this.newItemsCount = formattedTeams.length;
+      }
+      else if (filter === 'league') {
+        const leaguesData = await this.supabaseService.getLeaguesWithOffset(searchQuery, this.currentPage[filter], this.itemsPerPage);
+        const formattedLeagues = await this.formatData(leaguesData, 'league');
+        this.filteredResults.league = [...this.filteredResults.league, ...formattedLeagues]
+
+        this.newItemsCount = formattedLeagues.length;
+      }
+
+      else if (filter === 'player') {
+        const playersData = await this.supabaseService.getPlayersWithOffset(searchQuery, this.currentPage[filter], this.itemsPerPage);
+        const formattedPlayers = await this.formatData(playersData, 'player');
+        this.filteredResults.player = [...this.filteredResults.player, ...formattedPlayers]
+
+        this.newItemsCount = formattedPlayers.length;
+      }
+
+      else {
+        const teamsData = await this.supabaseService.getTeamsWithOffset(searchQuery, this.currentPage[filter], this.itemsPerPage);
+        const formattedTeams = await this.formatData(teamsData, 'team');
+        const leaguesData = await this.supabaseService.getLeaguesWithOffset(searchQuery, this.currentPage[filter], this.itemsPerPage);
+        const formattedLeagues = await this.formatData(leaguesData, 'league');
+        const playersData = await this.supabaseService.getPlayersWithOffset(searchQuery, this.currentPage[filter], this.itemsPerPage);
+        const formattedPlayers = await this.formatData(playersData, 'player');
+        this.filteredResults.all = [...this.filteredResults.all, ...formattedTeams, ...formattedLeagues, ...formattedPlayers];
+
+        this.newItemsCount = formattedTeams.length + formattedLeagues.length + formattedPlayers.length;
+
+      }
+
+      console.log(this.newItemsCount);
+
+
+
+      if (this.newItemsCount < this.itemsPerPage) {
+        this.noMoreData[filter] = true;
+      }
+
+      this.currentPage[filter]++;
+
+      if (event) {
+        event.target.complete();
+      }
+
+    } catch (error) {
+      console.error('Error loading more data:', error);
+    } finally {
+      this.loadingMore[filter] = false;
     }
   }
 
@@ -73,7 +181,7 @@ export class SearchPage implements OnInit, OnDestroy {
     const formattedData = [];
     const storedFavorites = localStorage.getItem('favorites');
     const favorites = storedFavorites ? new Set(JSON.parse(storedFavorites)) : new Set<string>();
-    
+
     for (const item of data) {
       const photoUrl = await this.supabaseService.getPhotoUrl(item.photo_url);
       formattedData.push({
@@ -87,83 +195,19 @@ export class SearchPage implements OnInit, OnDestroy {
     return formattedData;
   }
 
-  onSearchInput() {
-    this.filterResults();
+  toggleFavorite(item: any, type: 'league' | 'team' | 'player') {
+    this.appService.toggleFavorite(item, type);
   }
-
-  onFilterChange() {
-    this.filterResults();
-  }
-
-  filterResults() {
-    this.filteredResults = [];
-  
-    if (this.filter === 'all') {
-      this.filteredResults = this.searchResults.filter(item =>
-        item.name.toLowerCase().includes(this.searchQuery.toLowerCase())
-      );
-    } else {
-      this.filteredResults = this.searchResults
-        .filter(item => item.type === this.filter)
-        .filter(item =>
-          item.name.toLowerCase().includes(this.searchQuery.toLowerCase())
-        );
-    }
-  }
-
-  toggleFavorite(item: any, type: string) {
-    const key = `${type}:${item.id}`;
-    const storedFavorites = localStorage.getItem('favorites');
-    let favorites = new Set<string>();
-
-    if (storedFavorites) {
-        favorites = new Set(JSON.parse(storedFavorites));
-    }
-
-    if (favorites.has(key)) {
-        favorites.delete(key);
-        item.isFavorite = false;
-    } else {
-        favorites.add(key);
-        item.isFavorite = true;
-    }
-
-    localStorage.setItem('favorites', JSON.stringify(Array.from(favorites)));
-}
-
-updateFavoriteStatus(item: any) {
-  const key = `${item.type}:${item.id}`;
-  this.searchResults = this.searchResults.map(result =>
-    `${result.type}:${result.id}` === key
-      ? { ...result, isFavorite: this.favorites.has(key) }
-      : result
-  );
-  this.filterResults();
-}
-
-saveFavorites() {
-  localStorage.setItem('favorites', JSON.stringify(Array.from(this.favorites)));
-}
-
-loadFavorites() {
-  const storedFavorites = localStorage.getItem('favorites');
-  if (storedFavorites) {
-    this.favorites = new Set(JSON.parse(storedFavorites));
-  }
-}
 
   goBack() {
     this.navController.back();
   }
 
-  onItemClick(event: Event, result: any) {
-    const clickedElement = event.target as HTMLElement;
+  onItemClick(event: Event, item: any, type: 'league' | 'team' | 'player') {
+    this.appService.onItemClick(event, item, type);
+  }
 
-    if (clickedElement.tagName === 'ION-BUTTON') {
-      event.preventDefault();
-    } else {
-      this.router.navigate(['../', result.type, result.id]);
-      this.dataLoaded = false;
-    }
+  isFavoriteItem(type: 'league' | 'team' | 'player', id: string): boolean {
+    return this.appService.isFavoriteItem(type, id);
   }
 }

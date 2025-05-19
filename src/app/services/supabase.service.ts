@@ -44,6 +44,72 @@ export class SupabaseService {
     return data || [];
   }
 
+  // Načítání lig s podporou stránkování
+async getLeaguesWithOffset(searchQuery: string, page: number, itemsPerPage: number) {
+  const offset = page * itemsPerPage;
+  const { data, error } = await this.supabase
+    .from('leagues')
+    .select('*')
+    .ilike('name', `%${searchQuery}%`) 
+    .range(offset, offset + itemsPerPage - 1);
+
+  if (error) {
+    console.error('Chyba při načítání lig:', error.message);
+    return [];
+  }
+  return data || [];
+}
+
+// Načítání týmů s podporou stránkování
+async getTeamsWithOffset(searchQuery: string, page: number, itemsPerPage: number) {
+  const offset = page * itemsPerPage;
+  const { data, error } = await this.supabase
+    .from('teams')
+    .select('*')
+    .ilike('name', `%${searchQuery}%`) 
+    .range(offset, offset + itemsPerPage - 1);
+
+  if (error) {
+    console.error('Chyba při načítání týmů:', error.message);
+    return [];
+  }
+  return data || [];
+}
+
+// Načítání hráčů s podporou stránkování
+async getPlayersWithOffset(searchQuery: string, page: number, itemsPerPage: number) {
+  const offset = page * itemsPerPage;
+  let query;
+
+  if (searchQuery.includes(' ')) {
+    const [firstPart, ...rest] = searchQuery.split(' ');
+    const secondPart = rest.join(' '); // pro víc slov za první mezerou
+
+    // Hledání kde first_name ilike firstPart AND second_name ilike secondPart
+    query = this.supabase
+      .from('players')
+      .select('*')
+      .ilike('first_name', `%${firstPart}%`)
+      .ilike('second_name', `%${secondPart}%`);
+  } else {
+    // Hledání kde first_name ilike searchQuery OR second_name ilike searchQuery
+    query = this.supabase
+      .from('players')
+      .select('*')
+      .or(`first_name.ilike.%${searchQuery}%,second_name.ilike.%${searchQuery}%`);
+  }
+
+  // Nakonec přidáme stránkování (range)
+  const { data, error } = await query.range(offset, offset + itemsPerPage - 1);
+
+  if (error) {
+    console.error('Chyba při načítání hráčů:', error.message);
+    return [];
+  }
+
+  return data || [];
+}
+
   // Načítání zápasů
   async getGames() {
     const { data, error } = await this.supabase.from('games').select('*');
