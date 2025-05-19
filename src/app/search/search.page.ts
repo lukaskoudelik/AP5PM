@@ -24,6 +24,7 @@ export class SearchPage implements OnInit, OnDestroy {
   filter: 'all' | 'team' | 'player' | 'league' = 'all';
   isInfiniteScrollVisible = true;
   newItemsCount = 0;
+  isLoading = false;
 
   filteredResults: {
   all: any[];
@@ -73,9 +74,12 @@ export class SearchPage implements OnInit, OnDestroy {
       debounceTime(300),
       distinctUntilChanged((prev, curr) => prev.query === curr.query && prev.filter === curr.filter),
       switchMap(({ query, filter }) => {
+        this.isLoading = true; 
         return from(this.loadData(query, filter));
       })
-    ).subscribe();
+    ).subscribe(() => {
+      this.isLoading = false;
+    });
 
     if (!this.dataLoaded[this.filter]) {
       this.searchSubject.next({ query: this.searchQuery, filter: this.filter });

@@ -20,7 +20,8 @@ export class PlayerDetailPage implements OnInit {
   team: any;
   games: any[] = [];
   playersGame: any[] = [];
-  isLoading: boolean = true;
+  isLoadingGames: boolean = false;
+  isLoadingInfo: boolean = true;
   favoritePlayers: any[] = [];
   selectedSegment: string = 'results';
   role: any;
@@ -92,7 +93,7 @@ export class PlayerDetailPage implements OnInit {
 
   async loadGamesWithTeams(playerId: number) {
     try {
-      this.isLoading = true;
+      this.isLoadingGames = true;
       const gamePlayersData = await this.supabaseService.getGamePlayersByPlayerId(`${playerId}`);
       this.playersGame = gamePlayersData;
       this.games = [];
@@ -171,10 +172,12 @@ export class PlayerDetailPage implements OnInit {
       }));
 
       this.games = gamesWithTeams.filter(game => game.result).sort((a, b) => b.round_number - a.round_number);;
-      this.isLoading = false;
 
     } catch (error) {
       console.error('Chyba při načítání zápasů s týmy:', error);
+    }
+    finally {
+      this.isLoadingGames = false;
     }
   }
 
@@ -183,28 +186,34 @@ export class PlayerDetailPage implements OnInit {
   }
 
   getPlayerAge(birthDate: string): number {
-  const birth = new Date(birthDate);
-  const today = new Date();
-  let age = today.getFullYear() - birth.getFullYear();
-  const monthDiff = today.getMonth() - birth.getMonth();
-  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
-    age--;
+    this.isLoadingInfo = true;
+    const birth = new Date(birthDate);
+    const today = new Date();
+    let age = today.getFullYear() - birth.getFullYear();
+    const monthDiff = today.getMonth() - birth.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+      age--;
+    }
+    this.isLoadingInfo = false;
+    return age;
   }
-  return age;
-}
 
-async getMotherClub(clubId: number) {
-  try {
-    const motherClub = await this.supabaseService.getTeamById(`${clubId}`);
-    const logoUrl = await this.supabaseService.getPhotoUrl(motherClub.photo_url)
+  async getMotherClub(clubId: number) {
+    try {
+      this.isLoadingInfo = true;
+      const motherClub = await this.supabaseService.getTeamById(`${clubId}`);
+      const logoUrl = await this.supabaseService.getPhotoUrl(motherClub.photo_url)
 
-    this.motherClubData = {
-      club: motherClub,
-      name: motherClub.name,
-      logoUrl: logoUrl
-    };
-  } catch (error) {
-    console.error("Chyba při načítání mateřského klubu:", error);
+      this.motherClubData = {
+        club: motherClub,
+        name: motherClub.name,
+        logoUrl: logoUrl
+      };
+    } catch (error) {
+      console.error("Chyba při načítání mateřského klubu:", error);
+    }
+    finally {
+      this.isLoadingInfo = false;
+    }
   }
-}
 }

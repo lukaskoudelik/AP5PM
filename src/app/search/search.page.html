@@ -23,7 +23,11 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <div [ngSwitch]="filter">
+  <div *ngIf="isLoading" class="loading-message">
+    <ion-spinner name="bubbles"></ion-spinner>
+    <p>Načítám výsledky...</p>
+  </div> 
+  <div [ngSwitch]="filter" *ngIf="!isLoading">
     <div *ngSwitchCase="'all'">
       <ion-list *ngIf="filteredResults.all.length > 0">
         <ion-item *ngFor="let result of filteredResults.all" (click)="onItemClick($event, result, result.type)" button>
@@ -59,8 +63,7 @@
       </p>
       <ng-container *ngIf="isInfiniteScrollVisible">
         <ion-infinite-scroll *ngIf="!noMoreData.all" (ionInfinite)="loadNextPage(searchQuery, 'all', $event)">
-          <ion-infinite-scroll-content loadingSpinner="bubbles"
-            loadingText="Načítám další..."></ion-infinite-scroll-content>
+          <ion-infinite-scroll-content loadingSpinner="bubbles" class="ion-padding"></ion-infinite-scroll-content>
         </ion-infinite-scroll>
       </ng-container>
     </div>
@@ -102,8 +105,7 @@
       </p>
       <ng-container *ngIf="isInfiniteScrollVisible">
         <ion-infinite-scroll *ngIf="!noMoreData.team" (ionInfinite)="loadNextPage(searchQuery, 'team', $event)">
-          <ion-infinite-scroll-content loadingSpinner="bubbles"
-            loadingText="Načítám další..."></ion-infinite-scroll-content>
+          <ion-infinite-scroll-content loadingSpinner="bubbles" class="ion-padding"></ion-infinite-scroll-content>
         </ion-infinite-scroll>
       </ng-container>
     </div>
@@ -145,8 +147,7 @@
       </p>
       <ng-container *ngIf="isInfiniteScrollVisible">
         <ion-infinite-scroll *ngIf="!noMoreData.league" (ionInfinite)="loadNextPage(searchQuery, 'league', $event)">
-          <ion-infinite-scroll-content loadingSpinner="bubbles"
-            loadingText="Načítám další..."></ion-infinite-scroll-content>
+          <ion-infinite-scroll-content loadingSpinner="bubbles" class="ion-padding"></ion-infinite-scroll-content>
         </ion-infinite-scroll>
       </ng-container>
     </div>
@@ -188,8 +189,7 @@
       </p>
       <ng-container *ngIf="isInfiniteScrollVisible">
         <ion-infinite-scroll *ngIf="!noMoreData.player" (ionInfinite)="loadNextPage(searchQuery, 'player', $event)">
-          <ion-infinite-scroll-content loadingSpinner="bubbles"
-            loadingText="Načítám další..."></ion-infinite-scroll-content>
+          <ion-infinite-scroll-content loadingSpinner="bubbles" class="ion-padding"></ion-infinite-scroll-content>
         </ion-infinite-scroll>
       </ng-container>
     </div>

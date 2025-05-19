@@ -100,8 +100,14 @@
           </ion-grid>
         </ion-item>
       </ion-list>
-      <h3 *ngIf="gamesPlayed.length == 0 && team" class="ion-text-center ion-padding">Načítám výsledky...</h3>
+      <div *ngIf="isLoadingGames" class="loading-message">
+        <ion-spinner name="bubbles"></ion-spinner>
+        <p>Načítám zápasy...</p>
+      </div>
+      <p *ngIf="gamesPlayed.length == 0 && team && !isLoadingGames" class="ion-text-center ion-padding">Žádné dostupné
+        zápasy.</p>
     </div>
+
     <div *ngSwitchCase="'matches'">
       <ion-list *ngIf="gamesToPlay.length > 0">
         <ion-item *ngFor="let game of gamesToPlay" class="no-border" (click)="goToGameDetail(game.id)" button>
@@ -153,8 +159,14 @@
           </ion-grid>
         </ion-item>
       </ion-list>
-      <h3 *ngIf="gamesToPlay.length == 0 && team" class="ion-text-center ion-padding">Načítám zápasy...</h3>
+      <div *ngIf="isLoadingGames" class="loading-message">
+        <ion-spinner name="bubbles"></ion-spinner>
+        <p>Načítám zápasy...</p>
+      </div>
+      <p *ngIf="gamesToPlay.length == 0 && team && !isLoadingGames" class="ion-text-center ion-padding">Žádné dostupné
+        zápasy.</p>
     </div>
+
     <div *ngSwitchCase="'table'">
       <ion-grid *ngIf="leagueTable.length > 0" class="nomp shadow-box">
         <ion-row class="tabhead">
@@ -235,8 +247,14 @@
           </ion-text>
         </div>
       </div>
-      <h3 *ngIf="leagueTable.length == 0 && team" class="ion-text-center ion-padding">Načítám tabulku...</h3>
+      <p *ngIf="leagueTable.length == 0 && team && !isLoadingTable" class="ion-text-center ion-padding">Tabulka není k
+        dispozici.</p>
+      <div *ngIf="isLoadingTable" class="loading-message">
+        <ion-spinner name="bubbles"></ion-spinner>
+        <p>Načítám tabulku...</p>
+      </div>
     </div>
+
     <div *ngSwitchCase="'playerslist'">
       <ion-list *ngIf="players.length > 0" class="nomp">
         <ion-item *ngFor="let player of players" (click)="onItemClick($event, player, 'player')" button>
@@ -256,8 +274,12 @@
           </ion-grid>
         </ion-item>
       </ion-list>
-      <h3 *ngIf="players.length == 0 && team" class="ion-text-center ion-padding">Tým nemá na soupisce žádného hráče.
-      </h3>
+      <p *ngIf="players.length == 0 && team && !isLoadingPlayers" class="ion-text-center ion-padding">Tým nemá na
+        soupisce žádného hráče.</p>
+      <div *ngIf="isLoadingPlayers" class="loading-message">
+        <ion-spinner name="bubbles"></ion-spinner>
+        <p>Načítám soupisku...</p>
+      </div>
     </div>
   </div>
 </ion-content>

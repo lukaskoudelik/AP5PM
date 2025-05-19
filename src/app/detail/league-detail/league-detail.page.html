@@ -96,8 +96,14 @@
           </ion-grid>
         </ion-item>
       </ion-list>
-      <h3 *ngIf="playedGames.length == 0 && league" class="ion-text-center ion-padding">Načítám výsledky...</h3>
+      <div *ngIf="isLoadingGames" class="loading-message">
+        <ion-spinner name="bubbles"></ion-spinner>
+        <p>Načítám zápasy...</p>
+      </div>
+      <p *ngIf="playedGames.length == 0 && league && !isLoadingGames" class="ion-text-center ion-padding">Žádné dostupné
+        zápasy.</p>
     </div>
+
     <div *ngSwitchCase="'matches'">
       <ion-list *ngIf="gamesToPlay.length > 0">
         <ion-item *ngFor="let game of gamesToPlay" class="no-border" (click)="goToGameDetail(game.id)" button>
@@ -149,8 +155,14 @@
           </ion-grid>
         </ion-item>
       </ion-list>
-      <h3 *ngIf="gamesToPlay.length == 0 && league" class="ion-text-center ion-padding">Načítám zápasy...</h3>
+      <div *ngIf="isLoadingGames" class="loading-message">
+        <ion-spinner name="bubbles"></ion-spinner>
+        <p>Načítám zápasy...</p>
+      </div>
+      <p *ngIf="gamesToPlay.length == 0 && league && !isLoadingGames" class="ion-text-center ion-padding">Žádné dostupné
+        zápasy.</p>
     </div>
+
     <div *ngSwitchCase="'table'">
       <ion-grid *ngIf="leagueTable.length > 0" class="nomp shadow-box">
         <ion-row class="tabhead">
@@ -230,7 +242,12 @@
           </ion-text>
         </div>
       </div>
-      <h3 *ngIf="leagueTable.length == 0 && league" class="ion-text-center ion-padding">Načítám tabulku...</h3>
+      <div *ngIf="isLoadingTable" class="loading-message">
+        <ion-spinner name="bubbles"></ion-spinner>
+        <p>Načítám tabulku...</p>
+      </div>
+      <p *ngIf="leagueTable.length == 0 && league && !isLoadingTable" class="ion-text-center ion-padding">Tabulka není k
+        dispozici.</p>
     </div>
   </div>
 </ion-content>

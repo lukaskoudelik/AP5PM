@@ -18,6 +18,9 @@ export class GameDetailPage implements OnInit {
 
   game: any;
   isLoading: boolean = true;
+  isLoadingEvents: boolean = true;
+  isLoadingSquadlist: boolean = true;
+  isLoadingTable: boolean = true;
   selectedSegment: string = 'events';
   homeStarters: any[] = [];
   homeBench: any[] = [];
@@ -128,15 +131,18 @@ export class GameDetailPage implements OnInit {
         second_ar,
       };
 
-      this.isLoading = false;
 
     } catch (error) {
       console.error('Chyba při načítání zápasu s týmy:', error);
+    }
+    finally {
+      this.isLoading = false;
     }
   }
 
   async loadLineups(gameId: number) {
     try {
+      this.isLoadingSquadlist = true;
       const gamePlayers = await this.supabaseService.getPlayersByGameId(`${gameId}`);
 
       const enrichedPlayers = await Promise.all(
@@ -198,10 +204,14 @@ export class GameDetailPage implements OnInit {
     } catch (error) {
       console.error('Chyba při načítání sestav:', error);
     }
+    finally {
+      this.isLoadingSquadlist = false;
+    }
   }
 
   async loadGoalsAndCards(gameId: number) {
     try {
+      this.isLoadingEvents = true;
       // Načteme góly pro daný zápas
       const goals = await this.supabaseService.getGoalsByGameId(`${gameId}`);
       const cards = await this.supabaseService.getCardsByGameId(`${gameId}`);
@@ -265,6 +275,9 @@ export class GameDetailPage implements OnInit {
 
     } catch (error) {
       console.error('Chyba při načítání gólů a karet:', error);
+    }
+    finally {
+      this.isLoadingEvents = false;
     }
   }
 
@@ -334,10 +347,12 @@ export class GameDetailPage implements OnInit {
 
   async loadTable(leagueId: number) {
     try {
+      this.isLoadingTable = true;
       this.leagueTable = await this.loadLeagueTable(leagueId);
     } catch (error) {
       console.error('Chyba při načítání tabulky ligy:', error);
     } finally {
+      this.isLoadingTable = false;
     }
   }
 

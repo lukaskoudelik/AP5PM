@@ -24,6 +24,8 @@ export class LeagueDetailPage implements OnInit {
   gamesToPlay: any[] = [];
   favoriteLeagues: any[] = [];
   leagueTable: any[] = [];
+  isLoadingGames: boolean = false;
+  isLoadingTable: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -86,6 +88,7 @@ export class LeagueDetailPage implements OnInit {
   async loadGamesWithTeams() {
     try {
       // Načtení zápasů týmu
+      this.isLoadingGames = true;
       const games = await this.supabaseService.getGamesByLeagueId(this.league.id);
 
       // Načtení domácího a venkovního týmu s jejich fotografiemi
@@ -104,14 +107,19 @@ export class LeagueDetailPage implements OnInit {
     } catch (error) {
       console.error('Chyba při načítání zápasů s týmy:', error);
     }
+    finally {
+      this.isLoadingGames = false;
+    }
   }
 
   async loadTable(leagueId: number) {
     try {
+      this.isLoadingTable = true;
       this.leagueTable = await this.loadLeagueTable(leagueId);
     } catch (error) {
       console.error('Chyba při načítání tabulky ligy:', error);
     } finally {
+      this.isLoadingTable = false;
     }
   }
 

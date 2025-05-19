@@ -23,14 +23,17 @@
         {{ selectedDate | date: 'dd.MM.yyyy' }}
       </ion-button>
     </ion-card-header>
-    <ion-spinner *ngIf="isLoading" name="crescent" class="ion-padding"></ion-spinner>
   </ion-card>
+  <div *ngIf="isLoading" class="loading-message">
+    <ion-spinner name="bubbles"></ion-spinner>
+    <p>Načítám zápasy...</p>
+  </div> 
     <ng-container *ngIf="!isLoading">
       <ng-container *ngIf="gamesGroupedByLeague | keyvalue as leagues">
         <ng-container *ngFor="let league of leagues">
           <div class="ion-text-center tabhead">{{ league.key }}</div>
           <ion-list>
-            <ion-item *ngFor="let game of league.value" class="no-border bg-color" (click)="goToGameDetail(game.id)">
+            <ion-item *ngFor="let game of league.value" class="no-border bg-color" (click)="goToGameDetail(game.id)" button>
               <ion-grid fixed="true" class="p-nomar">
                 <div class="shadow-box">
                   <div class="rounded-item">

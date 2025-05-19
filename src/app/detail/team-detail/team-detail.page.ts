@@ -20,18 +20,22 @@ export class TeamDetailPage implements OnInit {
   league: any;
   selectedSegment: string = 'results';
   gamesPlayed: any[] = [];
-  gamesToPlay: any[] = []; 
+  gamesToPlay: any[] = [];
   opponent: any;
   favoriteTeams: any[] = [];
   leagueTable: any[] = [];
   players: any[] = [];
+
+  isLoadingGames: boolean = false;
+  isLoadingTable: boolean = false;
+  isLoadingPlayers: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
     private supabaseService: SupabaseService,
     private router: Router,
     private appService: AppService
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.appService.setActiveTab(this.activeTab);
@@ -42,7 +46,7 @@ export class TeamDetailPage implements OnInit {
         this.team = data;
         this.loadPhotoUrl(this.team.photo_url);
         if (this.team.league_id) {
-          this.loadLeagueForTeam(this.team.league_id);   
+          this.loadLeagueForTeam(this.team.league_id);
           this.loadTable(this.team.league_id);
         }
         this.loadGamesWithTeams();
@@ -58,9 +62,9 @@ export class TeamDetailPage implements OnInit {
 
   navigateToSearch() {
     this.router.navigate([`../search/`]);
-  } 
+  }
 
-  toggleFavorite(item: any, type: 'league' | 'team' | 'player'){
+  toggleFavorite(item: any, type: 'league' | 'team' | 'player') {
     this.appService.toggleFavorite(item, type);
   }
 
@@ -93,8 +97,9 @@ export class TeamDetailPage implements OnInit {
 
   async loadGamesWithTeams() {
     try {
+      this.isLoadingGames = true;
       const games = await this.supabaseService.getGamesByTeamId(this.team.id);
-  
+
       // Načtení domácího a venkovního týmu s jejich fotografiemi
       const gamesWithTeams = await Promise.all(games.map(async (game) => {
         const { homeTeam, awayTeam } = await this.supabaseService.getTeamsWithPhotos(game.home_team_id, game.away_team_id);
@@ -104,42 +109,42 @@ export class TeamDetailPage implements OnInit {
           awayTeam
         };
       }));
-  
+
       this.gamesPlayed = gamesWithTeams.filter(game => game.result).sort((a, b) => b.round_number - a.round_number);;
       this.gamesToPlay = gamesWithTeams.filter(game => !game.result);
-  
+
     } catch (error) {
       console.error('Chyba při načítání zápasů s týmy:', error);
+    }
+    finally {
+      this.isLoadingGames = false;
     }
   }
 
   async loadTable(leagueId: number) {
     try {
+      this.isLoadingTable = true;
       this.leagueTable = await this.loadLeagueTable(leagueId);  // Uložení výsledků do proměnné
     } catch (error) {
       console.error('Chyba při načítání tabulky ligy:', error);
     } finally {
+      this.isLoadingTable = false;
     }
-  }
-
-  async loadPhotoToTable(photourl: string){
-      const url = await this.supabaseService.getPhotoUrl(photourl);
-      return(url);
   }
 
   async loadLeagueTable(leagueId: number) {
     try {
       // Načteme všechny zápasy pro danou ligu
       const games = await this.supabaseService.getGamesByLeagueId(`${leagueId}`);
-  
+
       // Vytvoříme objekt pro uložení informací o týmech s konkrétním typem
       const teamsStats: { [teamId: number]: { points: number; goalsFor: number; goalsAgainst: number; gamesPlayed: number } } = {};
-  
+
       games.forEach(game => {
         // Extrahujeme výsledek zápasu
         if (game.result) {
           const [homeScore, awayScore] = game.result.split('-').map(Number);
-  
+
           // Inicializujeme týmy, pokud ještě nejsou v objektu
           if (!teamsStats[game.home_team_id]) {
             teamsStats[game.home_team_id] = { points: 0, goalsFor: 0, goalsAgainst: 0, gamesPlayed: 0 };
@@ -147,17 +152,17 @@ export class TeamDetailPage implements OnInit {
           if (!teamsStats[game.away_team_id]) {
             teamsStats[game.away_team_id] = { points: 0, goalsFor: 0, goalsAgainst: 0, gamesPlayed: 0 };
           }
-  
+
           // Přičteme skóre
           teamsStats[game.home_team_id].goalsFor += homeScore;
           teamsStats[game.home_team_id].goalsAgainst += awayScore;
           teamsStats[game.away_team_id].goalsFor += awayScore;
           teamsStats[game.away_team_id].goalsAgainst += homeScore;
-  
+
           // Počet odehraných zápasů
           teamsStats[game.home_team_id].gamesPlayed++;
           teamsStats[game.away_team_id].gamesPlayed++;
-  
+
           // Počítání bodů
           if (homeScore > awayScore) {
             teamsStats[game.home_team_id].points += 3;  // Domácí vítězství
@@ -169,7 +174,7 @@ export class TeamDetailPage implements OnInit {
           }
         }
       });
-  
+
       // Seřadíme týmy podle bodů a pak podle skóre
       const sortedTeams = Object.keys(teamsStats).map(teamId => ({
         teamId: Number(teamId), // Ujistíme se, že ID týmu je číslo
@@ -183,12 +188,12 @@ export class TeamDetailPage implements OnInit {
         }
         return b.points - a.points;  // Seřadíme podle bodů
       });
-  
+
       // Načteme týmy a přiřadíme jim názvy
       const teams = await this.supabaseService.getTeamsByIds(sortedTeams.map(team => team.teamId.toString()));
-  
+
       // Vytvoříme výslednou tabulku týmů
-      const leagueTable = await Promise.all(sortedTeams.map( async teamStat => {
+      const leagueTable = await Promise.all(sortedTeams.map(async teamStat => {
         const team = teams.find(t => t.id === teamStat.teamId);
         const photoUrl = await this.supabaseService.getPhotoUrl(team.photo_url);
         return {
@@ -201,7 +206,7 @@ export class TeamDetailPage implements OnInit {
           id: team.id
         };
       }));
-  
+
       // Jeden return, který vrací konečnou tabulku
       return leagueTable;
     } catch (error) {
@@ -216,16 +221,20 @@ export class TeamDetailPage implements OnInit {
 
   async getPlayersWithPhotos(teamId: number) {
     try {
+      this.isLoadingPlayers = true;
       const players = await this.supabaseService.getPlayersByTeamId(`${teamId}`);
 
       const playersWithPhotos = await Promise.all(players.map(async (player: any) => {
-          const photoUrl = await this.supabaseService.getPhotoUrl(player.photo_url);
-          return { ...player, photoUrl };
+        const photoUrl = await this.supabaseService.getPhotoUrl(player.photo_url);
+        return { ...player, photoUrl };
       }));
 
       this.players = playersWithPhotos;
-  } catch (error) {
+    } catch (error) {
       console.error('Chyba při načítání hráčů s fotkami:', error);
-  }
+    }
+    finally {
+      this.isLoadingPlayers = false;
+    }
   }
 }

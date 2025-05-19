@@ -391,6 +391,17 @@ p.nomar {
   --inner-border-width: 0;
 }
 
+
+// Spinner 
+
+.loading-message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+}
+
 .ion-palette-dark {
   ion-segment-button {
     --color: var(--ion-color-light);
