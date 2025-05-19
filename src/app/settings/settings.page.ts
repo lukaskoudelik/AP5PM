@@ -7,32 +7,42 @@ import { Component, OnInit } from '@angular/core';
   standalone: false,
 })
 export class SettingsPage implements OnInit {
-  isDarkMode!: boolean; // Aktuální stav tmavého režimu
+  isDarkMode!: boolean;
+  preferredTab: string = 'team';
 
-  constructor() { }
+  constructor() {}
 
   ngOnInit() {
-    // Inicializace podle uživatelských preferencí
-    this.isDarkMode = document.documentElement.classList.contains('ion-palette-dark');
+    const storedDarkMode = localStorage.getItem('darkMode');
+    this.isDarkMode = storedDarkMode === 'true';
 
-    // Poslouchání změn barevného schématu
+    document.documentElement.classList.toggle('ion-palette-dark', this.isDarkMode);
+
     document.documentElement.addEventListener('classChange', () => {
       this.isDarkMode = document.documentElement.classList.contains('ion-palette-dark');
     });
+
+    const storedTab = localStorage.getItem('preferredTab');
+    if (storedTab) {
+      this.preferredTab = storedTab;
+    }
   }
 
-  // Přepnutí mezi světlým a tmavým režimem
   toggleDarkMode(event: any) {
     const isChecked = event.detail.checked;
     this.updateDarkMode(isChecked);
   }
 
-  // Aktualizace třídy na elementu <html> pro přepnutí režimu
   private updateDarkMode(isDark: boolean) {
     document.documentElement.classList.toggle('ion-palette-dark', isDark);
 
-    // Vytvoříme vlastní event pro detekci změny třídy
+    localStorage.setItem('darkMode', String(isDark));
+
     const event = new Event('classChange');
     document.documentElement.dispatchEvent(event);
+  }
+
+  savePreferredTab(tab: string) {
+    localStorage.setItem('preferredTab', tab);
   }
 }

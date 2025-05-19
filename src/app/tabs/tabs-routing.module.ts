@@ -36,8 +36,7 @@ const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: '/tabs/team',
-    pathMatch: 'full'
+    component: TabsPage,
   },
 
 ];

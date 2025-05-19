@@ -25,9 +25,9 @@
             <img [src]="player.photoUrl" alt="{{ player.name }}" />
           </ion-thumbnail>
         </ion-col>
-        <ion-col class="ion-padding" *ngIf="player && team">
+        <ion-col class="ion-padding" *ngIf="player">
           <ion-card-title>{{ player.first_name}} {{ player.second_name }}</ion-card-title>
-          <ion-card-subtitle>{{ team.name }}</ion-card-subtitle>
+          <ion-card-subtitle>{{ team == null ? 'volný hráč' : team.name }}</ion-card-subtitle>
         </ion-col>
       </ion-row>
     </ion-grid>

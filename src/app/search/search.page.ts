@@ -160,10 +160,6 @@ export class SearchPage implements OnInit, OnDestroy {
 
       }
 
-      console.log(this.newItemsCount);
-
-
-
       if (this.newItemsCount < this.itemsPerPage) {
         this.noMoreData[filter] = true;
       }

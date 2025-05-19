@@ -9,59 +9,31 @@
 <ion-content>
   <ion-list inset="true">
     <ion-item>
-      <ion-toggle disabled [checked]="isDarkMode" (ionChange)="toggleDarkMode($event)" justify="space-between"
-        id="paletteToggle">Dark Mode</ion-toggle>
+      <ion-toggle [checked]="isDarkMode" (ionChange)="toggleDarkMode($event)" justify="space-between"
+        id="paletteToggle">Tmavý režim</ion-toggle>
     </ion-item>
   </ion-list>
 
-  <!-- VYMAZAT -->
-  <h2 class="tabhead ion-text-center">TO DO LIST</h2>
-  <ion-list>
+  <h2 class="tabhead ion-text-center">Preferovaná záložka</h2>
+<ion-radio-group [(ngModel)]="preferredTab" (ionChange)="savePreferredTab($event.detail.value)">
+  <ion-list inset="true" class="nomp">
     <ion-item>
-      Menu zápasu - dnešní zápasy oblíbených
+      <ion-label>Týmy</ion-label>
+      <ion-radio slot="end" value="team"></ion-radio>
     </ion-item>
     <ion-item>
-      Search page design + postupné načítání
+      <ion-label>Ligy</ion-label>
+      <ion-radio slot="end" value="league"></ion-radio>
     </ion-item>
     <ion-item>
-      Loading spinner
+      <ion-label>Hráči</ion-label>
+      <ion-radio slot="end" value="player"></ion-radio>
     </ion-item>
     <ion-item>
-      Ukládat nastavení dark mode
-    </ion-item>
-    <ion-item>
-      Barvy podle modu
-    </ion-item>
-    <ion-item>
-      Efekt kliknutí
-    </ion-item>
-    <ion-item>
-      Oblíbené ukládat do 3d pole
-    </ion-item>
-    <ion-item>
-      Při přidání do oblíbených zobrazit info (toast)
-    </ion-item>
-    <ion-item>
-      Css sjednotit + barvy (light, dark)
-    </ion-item>
-    <ion-item>
-      Responzivita pro nejmenší zařízení
-    </ion-item>
-    <ion-item>
-      Player-detail: statistiky (dle soutěží)
-    </ion-item>
-    <ion-item>
-      Databáze: střelci gólů nesedí týmům
-    </ion-item>
-    <ion-item>
-      Databáze: přidat rozhodčí, stadion a počet diváků k zápasům s result
-    </ion-item>
-    <ion-item>
-      Databáze: přidat karty a střídání
-    </ion-item>
-    <ion-item>
-      Zápasy a tabulka jako samostatná komponenta
+      <ion-label>Zápasy</ion-label>
+      <ion-radio slot="end" value="games"></ion-radio>
     </ion-item>
   </ion-list>
-
+</ion-radio-group>
+<p class="ion-padding ion-text-center">Zvolená záložka se zobrazí při suštění aplikace.</p>
 </ion-content>

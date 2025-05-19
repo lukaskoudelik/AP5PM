@@ -42,7 +42,9 @@ export class PlayerDetailPage implements OnInit {
       if (data) {
         this.player = data;
         await this.loadPhotoUrl(this.player.photo_url);
+        if (this.player.team_id) {
         await this.loadteamForPlayer(this.player.team_id);
+        }
         await this.loadGamesWithTeams(this.player.id);
         await this.getMotherClub(this.player.mother_club_id);
       }

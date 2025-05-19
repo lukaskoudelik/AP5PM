@@ -1,4 +1,7 @@
 :root {
+  --ion-color-tab-bg: #144330;
+  --ion-color-tab: #f5f8f5;
+  --ion-color-tab-secondary: #a0faaa;
   --ion-color-primary: #144330;
   --ion-color-primary-rgb: 20, 67, 48;
   --ion-color-secondary: #a0faaa;
@@ -6,9 +9,10 @@
   --ion-color-tertiary: #D9D9D9;
   --ion-color-tertiary-rgb: 217, 217, 217;
   --ion-color-light: #f5f8f5;
-  --ion-color-dark: #222428;
+  --ion-color-dark: #232323;
   --ion-color-quaternary: #ebf5eb;
   --ion-color-lightblack: #333333;
+  --ion-color-dark-green: #171717;
 
   --ion-font-family: 'RecursoSansRegular';
   --background: var(--ion-color-light);
@@ -40,19 +44,19 @@ ion-item {
 // Tabs and toolbar
 
 ion-tab-bar {
-  --background: var(--ion-color-primary);
-  --color: var(--ion-color-secondary);
-  --color-selected: var(--ion-color-light);
+  --background: var(--ion-color-tab-bg);
+  --color: var(--ion-color-tab-secondary);
+  --color-selected: var(--ion-color-tab);
 }
 
 ion-toolbar {
-  --background: var(--ion-color-primary);
-  --color: var(--ion-color-light);
+  --background: var(--ion-color-tab-bg);
+  --color: var(--ion-color-tab);
 }
 
 .heart-icon-active-light {
   font-size: 2rem;
-  color: var(--ion-color-secondary);
+  color: var(--ion-color-tab-secondary);
 }
 
 .heart-icon-active {
@@ -62,7 +66,7 @@ ion-toolbar {
 
 .heart-icon-deactive {
   font-size: 2rem;
-  color: var(--ion-color-light);
+  color: var(--ion-color-tab);
 }
 
 .heart-icon-deactive-light {
@@ -70,12 +74,9 @@ ion-toolbar {
   color: var(--ion-color-primary);
 }
 
-ion-menu-button {
-  color: white;
-}
-
+ion-menu-button,
 ion-back-button {
-  color: white;
+  color: var(--ion-color-tab);
 }
 
 
@@ -222,7 +223,7 @@ ion-col.cntr {
 
 .first-team {
   background-color: var(--ion-color-primary);
-  color: white;
+  color: var(--ion-color-light);
 }
 
 .middle-team {
@@ -231,7 +232,7 @@ ion-col.cntr {
 
 .last-team {
   background-color: darkred;
-  color: white;
+  color: var(--ion-color-light);
 }
 
 .icon-primary {
@@ -296,10 +297,11 @@ ion-col.cntr {
   justify-content: center;
 }
 
+
 .square-logo-table {
-  width: 2.5rem;
+  width: 2.8rem;
   height: 2rem;
-  justify-content: flex-end;
+  justify-content: center;
 }
 
 .square-logo-header {
@@ -315,8 +317,19 @@ ion-col.cntr {
 }
 
 ion-thumbnail.small.fixed {
-  width: 2em;
-  height: 2em;
+  width: 2rem;
+  height: 2rem;
+  object-fit: cover;
+  border-radius: 20%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+}
+
+ion-thumbnail.small.fixed img {
+  width: 1.5rem;
+  height: 1.5rem;
   object-fit: cover;
 }
 
@@ -402,37 +415,55 @@ p.nomar {
   padding: 1rem;
 }
 
-.ion-palette-dark {
-  ion-segment-button {
-    --color: var(--ion-color-light);
-    --color-checked: var(--ion-color-secondary);
-  }
-
-  ion-segment.fltr {
-    --background: var(--ion-color-dark);
-  }
-
-  .heart-icon-active {
-    font-size: 2rem;
-    color: var(--ion-color-secondary);
-  }
-
-  .heart-icon-deactive {
-    font-size: 2rem;
-    color: var(--ion-color-light);
-  }
-
-  .colcol {
-    color: var(--ion-color-secondary);
-  }
-
-  .tabhead {
-    background-color: var(--ion-color-primary);
-  }
-}
 
 @media screen and (max-width: 375px) {
   .table-team {
     font-size: 0.8em;
   }
+}
+
+/* Dark theme přepisky */
+.ion-palette-dark.ios,
+.ion-palette-dark.md {
+  :root {
+    --background: var(--ion-color-dark);
+  }
+
+  --ion-color-secondary: #144330;
+  --ion-color-secondary-rgb: 20,
+  67,
+  48;
+  --ion-color-primary: #a0faaa;
+  --ion-color-primary-rgb: 160,
+  250,
+  150;
+  --ion-color-lightblack: #D9D9D9;
+  --ion-color-lightblack-rgb: 217,
+  217,
+  217;
+  --ion-color-dark: #f5f8f5;
+  --ion-color-light: #232323;
+  --ion-color-lightblack: #ebf5eb;
+  --ion-color-tertiary: #333333;
+  --ion-color-quaternary: #171717;
+  --ion-color-tertiary-rbg: 51,
+  51,
+  51;
+
+  .shadow-box {
+    box-shadow: 0px 4px 8px rgba(255, 255, 255, 0.1);
+  }
+
+  ion-thumbnail {
+    background-color: var(--ion-color-dark);
+  }
+
+  ion-card-title {
+    color: var(--ion-color-dark);
+  }
+
+  .last-team {
+    color: var(--ion-color-dark);
+  }
+
 }
