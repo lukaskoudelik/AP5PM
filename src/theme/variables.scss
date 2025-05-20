@@ -113,9 +113,11 @@ ion-thumbnail.prf {
   justify-content: center;
 }
 
-ion-thumbnail.prf img {
-  height: 80%;
-  width: 80%;
+ion-thumbnail img {
+  max-width: 80%;
+  max-height: 80%;
+  width: auto;
+  height: auto;
 }
 
 
@@ -325,12 +327,6 @@ ion-thumbnail.small.fixed {
   align-items: center;
   justify-content: center;
 
-}
-
-ion-thumbnail.small.fixed img {
-  width: 1.5rem;
-  height: 1.5rem;
-  object-fit: cover;
 }
 
 

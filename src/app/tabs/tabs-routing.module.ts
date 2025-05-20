@@ -36,7 +36,8 @@ const routes: Routes = [
   },
   {
     path: '',
-    component: TabsPage,
+    redirectTo: '/tabs',
+    pathMatch: 'full'
   },
 
 ];
