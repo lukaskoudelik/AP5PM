@@ -37,6 +37,7 @@
           },
           "configurations": {
             "production": {
+              "baseHref": "FootballServiceApp",
               "budgets": [
                 {
                   "type": "initial",
