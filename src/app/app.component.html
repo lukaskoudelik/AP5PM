@@ -11,76 +11,78 @@
       <div>
         <h2 class="tabhead">Domů</h2>
         <ion-list>
-          <ion-item button href="/tabs/team">
-            <ion-grid class="nomp">
-              <ion-row class="league-row">
-                <ion-col size="auto">
-                  <div class="square-cell square-logo">
-                    <ion-icon name="shield-half-outline"></ion-icon>
-                  </div>
-                </ion-col>
-                <ion-col class="team-name-cell">
-                  Týmy
-                </ion-col>
-              </ion-row>
-            </ion-grid>
-          </ion-item>
-          <ion-item button href="/tabs/league">
-            <ion-grid class="nomp">
-              <ion-row class="league-row">
-                <ion-col size="auto">
-                  <div class="square-cell square-logo">
-                    <ion-icon name="trophy-outline"></ion-icon>
-                  </div>
-                </ion-col>
-                <ion-col class="team-name-cell">
-                  Soutěže
-                </ion-col>
-              </ion-row>
-            </ion-grid>
-          </ion-item>
-          <ion-item button href="/tabs/player">
-            <ion-grid class="nomp">
-              <ion-row class="league-row">
-                <ion-col size="auto">
-                  <div class="square-cell square-logo">
-                    <ion-icon name="people-outline"></ion-icon>
-                  </div>
-                </ion-col>
-                <ion-col class="team-name-cell">
-                  Hráči
-                </ion-col>
-              </ion-row>
-            </ion-grid>
-          </ion-item>
-          <ion-item button href="/tabs/games">
-            <ion-grid class="nomp">
-              <ion-row class="league-row">
-                <ion-col size="auto">
-                  <div class="square-cell square-logo">
-                    <ion-icon name="football-outline"></ion-icon>
-                  </div>
-                </ion-col>
-                <ion-col class="team-name-cell">
-                  Zápasy
-                </ion-col>
-              </ion-row>
-            </ion-grid>
-          </ion-item>
-          <ion-item button href="/tabs/settings">
-            <ion-grid class="nomp">
-              <ion-row class="league-row">
-                <ion-col size="auto">
-                  <div class="square-cell square-logo">
-                    <ion-icon name="settings-outline"></ion-icon>
-                  </div>
-                </ion-col>
-                <ion-col class="team-name-cell">
-                  Nastavení
-                </ion-col>
-              </ion-row>
-            </ion-grid>
-          </ion-item>
+          <ion-menu-toggle auto-hide="true">
+            <ion-item button [routerLink]="'/tabs/team'">
+              <ion-grid class="nomp">
+                <ion-row class="league-row">
+                  <ion-col size="auto">
+                    <div class="square-cell square-logo">
+                      <ion-icon name="shield-half-outline"></ion-icon>
+                    </div>
+                  </ion-col>
+                  <ion-col class="team-name-cell">
+                    Týmy
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-item>
+            <ion-item button [routerLink]="'/tabs/league'">
+              <ion-grid class="nomp">
+                <ion-row class="league-row">
+                  <ion-col size="auto">
+                    <div class="square-cell square-logo">
+                      <ion-icon name="trophy-outline"></ion-icon>
+                    </div>
+                  </ion-col>
+                  <ion-col class="team-name-cell">
+                    Soutěže
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-item>
+            <ion-item button [routerLink]="'/tabs/player'">
+              <ion-grid class="nomp">
+                <ion-row class="league-row">
+                  <ion-col size="auto">
+                    <div class="square-cell square-logo">
+                      <ion-icon name="people-outline"></ion-icon>
+                    </div>
+                  </ion-col>
+                  <ion-col class="team-name-cell">
+                    Hráči
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-item>
+            <ion-item button [routerLink]="'/tabs/games'">
+              <ion-grid class="nomp">
+                <ion-row class="league-row">
+                  <ion-col size="auto">
+                    <div class="square-cell square-logo">
+                      <ion-icon name="football-outline"></ion-icon>
+                    </div>
+                  </ion-col>
+                  <ion-col class="team-name-cell">
+                    Zápasy
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-item>
+            <ion-item button [routerLink]="'/tabs/settings'">
+              <ion-grid class="nomp">
+                <ion-row class="league-row">
+                  <ion-col size="auto">
+                    <div class="square-cell square-logo">
+                      <ion-icon name="settings-outline"></ion-icon>
+                    </div>
+                  </ion-col>
+                  <ion-col class="team-name-cell">
+                    Nastavení
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-item>
+          </ion-menu-toggle>
         </ion-list>
 
         <h2 class="tabhead">Oblíbené</h2>
