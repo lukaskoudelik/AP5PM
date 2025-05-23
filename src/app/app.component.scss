@@ -30,3 +30,15 @@ ion-icon.arrow {
 p.no-favorites {
     margin: 0;
 }
+
+.tabhead {
+    background-color: var(--ion-color-quaternary);
+    color: var(--ion-color-primary);
+    border: 0;
+    font-size: 1em;
+    text-align: left;
+    padding: 1.5rem 1rem 1rem 1rem;
+  font-family: "RecursoSansBlack";
+  letter-spacing: 0.05rem;
+  margin: 0;
+}

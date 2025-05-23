@@ -1,8 +1,16 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button menu="dynamic-menu"></ion-menu-button>
+    </ion-buttons>
     <ion-title>
       Nastavení
     </ion-title>
+    <ion-buttons slot="end">
+        <ion-button [routerLink]="'../../search'">
+          <ion-icon slot="icon-only" name="search" class="color-light"></ion-icon>
+        </ion-button>
+      </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
