@@ -50,8 +50,8 @@
 
   <div [ngSwitch]="selectedSegment">
     <div *ngSwitchCase="'results'">
-      <ion-list *ngIf="gamesPlayed.length > 0">
-        <ion-item *ngFor="let game of gamesPlayed" class="no-border" (click)="goToGameDetail(game.id)" button>
+      <ion-list *ngIf="gamesPlayed.length > 0 && !isLoadingGames">
+        <ion-item *ngFor="let game of gamesPlayed" class="no-border" (click)="goToGameDetail(game.id)" button detail="false">
           <ion-grid fixed="true" class="p-nomar">
             <div class="shadow-box">
               <ion-row class="roundanddate">
@@ -109,8 +109,8 @@
     </div>
 
     <div *ngSwitchCase="'matches'">
-      <ion-list *ngIf="gamesToPlay.length > 0">
-        <ion-item *ngFor="let game of gamesToPlay" class="no-border" (click)="goToGameDetail(game.id)" button>
+      <ion-list *ngIf="gamesToPlay.length > 0 && !isLoadingGames">
+        <ion-item *ngFor="let game of gamesToPlay" class="no-border" (click)="goToGameDetail(game.id)" button detail="false">
           <ion-grid fixed="true" class="p-nomar">
             <div class="shadow-box">
               <ion-row class="roundanddate">

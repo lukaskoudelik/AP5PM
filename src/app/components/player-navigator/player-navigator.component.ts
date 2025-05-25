@@ -1,9 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { AppService } from 'src/app/services/app.service';
-import { SupabaseService } from 'src/app/services/supabase.service';
+import { Component, OnInit } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
-
+import { OrganizationService } from 'src/app/services/domain/organization.service';
+import { LeagueService } from 'src/app/services/domain/league.service';
+import { TeamService } from 'src/app/services/domain/team.service';
+import { PlayerService } from 'src/app/services/domain/player.service';
+import { NavigationService } from 'src/app/services/domain/navigation.service';
 
 @Component({
   selector: 'app-player-navigator',
@@ -16,7 +18,7 @@ import { CommonModule } from '@angular/common';
 })
 export class PlayerNavigatorComponent  implements OnInit {
 
-  constructor(private supabaseService: SupabaseService, private appService: AppService) { }
+  constructor(private navigationService: NavigationService, private playerService: PlayerService, private organizationService: OrganizationService, private leagueService: LeagueService, private teamService: TeamService) { }
 
   organizations: any[] = [];
   regions: any[] = [];
@@ -27,12 +29,12 @@ export class PlayerNavigatorComponent  implements OnInit {
 
   async ngOnInit() {
 
-    this.organizations = await this.supabaseService.getOrganizations();
-    this.regions = await this.supabaseService.getRegions();
-    this.districts = await this.supabaseService.getDistricts();
-    this.leagues = await this.supabaseService.getLeagues();
-    this.teams = await this.supabaseService.getTeams();
-    this.players = await this.getPlayersWithPhotos();
+    this.organizations = await this.organizationService.getOrganizations();
+    this.regions = await this.organizationService.getRegions();
+    this.districts = await this.organizationService.getDistricts();
+    this.leagues = await this.leagueService.getLeagues();
+    this.teams = await this.teamService.getTeamsWithPhotoUrl();
+    this.players = await this.playerService.getPlayersWithPhotos();
   }
 
   isOrgOpen = false;
@@ -52,22 +54,6 @@ export class PlayerNavigatorComponent  implements OnInit {
 
 
   specialOrganizations = ['Celostátní', 'Čechy', 'Morava a Slezsko'];
-
-
-  async getPlayersWithPhotos() {
-    const playersData = await this.supabaseService.getPlayers();
-  
-    const enrichedPlayers = await Promise.all(
-      playersData.map(async (player) => {
-        const photoUrl = await this.supabaseService.getPhotoUrl(player.photo_url);
-        return {
-          ...player,
-          photoUrl
-        };
-      })
-    );
-    return enrichedPlayers;
-  }
 
   toggleOrganizations() {
     this.isOrgOpen = !this.isOrgOpen;
@@ -89,12 +75,10 @@ export class PlayerNavigatorComponent  implements OnInit {
     this.isNoTeamOpen = !this.isNoTeamOpen;
   }
 
-  // Funkce pro otevření organizace
   toggleOrg(orgId: number) {
     this.openOrgs[orgId] = !this.openOrgs[orgId];
   }
 
-  // Funkce pro otevření regionu (kraj)
   toggleRegion(regionId: number) {
     this.openRegions[regionId] = !this.openRegions[regionId];
   }
@@ -107,7 +91,6 @@ export class PlayerNavigatorComponent  implements OnInit {
     this.openLeague[leagueId] = !this.openLeague[leagueId];
   }
 
-  // Funkce pro otevření okresu
   toggleDistrict(districtId: number) {
     this.openDistricts[districtId] = !this.openDistricts[districtId];
   }
@@ -120,22 +103,18 @@ export class PlayerNavigatorComponent  implements OnInit {
     this.openLocDistrict[districtId] = !this.openLocDistrict[districtId];
   }
 
-  // Získání soutěží podle regionu
   getLeaguesByRegion(regionId: number) {
     return this.leagues.filter(l => l.region_id === regionId);
   }
 
-  // Získání okresů podle regionu
   getDistrictsByRegion(regionId: number) {
     return this.districts.filter(d => d.region_id === regionId);
   }
 
-  // Získání soutěží podle okresu
   getLeaguesByDistrict(districtId: number) {
     return this.leagues.filter(l => l.district_id === districtId);
   }
 
-  // Získání soutěží podle organizace
   getLeaguesByOrganization(orgId: number) {
     return this.leagues.filter(l => l.organization_id === orgId);
   }
@@ -157,7 +136,7 @@ export class PlayerNavigatorComponent  implements OnInit {
   }
 
   onItemClick(event: Event, league: any, type: 'league' | 'team' | 'player') {
-    this.appService.onItemClick(event, league, type);
+    this.navigationService.goToItem(event, league, type);
   }
 
 }

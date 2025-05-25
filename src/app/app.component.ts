@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { AppService } from './services/app.service';
+import { FavouritesService } from './services/domain/favourites.service';
+import { TabsService } from './services/domain/tabs.service';
+import { NavigationService } from './services/domain/navigation.service';
 
 @Component({
   selector: 'app-root',
@@ -13,46 +15,36 @@ export class AppComponent implements OnInit {
   otherTabs: { firstTab: 'league' | 'team' | 'player', secondTab: 'league' | 'team' | 'player' } = { firstTab: 'league', secondTab: 'player' };
   openTab: { league: boolean, team: boolean, player: boolean } = { league: true, team: true, player: true };
 
-  constructor(private appService: AppService) { }
+  constructor(private favouritesService: FavouritesService, private tabsService: TabsService, private navigationService: NavigationService) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     const storedDarkMode = localStorage.getItem('darkMode');
     const isDark = storedDarkMode === 'true';
     document.documentElement.classList.toggle('ion-palette-dark', isDark);
-    this.appService.favoriteItems$.subscribe(items => {
+    this.favouritesService.favoriteItems$.subscribe(items => {
       this.favoriteItems = items;
     });
-    this.appService.activeTab$.subscribe(tab => {
+    this.tabsService.activeTab$.subscribe(tab => {
       this.activeTab = tab;
-      this.setUnactiveTab();
-      this.appService.loadAllFavorites();
+      this.tabsService.setUnactiveTab(this.activeTab).then(otherTabs => {
+        this.otherTabs = otherTabs;
+      });
+      this.favouritesService.loadAllFavorites();
     });
   }
 
   async onMenuOpened() {
-    this.appService.loadFavorites(this.activeTab).then(items => {
+    this.favouritesService.loadFavorites(this.activeTab).then(items => {
       this.favoriteItems[this.activeTab] = items;
     });
   }
 
   onItemClick(event: Event, league: any, type: 'league' | 'team' | 'player') {
-    this.appService.onItemClick(event, league, type);
+    this.navigationService.goToItem(event, league, type);
   }
 
   async toggleFavorite(item: any, type: 'league' | 'team' | 'player') {
-    this.appService.toggleFavorite(item, type);
-  }
-
-  async setUnactiveTab() {
-    if (this.activeTab === 'league') {
-      this.otherTabs = { firstTab: 'team', secondTab: 'player' };
-    }
-    else if (this.activeTab === 'team') {
-      this.otherTabs = { firstTab: 'league', secondTab: 'player' };
-    }
-    else {
-      this.otherTabs = { firstTab: 'team', secondTab: 'league' };
-    }
+    this.favouritesService.toggleFavorite(item, type);
   }
 
   async toggleTab(tab: 'league' | 'team' | 'player') {

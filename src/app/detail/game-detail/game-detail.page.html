@@ -3,9 +3,9 @@
     <ion-buttons slot="start">
       <ion-menu-button menu="dynamic-menu"></ion-menu-button>
     </ion-buttons>
-    <ion-title *ngIf="game && game.homeTeam && game.awayTeam">{{ game.homeTeam.name }} - {{ game.awayTeam.name
+    <ion-title *ngIf="game && !isLoading">{{ game.homeTeam.name }} - {{ game.awayTeam.name
       }}</ion-title>
-    <ion-title *ngIf="!game || !game.homeTeam || !game.awayTeam">Načítám zápas...</ion-title>
+    <ion-title *ngIf="!game || isLoading">Načítám zápas...</ion-title>
     <ion-buttons slot="end">
       <ion-back-button defaultHref="/tabs/games"></ion-back-button>
     </ion-buttons>
@@ -104,8 +104,8 @@
     <div *ngSwitchCase="'events'">
       <div class="shadow-box no-round">
         <h2 class="tabhead nomp ion-text-center" *ngIf="game && game.result != null && !isLoadingEvents">1. poločas</h2>
-        <ion-list *ngIf="firstHalfEvents.length > 0" class="nomp">
-          <ion-item *ngFor="let event of firstHalfEvents; let i = index;"
+        <ion-list *ngIf="gameEvents.firstHalfEvents.length > 0" class="nomp">
+          <ion-item *ngFor="let event of gameEvents.firstHalfEvents; let i = index;"
             (click)="onItemClick($event, event.player, 'player')"
             [ngClass]="{'row-even': i % 2 === 0, 'row-odd': i % 2 !== 0 }" button>
             <div [ngClass]="event.homeOrAway === 'home' ? 'goal-home' : 'goal-away'">
@@ -124,11 +124,11 @@
           </ion-item>
         </ion-list>
         <p class="ion-padding info-text ion-text-center"
-          *ngIf="game && game.result != null && firstHalfEvents.length === 0 && !isLoadingEvents">-</p>
+          *ngIf="game && game.result != null && gameEvents.firstHalfEvents.length === 0 && !isLoadingEvents">-</p>
 
         <h2 class="tabhead nomp ion-text-center" *ngIf="game && game.result && !isLoadingEvents">2. poločas</h2>
-        <ion-list *ngIf="secondHalfEvents.length > 0" class="nomp">
-          <ion-item *ngFor="let event of secondHalfEvents; let i = index;"
+        <ion-list *ngIf="gameEvents.secondHalfEvents.length > 0" class="nomp">
+          <ion-item *ngFor="let event of gameEvents.secondHalfEvents; let i = index;"
             (click)="onItemClick($event, event.player, 'player')"
             [ngClass]="{'row-even': i % 2 === 0, 'row-odd': i % 2 !== 0 }" button>
             <div [ngClass]="event.homeOrAway === 'home' ? 'goal-home' : 'goal-away'">
@@ -148,36 +148,36 @@
 
         </ion-list>
         <p class="ion-padding info-text ion-text-center"
-          *ngIf="game && game.result && secondHalfEvents.length === 0 && !isLoadingEvents">-</p>
+          *ngIf="game && game.result && gameEvents.secondHalfEvents.length === 0 && !isLoadingEvents">-</p>
 
         <h2 class="tabhead nomp ion-text-center" *ngIf="game && !isLoadingEvents && game.result">Informace</h2>
         <p class="ion-padding info-text" *ngIf="game && !isLoadingEvents && game.result">Počet diváků: {{ game.visitors
           }}</p>
       </div>
 
-      <div *ngIf="game && !isLoadingEvents && game.result && allEvents.length > 0" class="symbol-description">
-        <div class="table-description" *ngIf="allGoals.length > 0">
+      <div *ngIf="game && !isLoadingEvents && game.result && gameEvents.allEvents.length > 0" class="symbol-description">
+        <div class="table-description" *ngIf="gameEvents.allGoals.length > 0">
           <div class="icon-wrapper">
             <ion-icon name="football"></ion-icon>
           </div>
           <span class="text">Gól</span>
 
         </div>
-        <div class="table-description" *ngIf="allYellowCards.length > 0">
+        <div class="table-description" *ngIf="gameEvents.allYellowCards.length > 0">
           <div class="icon-wrapper">
             <ion-icon name="tablet-portrait" class="yellow"></ion-icon>
           </div>
           <span class="text">Žlutá karta</span>
 
         </div>
-        <div class="table-description" *ngIf="allSecondYellowCards.length > 0">
+        <div class="table-description" *ngIf="gameEvents.allSecondYellowCards.length > 0">
           <div class="icon-wrapper">
             <ion-icon name="tablet-portrait" class="top-half yellow"></ion-icon>
             <ion-icon name="tablet-portrait" class="bottom-half red"></ion-icon>
           </div>
           <span class="text">Červená karta po druhé žluté</span>
         </div>
-        <div class="table-description" *ngIf="allRedCards.length > 0">
+        <div class="table-description" *ngIf="gameEvents.allRedCards.length > 0">
           <div class="icon-wrapper">
             <ion-icon name="tablet-portrait" class="red"></ion-icon>
           </div>
@@ -189,13 +189,13 @@
         <ion-spinner name="bubbles"></ion-spinner>
         <p>Načítám události...</p>
       </div>
-      <p *ngIf="allEvents.length === 0 && game && game.homeTeam && game.awayTeam && !game.result && !isLoadingEvents && !isLoading"
+      <p *ngIf="gameEvents.allEvents.length === 0 && game && game.homeTeam && game.awayTeam && !game.result && !isLoadingEvents && !isLoading"
         class="ion-text-center ion-padding">Informace nejsou k dispozici.</p>
     </div>
 
     <div *ngSwitchCase="'squadlist'">
       <ion-grid
-        *ngIf="homeStarters.length > 0 && homeBench.length > 0 && awayStarters.length > 0 && awayBench.length > 0 && !isLoadingSquadlist"
+        *ngIf="gameLineUps.homeStarters.length > 0 && gameLineUps.homeBench.length > 0 && gameLineUps.awayStarters.length > 0 && gameLineUps.awayBench.length > 0 && !isLoadingSquadlist"
         class="nomp shadow-box">
 
         <ion-row class="tabhead">
@@ -204,47 +204,47 @@
           </ion-col>
         </ion-row>
 
-        <ion-row *ngFor="let i of startersIndexes; let idx = index" class="squad-names"
+        <ion-row *ngFor="let i of gameLineUps.startersIndexes; let idx = index" class="squad-names"
           [ngClass]="{ 'row-even': idx % 2 === 0, 'row-odd': idx % 2 !== 0 }">
-          <ion-col size="auto" *ngIf="homeStarters[i]">
+          <ion-col size="auto" *ngIf="gameLineUps.homeStarters[i]">
             <div class="square-cell square-squad">
-              <ion-icon [name]="getIconNameByPosition(homeStarters[i].position)"
-                [ngClass]="homeStarters[i].position ? homeStarters[i].position : 'unknown'"></ion-icon>
+              <ion-icon [name]="getIconNameByPosition(gameLineUps.homeStarters[i].position)"
+                [ngClass]="gameLineUps.homeStarters[i].position ? gameLineUps.homeStarters[i].position : 'unknown'"></ion-icon>
             </div>
           </ion-col>
-          <ion-col size="auto" *ngIf="homeStarters[i]" (click)="onItemClick($event, homeStarters[i].player, 'player')">
+          <ion-col size="auto" *ngIf="gameLineUps.homeStarters[i]" (click)="onItemClick($event, gameLineUps.homeStarters[i].player, 'player')">
             <div class="square-cell square-squad">
-              {{ homeStarters[i].jersey_number }}
+              {{ gameLineUps.homeStarters[i].jersey_number }}
             </div>
           </ion-col>
-          <ion-col *ngIf="homeStarters[i]" class="squad-name-home p-nopad p-nomar"
-            (click)="onItemClick($event, homeStarters[i].player, 'player')">
+          <ion-col *ngIf="gameLineUps.homeStarters[i]" class="squad-name-home p-nopad p-nomar"
+            (click)="onItemClick($event, gameLineUps.homeStarters[i].player, 'player')">
             <span class="text">
-              <div class="ripple-wrapper ion-activatable ripple-parent">{{ homeStarters[i].player.first_name }} {{
-                homeStarters[i].player.second_name }}<ion-ripple-effect></ion-ripple-effect>
+              <div class="ripple-wrapper ion-activatable ripple-parent">{{ gameLineUps.homeStarters[i].player.first_name }} {{
+                gameLineUps.homeStarters[i].player.second_name }}<ion-ripple-effect></ion-ripple-effect>
               </div>
             </span>
-            <span class="text ion-text-left" *ngIf="homeStarters[i].captain">(C)</span>
+            <span class="text ion-text-left" *ngIf="gameLineUps.homeStarters[i].captain">(C)</span>
           </ion-col>
 
-          <ion-col *ngIf="awayStarters[i]" class="squad-name-away p-nopad p-nomar"
-            (click)="onItemClick($event, awayStarters[i].player, 'player')">
-            <span class="text ion-text-right" *ngIf="awayStarters[i].captain">(C)</span>
+          <ion-col *ngIf="gameLineUps.awayStarters[i]" class="squad-name-away p-nopad p-nomar"
+            (click)="onItemClick($event, gameLineUps.awayStarters[i].player, 'player')">
+            <span class="text ion-text-right" *ngIf="gameLineUps.awayStarters[i].captain">(C)</span>
             <span class="text">
-              <div class="ripple-wrapper ion-activatable ripple-parent">{{ awayStarters[i].player.first_name }} {{
-                awayStarters[i].player.second_name }}<ion-ripple-effect></ion-ripple-effect>
+              <div class="ripple-wrapper ion-activatable ripple-parent">{{ gameLineUps.awayStarters[i].player.first_name }} {{
+                gameLineUps.awayStarters[i].player.second_name }}<ion-ripple-effect></ion-ripple-effect>
               </div>
             </span>
           </ion-col>
-          <ion-col size="auto" *ngIf="awayStarters[i]" (click)="onItemClick($event, awayStarters[i].player, 'player')">
+          <ion-col size="auto" *ngIf="gameLineUps.awayStarters[i]" (click)="onItemClick($event, gameLineUps.awayStarters[i].player, 'player')">
             <div class="square-cell square-squad">
-              {{ awayStarters[i].jersey_number }}
+              {{ gameLineUps.awayStarters[i].jersey_number }}
             </div>
           </ion-col>
-          <ion-col size="auto" *ngIf="awayStarters[i]">
+          <ion-col size="auto" *ngIf="gameLineUps.awayStarters[i]">
             <div class="square-cell square-squad">
-              <ion-icon [name]="getIconNameByPosition(awayStarters[i].position)"
-                [ngClass]="awayStarters[i].position ? awayStarters[i].position : 'unknown'"></ion-icon>
+              <ion-icon [name]="getIconNameByPosition(gameLineUps.awayStarters[i].position)"
+                [ngClass]="gameLineUps.awayStarters[i].position ? gameLineUps.awayStarters[i].position : 'unknown'"></ion-icon>
             </div>
           </ion-col>
         </ion-row>
@@ -255,47 +255,47 @@
           </ion-col>
         </ion-row>
 
-        <ion-row *ngFor="let i of benchersIndexes let idx = index" class="squad-names"
+        <ion-row *ngFor="let i of gameLineUps.benchersIndexes let idx = index" class="squad-names"
           [ngClass]="{ 'row-even': idx % 2 === 0, 'row-odd': idx % 2 !== 0 }">
-          <ion-col size="auto" *ngIf="homeBench[i]">
+          <ion-col size="auto" *ngIf="gameLineUps.homeBench[i]">
             <div class="square-cell square-squad">
-              <ion-icon [name]="getIconNameByPosition(homeBench[i].position)"
-                [ngClass]="homeBench[i].position ? homeBench[i].position : 'unknown'"></ion-icon>
+              <ion-icon [name]="getIconNameByPosition(gameLineUps.homeBench[i].position)"
+                [ngClass]="gameLineUps.homeBench[i].position ? gameLineUps.homeBench[i].position : 'unknown'"></ion-icon>
             </div>
           </ion-col>
-          <ion-col size="auto" *ngIf="homeBench[i]" (click)="onItemClick($event, homeBench[i].player, 'player')">
+          <ion-col size="auto" *ngIf="gameLineUps.homeBench[i]" (click)="onItemClick($event, gameLineUps.homeBench[i].player, 'player')">
             <div class="square-cell square-squad">
-                {{ homeBench[i].jersey_number }}
+                {{ gameLineUps.homeBench[i].jersey_number }}
             </div>
           </ion-col>
-          <ion-col *ngIf="homeBench[i]" class="squad-name-home"
-            (click)="onItemClick($event, homeBench[i].player, 'player')">
+          <ion-col *ngIf="gameLineUps.homeBench[i]" class="squad-name-home"
+            (click)="onItemClick($event, gameLineUps.homeBench[i].player, 'player')">
             <span class="text">
               <div class="ripple-wrapper ion-activatable ripple-parent">
-                {{ homeBench[i].player.first_name }} {{ homeBench[i].player.second_name }}
+                {{ gameLineUps.homeBench[i].player.first_name }} {{ gameLineUps.homeBench[i].player.second_name }}
                 <ion-ripple-effect></ion-ripple-effect>
               </div>
             </span>
           </ion-col>
 
-          <ion-col *ngIf="awayBench[i]" class="squad-name-away"
-            (click)="onItemClick($event, awayBench[i].player, 'player')">
+          <ion-col *ngIf="gameLineUps.awayBench[i]" class="squad-name-away"
+            (click)="onItemClick($event, gameLineUps.awayBench[i].player, 'player')">
             <span class="text">
               <div class="ripple-wrapper ion-activatable ripple-parent">
-                {{ awayBench[i].player.first_name }} {{ awayBench[i].player.second_name }}
+                {{ gameLineUps.awayBench[i].player.first_name }} {{ gameLineUps.awayBench[i].player.second_name }}
                 <ion-ripple-effect></ion-ripple-effect>
               </div>
             </span>
           </ion-col>
-          <ion-col size="auto" *ngIf="awayBench[i]" (click)="onItemClick($event, awayBench[i].player, 'player')">
+          <ion-col size="auto" *ngIf="gameLineUps.awayBench[i]" (click)="onItemClick($event, gameLineUps.awayBench[i].player, 'player')">
             <div class="square-cell square-squad">
-              {{ awayBench[i].jersey_number }}
+              {{ gameLineUps.awayBench[i].jersey_number }}
             </div>
           </ion-col>
-          <ion-col size="auto" *ngIf="awayBench[i]">
+          <ion-col size="auto" *ngIf="gameLineUps.awayBench[i]">
             <div class="square-cell square-squad">
-              <ion-icon [name]="getIconNameByPosition(awayBench[i].position)"
-                [ngClass]="awayBench[i].position ? awayBench[i].position : 'unknown'"></ion-icon>
+              <ion-icon [name]="getIconNameByPosition(gameLineUps.awayBench[i].position)"
+                [ngClass]="gameLineUps.awayBench[i].position ? gameLineUps.awayBench[i].position : 'unknown'"></ion-icon>
             </div>
           </ion-col>
         </ion-row>
@@ -336,25 +336,25 @@
         </ion-row>
       </ion-grid>
       <div
-        *ngIf="homeStarters.length > 0 || homeBench.length > 0 || awayStarters.length > 0 || awayBench.length > 0 && !isLoadingSquadlist"
+        *ngIf="gameLineUps.homeStarters.length > 0 || gameLineUps.homeBench.length > 0 || gameLineUps.awayStarters.length > 0 || gameLineUps.awayBench.length > 0 && !isLoadingSquadlist"
         class="symbol-description">
-        <div class="table-description" *ngIf="positionCounts.goalkeeper > 0">
+        <div class="table-description" *ngIf="gameLineUps.positionCounts.goalkeeper > 0">
           <ion-icon name="hand-right" class="goalkeeper"></ion-icon>
           <span class="text">Brankář</span>
         </div>
-        <div class="table-description" *ngIf="positionCounts.defender > 0">
+        <div class="table-description" *ngIf="gameLineUps.positionCounts.defender > 0">
           <ion-icon name="shirt" class="defender"></ion-icon>
           <span class="text">Obránce</span>
         </div>
-        <div class="table-description" *ngIf="positionCounts.midfielder > 0">
+        <div class="table-description" *ngIf="gameLineUps.positionCounts.midfielder > 0">
           <ion-icon name="shirt" class="midfielder"></ion-icon>
           <span class="text">Záložník</span>
         </div>
-        <div class="table-description" *ngIf="positionCounts.attacker > 0">
+        <div class="table-description" *ngIf="gameLineUps.positionCounts.attacker > 0">
           <ion-icon name="shirt" class="attacker"></ion-icon>
           <span class="text">Útočník</span>
         </div>
-        <div class="table-description" *ngIf="positionCounts.other > 0">
+        <div class="table-description" *ngIf="gameLineUps.positionCounts.other > 0">
           <ion-icon name="shirt" class="unknown"></ion-icon>
           <span class="text">Neuvedeno</span>
         </div>
@@ -371,7 +371,7 @@
         <ion-spinner name="bubbles"></ion-spinner>
         <p>Načítám sestavy...</p>
       </div>
-      <p *ngIf="game && game.homeTeam && game.awayTeam && homeStarters.length === 0 || homeBench.length === 0 || awayStarters.length === 0 || awayBench.length === 0 && !isLoadingSquadlist && !isLoading"
+      <p *ngIf="game && game.homeTeam && game.awayTeam && gameLineUps.homeStarters.length === 0 || gameLineUps.homeBench.length === 0 || gameLineUps.awayStarters.length === 0 || gameLineUps.awayBench.length === 0 && !isLoadingSquadlist && !isLoading"
         class="ion-text-center ion-padding">Sestavy nejsou k dispozici.</p>
     </div>
 

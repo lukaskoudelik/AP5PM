@@ -9,14 +9,12 @@ import { AppComponent } from './app.component';
 
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { SupabaseService } from './services/supabase.service';
-
 
 @NgModule({
   declarations: [AppComponent],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, FormsModule,
     RouterModule.forRoot([]),],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, SupabaseService],
+  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

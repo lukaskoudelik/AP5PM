@@ -1,8 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { AppService } from 'src/app/services/app.service';
-import { SupabaseService } from 'src/app/services/supabase.service';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
+import { NavigationService } from 'src/app/services/domain/navigation.service';
+import { TeamService } from 'src/app/services/domain/team.service';
+import { LeagueService } from 'src/app/services/domain/league.service';
+import { OrganizationService } from 'src/app/services/domain/organization.service';
 
 
 @Component({
@@ -16,7 +18,12 @@ import { CommonModule } from '@angular/common';
 })
 export class TeamNavigatorComponent implements OnInit {
 
-  constructor(private supabaseService: SupabaseService, private appService: AppService) { }
+  constructor(
+    private navigationService: NavigationService,
+    private teamService: TeamService,
+    private leagueService: LeagueService,
+    private organizationService: OrganizationService
+  ) { }
 
   organizations: any[] = [];
   regions: any[] = [];
@@ -26,11 +33,11 @@ export class TeamNavigatorComponent implements OnInit {
 
   async ngOnInit() {
 
-    this.organizations = await this.supabaseService.getOrganizations();
-    this.regions = await this.supabaseService.getRegions();
-    this.districts = await this.supabaseService.getDistricts();
-    this.leagues = await this.supabaseService.getLeagues();
-    this.teams = await this.getTeamsWithPhotos();
+    this.organizations = await this.organizationService.getOrganizations();
+    this.regions = await this.organizationService.getRegions();
+    this.districts = await this.organizationService.getDistricts();
+    this.leagues = await this.leagueService.getLeagues();
+    this.teams = await this.teamService.getTeamsWithPhotoUrl();
   }
 
   isOrgOpen = false;
@@ -44,25 +51,7 @@ export class TeamNavigatorComponent implements OnInit {
   openLocRegion : Record<number, boolean> = {};
   openLocDistrict : Record<number, boolean> = {};
 
-
-
   specialOrganizations = ['Celostátní', 'Čechy', 'Morava a Slezsko'];
-
-
-  async getTeamsWithPhotos() {
-    const teamsData = await this.supabaseService.getTeams();
-  
-    const enrichedTeams = await Promise.all(
-      teamsData.map(async (team) => {
-        const photoUrl = await this.supabaseService.getPhotoUrl(team.photo_url);
-        return {
-          ...team,
-          photoUrl
-        };
-      })
-    );
-    return enrichedTeams;
-  }
 
   toggleOrganizations() {
     this.isOrgOpen = !this.isOrgOpen;
@@ -71,12 +60,11 @@ export class TeamNavigatorComponent implements OnInit {
   toggleLocations() {
     this.isLocationsOpen = !this.isLocationsOpen;
   }
-  // Funkce pro otevření organizace
+
   toggleOrg(orgId: number) {
     this.openOrgs[orgId] = !this.openOrgs[orgId];
   }
 
-  // Funkce pro otevření regionu (kraj)
   toggleRegion(regionId: number) {
     this.openRegions[regionId] = !this.openRegions[regionId];
   }
@@ -89,7 +77,6 @@ export class TeamNavigatorComponent implements OnInit {
     this.openLeague[leagueId] = !this.openLeague[leagueId];
   }
 
-  // Funkce pro otevření okresu
   toggleDistrict(districtId: number) {
     this.openDistricts[districtId] = !this.openDistricts[districtId];
   }
@@ -102,22 +89,18 @@ export class TeamNavigatorComponent implements OnInit {
     this.openLocDistrict[districtId] = !this.openLocDistrict[districtId];
   }
 
-  // Získání soutěží podle regionu
   getLeaguesByRegion(regionId: number) {
     return this.leagues.filter(l => l.region_id === regionId);
   }
 
-  // Získání okresů podle regionu
   getDistrictsByRegion(regionId: number) {
     return this.districts.filter(d => d.region_id === regionId);
   }
 
-  // Získání soutěží podle okresu
   getLeaguesByDistrict(districtId: number) {
     return this.leagues.filter(l => l.district_id === districtId);
   }
 
-  // Získání soutěží podle organizace
   getLeaguesByOrganization(orgId: number) {
     return this.leagues.filter(l => l.organization_id === orgId);
   }
@@ -131,7 +114,7 @@ export class TeamNavigatorComponent implements OnInit {
   }
 
   onItemClick(event: Event, league: any, type: 'league' | 'team' | 'player') {
-    this.appService.onItemClick(event, league, type);
+    this.navigationService.goToItem(event, league, type);
   }
 
 }

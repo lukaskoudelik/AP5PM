@@ -1,7 +1,8 @@
 import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { SupabaseService } from 'src/app/services/supabase.service';
-import { AppService } from 'src/app/services/app.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { FavouritesService } from 'src/app/services/domain/favourites.service';
+import { NavigationService } from 'src/app/services/domain/navigation.service';
+import { SearchService } from 'src/app/services/domain/search.service';
+import { TabsService } from 'src/app/services/domain/tabs.service';
 
 @Component({
   selector: 'app-shared-content',
@@ -11,7 +12,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class SharedContentComponent  implements OnInit, OnChanges {
 
-  constructor(private supabaseService: SupabaseService, private appService: AppService, private activatedRoute: ActivatedRoute) { }
+  constructor(private favouritesService: FavouritesService, private tabsService: TabsService, private searchService: SearchService, private navigationService: NavigationService) { }
   
   @Input() activeTab: 'league' | 'team' | 'player' = 'team';
   @Input() searchQuery: string = '';
@@ -21,84 +22,38 @@ export class SharedContentComponent  implements OnInit, OnChanges {
   itemsData: any[] = [];
 
   async ngOnInit() {
-    this.appService.favoriteItems$.subscribe(items => {
+    this.favouritesService.favoriteItems$.subscribe(items => {
       this.favoriteItems = items;
     });
 
-    this.appService.loadAllFavorites();
-
+    this.favouritesService.loadAllFavorites();
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['activeTab']) {
-      this.appService.setActiveTab(this.activeTab);
+      this.tabsService.setActiveTab(this.activeTab);
     }
   }
 
   setActiveTab(tab: 'league' | 'team' | 'player') {
     this.activeTab = tab;
 
-    this.appService.loadFavorites(this.activeTab).then(items => {
+    this.favouritesService.loadFavorites(this.activeTab).then(items => {
       this.favoriteItems[this.activeTab] = items;
     });
   }
 
-  onSearchInput(type: 'league' | 'team' | 'player') {
+  async onSearchInput(type: 'league' | 'team' | 'player') {
     if (!this.searchQuery) {
       this.searchedResults = [];
       this.filteredResults = [];
     } else {
-      this.loadAll(type);
+      this.searchedResults, this.filteredResults = await this.searchService.loadAll(type, this.searchQuery);
     }
-  }
-
-  async loadAll(type: 'league' | 'team' | 'player') {
-    try {
-      if (type == 'league') {
-        this.itemsData = await this.supabaseService.getLeagues();
-      }
-      else if (type == 'team') {
-        this.itemsData = await this.supabaseService.getTeams();
-      }
-      else if (type == 'player') {
-        this.itemsData = await this.supabaseService.getPlayers();
-      }
-
-      const formatteditems = await this.formatData(this.itemsData, type);
-
-      this.searchedResults = [...formatteditems];
-      this.filteredResults = [...this.searchedResults];
-      this.filterResults();
-    } catch (error) {
-      console.error('Error loading data:', error);
-    }
-  }
-
-  async formatData(data: any[], type: 'league' | 'team' | 'player') {
-    const formattedData = [];
-
-    for (const item of data) {
-      const photoUrl = await this.supabaseService.getPhotoUrl(item.photo_url);
-      formattedData.push({
-        id: item.id,
-        name: type === 'player' ? `${item.first_name} ${item.second_name}` : item.name,
-        photoUrl,
-      });
-    }
-    return formattedData;
-  }
-
-  filterResults() {
-    this.filteredResults = [];
-    this.filteredResults = this.searchedResults.filter(item =>
-      item.name.toLowerCase().includes(this.searchQuery.toLowerCase())
-    );
-
   }
 
   onItemClick(event: Event, league: any, type: 'league' | 'team' | 'player'){
-    this.appService.onItemClick(event, league, type);
+    this.navigationService.goToItem(event, league, type);
   }
-
 
 }

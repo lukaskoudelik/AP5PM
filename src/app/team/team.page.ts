@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { AppService } from '../services/app.service';
 import { Subscription } from 'rxjs';
+import { FavouritesService } from '../services/domain/favourites.service';
+import { TabsService } from '../services/domain/tabs.service';
 
 @Component({
   selector: 'app-team',
@@ -12,22 +13,18 @@ export class TeamPage implements OnInit, OnDestroy {
 
   activeTab: 'team' = 'team';
   favoriteTeams: any[] = [];
-  
   filteredResults: any[] = [];
   searchQuery: string = '';
   favoriteItems: { league: any[], team: any[], player: any[] } = { league: [], team: [], player: [] };
-
   subscription!: Subscription;
 
-  constructor(private appService: AppService) { }
-
+  constructor(private favouriteService: FavouritesService, private tabsService: TabsService) { }
 
   ngOnInit() {
-    this.appService.setActiveTab(this.activeTab);
-    this.subscription = this.appService.favoriteItems$.subscribe(items => {
+    this.tabsService.setActiveTab(this.activeTab);
+    this.subscription = this.favouriteService.favoriteItems$.subscribe(items => {
       this.favoriteTeams = items.team;
     });
-
   }
 
   ngOnDestroy() {
@@ -35,8 +32,6 @@ export class TeamPage implements OnInit, OnDestroy {
   }
 
   ionViewWillEnter() {
-    this.appService.setActiveTab(this.activeTab);
+    this.tabsService.setActiveTab(this.activeTab);
   }
-
-
 }
