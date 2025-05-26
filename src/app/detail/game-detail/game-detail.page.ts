@@ -9,13 +9,14 @@ import { TableService } from 'src/app/services/domain/table.service';
 import { PlayerService } from 'src/app/services/domain/player.service';
 import { GameLineUps } from 'src/app/shared/interfaces/game-lineups.interface';
 import { GameEvents } from 'src/app/shared/interfaces/game-events.interface';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @Component({
   selector: 'app-game-detail',
   templateUrl: './game-detail.page.html',
   styleUrls: ['./game-detail.page.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule, FormsModule],
+  imports: [CommonModule, IonicModule, FormsModule, SharedModule],
 })
 
 export class GameDetailPage implements OnInit {

@@ -14,9 +14,9 @@
 
 .league-row {
   font-size: 1.2em;
-  background-color: var(--ion-color-light);
+  background-color: var(--ion-color-theme-bg);
   padding: 0.5em;
-  color: var(--ion-color-dark);
+  color: var(--ion-color-theme-fg);
   align-items: center;
 }
 
@@ -26,7 +26,7 @@
   justify-content: center;
   font-size: 1.8em;
   font-weight: bold;
-  color: var(--ion-color-dark);
+  color: var(--ion-color-theme-fg);
 }
 
 .single-score-cell {
@@ -38,7 +38,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--ion-color-light);
+  color: var(--ion-color-theme-bg);
 }
 
 .double-dots {
@@ -152,7 +152,7 @@ ion-thumbnail.big.fixed {
 }
 
 .goalkeeper {
-  color: darkred;
+  color: var(--ion-color-red);
 }
 
 .defender {
@@ -160,19 +160,19 @@ ion-thumbnail.big.fixed {
 }
 
 .midfielder {
-  color: orange;
+  color: var(--ion-color-yellow);
 }
 
 .attacker {
-  color: dodgerblue;
+  color: var(--ion-color-blue);
 }
 
 .unknown {
-  color: gray;
+  color: var(--ion-color-theme-fg);
 }
 
 .referee {
-  color: var(--ion-color-dark);
+  color: var(--ion-color-theme-fg);
 }
 
 .info-text {
@@ -184,7 +184,7 @@ ion-thumbnail.big.fixed {
 .squad-header {
   padding: 1rem 1rem 0.5rem 1rem;
   align-items: center;
-  background-color: var(--ion-color-light);
+  background-color: var(--ion-color-theme-bg);
   color: var(--ion-color-primary);
   border-bottom: solid 2px var(--ion-color-primary);
   text-transform: uppercase;
@@ -193,20 +193,10 @@ ion-thumbnail.big.fixed {
 }
 
 .squad-names {
-  background-color: var(--ion-color-light);
+  background-color: var(--ion-color-theme-bg);
   padding: 0.5rem;
   align-items: center;
   font-size: 0.8em;
-}
-
-.row-odd {
-  background-color: var(--ion-color-light);
-  --background: var(--ion-color-light);
-}
-
-.row-even {
-  background-color: var(--ion-color-quaternary);
-  --background: var(--ion-color-quaternary);
 }
 
 ion-item {
@@ -249,13 +239,23 @@ ion-item {
   white-space: nowrap;
 }
 
+.row-odd {
+  background-color: var(--ion-color-theme-bg);
+  --background: var(--ion-color-theme-bg);
+}
+
+.row-even {
+  background-color: var(--ion-color-theme-bg-secondary);
+  --background: var(--ion-color-theme-bg-secondary);
+}
+
 @media screen and (max-width: 375px) {
 
   .team-name-game {
     width: 6rem;
     text-align: center;
     font-size: 0.9rem;
-    color: var(--ion-color-dark);
+    color: var(--ion-color-theme-fg);
   }
 
   .square-logo-game {
@@ -274,7 +274,7 @@ ion-item {
 }
 
 .yellow {
-  color: gold;
+  color: var(--ion-color-yellow);
 }
 
 .icon-wrapper ion-icon {
@@ -304,5 +304,5 @@ ion-item {
 }
 
 .red {
-  color: darkred;
+  color: var(--ion-color-red);
 }

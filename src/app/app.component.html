@@ -9,7 +9,7 @@
     </ion-header>
     <ion-content>
       <div>
-        <h2 class="tabhead">Domů</h2>
+        <h2 class="full-head">Domů</h2>
         <ion-list>
           <ion-menu-toggle auto-hide="true">
             <ion-item button [routerLink]="'/tabs/team'">
@@ -85,7 +85,7 @@
           </ion-menu-toggle>
         </ion-list>
 
-        <h2 class="tabhead">Oblíbené</h2>
+        <h2 class="full-head">Oblíbené</h2>
         <div class="navigator-item level1" (click)="toggleTab(activeTab)">
           <ion-label>{{ activeTab === 'league' ? 'Soutěže' :
             activeTab === 'team' ? 'Týmy' :

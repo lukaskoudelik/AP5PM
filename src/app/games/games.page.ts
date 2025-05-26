@@ -45,7 +45,4 @@ export class GamesPage implements OnInit {
     return !this.isLoading && Object.keys(this.games).length === 0;
   }
 
-  goToGameDetail(gameId: string) {
-    this.navigationService.goToGameDetail(gameId);
-  }
 }

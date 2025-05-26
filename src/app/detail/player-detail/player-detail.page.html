@@ -139,17 +139,17 @@
 
     <div *ngSwitchCase="'info'">
       <div *ngIf="!isLoadingInfo">
-        <h2 class="tabhead nomp ion-text-center">Datum narození</h2>
+        <h2 class="full-head nomp ion-text-center">Datum narození</h2>
         <p class="nomar ion-padding">{{ player.birth_date | date:'d. M. yyyy' }}</p>
-        <h2 class="tabhead nomp ion-text-center">Věk</h2>
+        <h2 class="full-head nomp ion-text-center">Věk</h2>
         <p class="nomar ion-padding">{{ getPlayerAge(player.birth_date) }} let</p>
-        <h2 class="tabhead nomp ion-text-center">Datum registrace</h2>
+        <h2 class="full-head nomp ion-text-center">Datum registrace</h2>
         <p class="nomar ion-padding">{{ player.registration_date | date:'d. M. yyyy' }}</p>
-        <h2 class="tabhead nomp ion-text-center">Člen</h2>
+        <h2 class="full-head nomp ion-text-center">Člen</h2>
         <p class="nomar ion-padding">{{ player.active ? 'Aktivní' : 'Neaktivní' }}</p>
-        <h2 class="tabhead nomp ion-text-center">Status</h2>
+        <h2 class="full-head nomp ion-text-center">Status</h2>
         <p class="nomar ion-padding">{{ player.status }}</p>
-        <h2 class="tabhead nomp ion-text-center">Mateřský klub</h2>
+        <h2 class="full-head nomp ion-text-center">Mateřský klub</h2>
         <ion-grid class="nomp" *ngIf="motherClub">
           <ion-row class="table-team" (click)="onItemClick($event, motherClub, 'team')">
             <div class="ripple-wrapper ion-activatable ripple-parent half-padding">

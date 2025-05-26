@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { IonicModule } from '@ionic/angular';
-import { CommonModule } from '@angular/common';
 import { NavigationService } from 'src/app/services/domain/navigation.service';
 import { LeagueService } from 'src/app/services/domain/league.service';
 import { OrganizationService } from 'src/app/services/domain/organization.service';
@@ -9,10 +7,7 @@ import { OrganizationService } from 'src/app/services/domain/organization.servic
   selector: 'app-league-navigator',
   templateUrl: './league-navigator.component.html',
   styleUrls: ['./league-navigator.component.scss'],
-  imports: [
-    CommonModule,
-    IonicModule
-  ]
+  standalone: false,
 })
 export class LeagueNavigatorComponent implements OnInit {
 
@@ -22,41 +17,34 @@ export class LeagueNavigatorComponent implements OnInit {
     private organizationService: OrganizationService
   ) { }
 
+  isItemOpen: {
+    organization: Record<number, boolean>,
+    region: Record<number, boolean>,
+    regionUnderDistricts: Record<number, boolean>,
+    district: Record<number, boolean>
+  } = {
+      organization: {},
+      region: {},
+      regionUnderDistricts: {},
+      district: {}
+    }
+
   organizations: any[] = [];
   regions: any[] = [];
   districts: any[] = [];
   leagues: any[] = [];
 
   async ngOnInit() {
-
     this.organizations = await this.organizationService.getOrganizations();
     this.regions = await this.organizationService.getRegions();
     this.districts = await this.organizationService.getDistricts();
     this.leagues = await this.leagueService.getLeaguesWithPhotos();
   }
 
-  openOrgs: Record<number, boolean> = {};
-  openRegions: Record<number, boolean> = {};
-  openRegionsUnderDistrict: Record<number, boolean> = {};
-  openDistricts: Record<number, boolean> = {};
-
   specialOrganizations = ['Celostátní', 'Čechy', 'Morava a Slezsko'];
 
-
-  toggleOrg(orgId: number) {
-    this.openOrgs[orgId] = !this.openOrgs[orgId];
-  }
-
-  toggleRegion(regionId: number) {
-    this.openRegions[regionId] = !this.openRegions[regionId];
-  }
-
-  toggleRegionUnderDistrict(regionId: number) {
-    this.openRegionsUnderDistrict[regionId] = !this.openRegionsUnderDistrict[regionId];
-  }
-
-  toggleDistrict(districtId: number) {
-    this.openDistricts[districtId] = !this.openDistricts[districtId];
+  toggleItem(type: keyof typeof this.isItemOpen, id: number) {
+    this.isItemOpen[type][id] = !this.isItemOpen[type][id];
   }
 
   getLeaguesByRegion(regionId: number) {

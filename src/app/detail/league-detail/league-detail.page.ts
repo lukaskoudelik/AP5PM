@@ -11,13 +11,14 @@ import { LeagueService } from 'src/app/services/domain/league.service';
 import { GameService } from 'src/app/services/domain/game.service';
 import { TableService } from 'src/app/services/domain/table.service';
 import { OrganizationService } from 'src/app/services/domain/organization.service';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @Component({
   selector: 'app-league-detail',
   templateUrl: './league-detail.page.html',
   styleUrls: ['./league-detail.page.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule, FormsModule],
+  imports: [CommonModule, IonicModule, FormsModule, SharedModule],
 })
 
 export class LeagueDetailPage implements OnInit {
@@ -37,7 +38,6 @@ export class LeagueDetailPage implements OnInit {
     private route: ActivatedRoute,
     private tabsService: TabsService,
     private favouritesService: FavouritesService,
-    private navigationService: NavigationService,
     private leagueService: LeagueService,
     private gameService: GameService,
     private tableService: TableService,
@@ -109,14 +109,6 @@ export class LeagueDetailPage implements OnInit {
 
   isFavoriteItem(type: 'league' | 'team' | 'player', id: string): boolean {
     return this.favouritesService.isFavoriteItem(type, id);
-  }
-
-  onItemClick(event: Event, league: any, type: 'league' | 'team' | 'player') {
-    this.navigationService.goToItem(event, league, type);
-  }
-
-  goToGameDetail(gameId: string) {
-    this.navigationService.goToGameDetail(gameId);
   }
 
 }

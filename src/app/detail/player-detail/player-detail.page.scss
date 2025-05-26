@@ -15,7 +15,7 @@
 
 
 .yellow {
-  color: gold;
+  color: var(--ion-color-yellow);
 }
 
 .icon-wrapper ion-icon {
@@ -35,16 +35,16 @@
 
 .top-half {
   clip-path: polygon(0 100%, 100% 100%, 0 0);
-  color: gold;
+  color: var(--ion-color-yellow);
 }
 
 .bottom-half {
   clip-path: polygon(100% 0, 100% 100%, 0 0);
-  color: darkred;
+  color: var(--ion-color-red);
 }
 
 .red {
-  color: darkred;
+  color: var(--ion-color-red);
 }
 
 .home-flex {

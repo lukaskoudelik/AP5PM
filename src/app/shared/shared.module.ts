@@ -1,25 +1,31 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
-import { SharedContentComponent } from '../components/shared-content/shared-content.component';
+import { SharedContentComponent } from './components/shared-content/shared-content.component';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { LeagueNavigatorComponent } from '../components/league-navigator/league-navigator.component';
-import { PlayerNavigatorComponent } from '../components/player-navigator/player-navigator.component';
-import { TeamNavigatorComponent } from '../components/team-navigator/team-navigator.component';
+import { LeagueNavigatorComponent } from './components/league-navigator/league-navigator.component';
+import { PlayerNavigatorComponent } from './components/player-navigator/player-navigator.component';
+import { TeamNavigatorComponent } from './components/team-navigator/team-navigator.component';
+import { GameListComponent } from './components/game-list/game-list.component';
+import { LeagueTableComponent } from './components/league-table/league-table.component';
 
 
 @NgModule({
-  declarations: [SharedContentComponent],
+  declarations: [
+    SharedContentComponent,
+    GameListComponent,
+    LeagueTableComponent,
+    LeagueNavigatorComponent,
+    PlayerNavigatorComponent,
+    TeamNavigatorComponent,
+  ],
   imports: [
     CommonModule,
     IonicModule,
     RouterModule,
     FormsModule,
-    LeagueNavigatorComponent,
-    PlayerNavigatorComponent,
-    TeamNavigatorComponent
   ],
-  exports: [SharedContentComponent]
+  exports: [SharedContentComponent, GameListComponent, LeagueTableComponent]
 })
 export class SharedModule { }

@@ -2,24 +2,31 @@
   --ion-color-tab-bg: #144330;
   --ion-color-tab: #f5f8f5;
   --ion-color-tab-secondary: #a0faaa;
+
   --ion-color-primary: #144330;
   --ion-color-primary-rgb: 20, 67, 48;
   --ion-color-secondary: #a0faaa;
   --ion-color-secondary-rgb: 160, 250, 150;
-  --ion-color-tertiary: #D9D9D9;
-  --ion-color-tertiary-rgb: 217, 217, 217;
-  --ion-color-light: #f5f8f5;
-  --ion-color-dark: #232323;
-  --ion-color-quaternary: #ebf5eb;
-  --ion-color-lightblack: #333333;
-  --ion-color-dark-green: #171717;
+
+  --ion-color-theme-bg: #f5f8f5;
+  --ion-color-theme-bg-rgb: 245, 248, 245;
+  --ion-color-theme-fg: #232323;
+  --ion-color-theme-fg-rgb: 35, 35, 35;
+  --ion-color-theme-bg-secondary: #ebf5eb;
+  --ion-color-theme-bg-secondary-rgb: 235, 245, 235;
+  --ion-color-theme-fg-secondary: #171717;
+  --ion-color-theme-fg-secondar-rgb: 23, 23, 23;
+
+  --ion-color-red: darkred;
+  --ion-color-yellow: goldenrod;
+  --ion-color-blue: dodgerblue;
 
   --ion-font-family: 'RecursoSansRegular';
-  --background: var(--ion-color-light);
+  --background: var(--ion-color-theme-bg);
 }
 
 .color-light {
-    color: var(--ion-color-tab);
+  color: var(--ion-color-tab);
 }
 
 .nomp {
@@ -28,11 +35,11 @@
 }
 
 .bg-color {
-  --background: var(--ion-color-light);
+  --background: var(--ion-color-theme-bg);
 }
 
 .shadow-box {
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 4px 8px rgba(var(--ion-color-theme-fg-rgb), 0.2);
   border-bottom-right-radius: 1em;
   border-bottom-left-radius: 1em;
 }
@@ -42,8 +49,29 @@ ion-card,
 ion-content,
 ion-list,
 ion-item {
-  --background: var(--ion-color-light);
+  --background: var(--ion-color-theme-bg);
 }
+
+.full-head {
+  padding: 0.6rem 0.5rem 0.5rem 0.5rem;
+  align-items: center;
+  background-color: var(--ion-color-primary);
+  color: var(--ion-color-theme-bg);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-family: "RecursoSansBold";
+}
+
+.symbol-description {
+  font-size: 0.8em;
+  margin: 0.5rem;
+  border-radius: 1rem;
+  padding: 0.5rem;
+  opacity: 0.8;
+}
+
+
 
 // Tabs and toolbar
 
@@ -81,192 +109,6 @@ ion-toolbar {
 ion-menu-button,
 ion-back-button {
   color: var(--ion-color-tab);
-}
-
-
-// Card
-
-ion-card-title {
-  font-size: 1.6rem;
-  padding-bottom: 0.5rem;
-  font-family: "RecursoSansBold";
-  color: var(--ion-color-primary);
-}
-
-ion-card-subtitle {
-  font-size: 1.2rem;
-  color: var(--ion-color-primary);
-}
-
-ion-card {
-  --background: var(--ion-color-quaternary);
-}
-
-.cardhdr {
-  display: flex;
-  align-items: left;
-}
-
-ion-thumbnail.prf {
-  height: 6rem;
-  width: 6rem;
-  border-radius: 20%;
-  background-color: var(--ion-color-quaternary);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-ion-thumbnail img {
-  max-width: 80%;
-  max-height: 80%;
-  width: auto;
-  height: auto;
-}
-
-
-// Segment
-
-ion-segment-button {
-  --background: var(--ion-color-light);
-  --color: var(--ion-color-primary);
-  --background-checked: var(--ion-color-primary);
-  --color-checked: var(--ion-color-light);
-  --indicator-color: transparent;
-  box-shadow: 0;
-  font-family: 'RecursoSansBold';
-  border: solid 1px var(--ion-color-primary);
-  box-shadow: none;
-}
-
-ion-segment-button {
-  padding: 0;
-  margin: 0 0.5rem 1rem 0.5rem;
-  border-radius: 1rem;
-}
-
-ion-segment {
-  --border-width: 0;
-  box-shadow: none;
-  border: none;
-  --background: var(--ion-color-quaternary);
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
-}
-
-ion-card {
-  border: none;
-  box-shadow: none;
-}
-
-.center-toast {
-  text-align: center;
-}
-
-// Tabulka
-
-.tabhead {
-  padding: 0.6rem 0.5rem 0.5rem 0.5rem;
-  align-items: center;
-  background-color: var(--ion-color-primary);
-  color: var(--ion-color-light);
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  font-family: "RecursoSansBold";
-}
-
-.table-team {
-  background-color: var(--ion-color-light);
-  align-items: center;
-  font-size: 0.9em;
-}
-
-.ripple-wrapper {
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  width: 100%;
-  height: 100%;
-}
-
-.half-padding {
-  padding: 0.5rem;
-}
-
-ion-grid {
-  --ion-grid-padding-top: 0;
-
-  --ion-grid-padding-xs: 0;
-  --ion-grid-padding-sm: 0;
-  --ion-grid-padding-md: 0;
-  --ion-grid-padding-lg: 0;
-  --ion-grid-padding-xl: 0;
-
-  --ion-grid-column-padding: 0;
-
-  --ion-grid-column-padding-xs: 0;
-  --ion-grid-column-padding-sm: 0;
-  --ion-grid-column-padding-md: 0;
-  --ion-grid-column-padding-lg: 0;
-  --ion-grid-column-padding-xl: 0;
-}
-
-ion-col.cntr {
-  text-align: center;
-}
-
-.first-team,
-.middle-team,
-.last-team {
-  border-radius: 20%;
-  font-family: "RecursoSansBold";
-}
-
-.points {
-  font-family: "RecursoSansBold";
-}
-
-.first-team {
-  background-color: var(--ion-color-primary);
-  color: var(--ion-color-light);
-}
-
-.middle-team {
-  background-color: var(--ion-color-tertiary);
-}
-
-.last-team {
-  background-color: darkred;
-  color: var(--ion-color-light);
-}
-
-.icon-primary {
-  color: var(--ion-color-primary);
-  border-radius: 20%;
-}
-
-.icon-red {
-  color: darkred;
-}
-
-.table-description {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.2rem;
-}
-
-.symbol-description {
-  font-size: 0.8em;
-  margin: 0.5rem;
-  border-radius: 1rem;
-  padding: 0.5rem;
-  opacity: 0.8;
-}
-
-.table-description p {
-  margin: 0
 }
 
 .square-cell {
@@ -333,17 +175,151 @@ ion-thumbnail.small.fixed {
 
 }
 
+ion-thumbnail img {
+  max-width: 80%;
+  max-height: 80%;
+  width: auto;
+  height: auto;
+}
 
 .row-odd {
-  background-color: var(--ion-color-light);
+  background-color: var(--ion-color-theme-bg);
 }
 
 .row-even {
-  background-color: var(--ion-color-quaternary);
+  background-color: var(--ion-color-theme-bg-secondary);
 }
 
-.highlighted-club {
-  background-color: var(--ion-color-secondary);
+// Card
+
+ion-card-title {
+  font-size: 1.6rem;
+  padding-bottom: 0.5rem;
+  font-family: "RecursoSansBold";
+  color: var(--ion-color-primary);
+}
+
+ion-card-subtitle {
+  font-size: 1.2rem;
+  color: var(--ion-color-primary);
+}
+
+ion-card {
+  --background: var(--ion-color-theme-bg-secondary);
+}
+
+.cardhdr {
+  display: flex;
+  align-items: left;
+}
+
+ion-thumbnail.prf {
+  height: 6rem;
+  width: 6rem;
+  border-radius: 20%;
+  background-color: var(--ion-color-theme-bg-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+// Segment
+
+ion-segment-button {
+  --background: var(--ion-color-theme-bg);
+  --color: var(--ion-color-primary);
+  --background-checked: var(--ion-color-primary);
+  --color-checked: var(--ion-color-theme-bg);
+  --indicator-color: transparent;
+  box-shadow: 0;
+  font-family: 'RecursoSansBold';
+  border: solid 1px var(--ion-color-primary);
+  box-shadow: none;
+}
+
+ion-segment-button {
+  padding: 0;
+  margin: 0 0.5rem 1rem 0.5rem;
+  border-radius: 1rem;
+}
+
+ion-segment {
+  --border-width: 0;
+  box-shadow: none;
+  border: none;
+  --background: var(--ion-color-theme-bg-secondary);
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+ion-card {
+  border: none;
+  box-shadow: none;
+}
+
+.center-toast {
+  text-align: center;
+}
+
+.icon-gold {
+  color: var(--ion-color-yellow);
+  border-radius: 20%;
+}
+
+.icon-red {
+  color: var(--ion-color-red);
+}
+
+.ripple-wrapper {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.half-padding {
+  padding: 0.5rem;
+}
+
+ion-grid {
+  --ion-grid-padding-top: 0;
+
+  --ion-grid-padding-xs: 0;
+  --ion-grid-padding-sm: 0;
+  --ion-grid-padding-md: 0;
+  --ion-grid-padding-lg: 0;
+  --ion-grid-padding-xl: 0;
+
+  --ion-grid-column-padding: 0;
+
+  --ion-grid-column-padding-xs: 0;
+  --ion-grid-column-padding-sm: 0;
+  --ion-grid-column-padding-md: 0;
+  --ion-grid-column-padding-lg: 0;
+  --ion-grid-column-padding-xl: 0;
+}
+
+ion-col.cntr {
+  text-align: center;
+}
+
+.table-team {
+  background-color: var(--ion-color-theme-bg);
+  align-items: center;
+  font-size: 0.9em;
+}
+
+.table-description {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.2rem;
+}
+
+.table-description p {
+  margin: 0
 }
 
 // Zápasy
@@ -380,7 +356,7 @@ p.nomar {
 
 .roundanddate {
   background-color: var(--ion-color-primary);
-  color: var(--ion-color-light);
+  color: var(--ion-color-theme-bg);
   padding: 0.8rem 1rem 0.5rem 1rem;
   font-size: 0.8rem;
   margin-top: 0.5rem;
@@ -422,48 +398,46 @@ p.nomar {
   }
 }
 
-/* Dark theme přepisky */
+// Dark mode
 .ion-palette-dark.ios,
 .ion-palette-dark.md {
   :root {
-    --background: var(--ion-color-dark);
+    --background: var(--ion-color-theme-fg);
   }
 
-  --ion-color-secondary: #144330;
-  --ion-color-secondary-rgb: 20,
-  67,
-  48;
   --ion-color-primary: #a0faaa;
   --ion-color-primary-rgb: 160,
   250,
   150;
-  --ion-color-lightblack: #D9D9D9;
-  --ion-color-lightblack-rgb: 217,
-  217,
-  217;
-  --ion-color-dark: #f5f8f5;
-  --ion-color-light: #232323;
-  --ion-color-lightblack: #ebf5eb;
-  --ion-color-tertiary: #333333;
-  --ion-color-quaternary: #171717;
-  --ion-color-tertiary-rbg: 51,
-  51,
-  51;
+  --ion-color-secondary: #144330;
+  --ion-color-secondary-rgb: 20,
+  67,
+  48;
 
-  .shadow-box {
-    box-shadow: 0px 4px 8px rgba(255, 255, 255, 0.1);
-  }
+  --ion-color-theme-bg: #232323;
+  --ion-color-theme-bg-rgb: 35, 35, 35;
+  --ion-color-theme-fg: #f5f8f5;
+   --ion-color-theme-fg-rgb: 245, 248, 245;
+
+  --ion-color-theme-bg-secondary: #171717;
+  --ion-color-theme-bg-secondar-rgb: 23, 23, 23;
+  --ion-color-theme-fg-secondary: #ebf5eb;
+  --ion-color-theme-fg-secondary-rgb: 235, 245, 235;
+
+  --ion-color-red: #c30000;
+  --ion-color-yellow: gold;
+  --ion-color-blue: DeepSkyBlue;
 
   ion-thumbnail {
-    background-color: var(--ion-color-dark);
+    background-color: var(--ion-color-theme-fg);
   }
 
   ion-card-title {
-    color: var(--ion-color-dark);
+    color: var(--ion-color-theme-fg);
   }
 
   .last-team {
-    color: var(--ion-color-dark);
+    color: var(--ion-color-theme-fg);
   }
 
 }

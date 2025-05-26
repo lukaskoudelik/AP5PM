@@ -1,6 +1,6 @@
 ion-content,
 ion-list {
-    background-color: var(--ion-color-light);
+    background-color: var(--ion-color-theme-bg);
 }
 
 ion-icon {
@@ -9,12 +9,12 @@ ion-icon {
 
 .navigator-item {
     font-size: 1em;
-    color: var(--ion-color-dark);
+    color: var(--ion-color-theme-fg);
     padding-left: 1rem;
     padding-top: 1rem;
     display: flex;
     align-items: center;
-    background-color: var(--ion-color-light);
+    background-color: var(--ion-color-theme-bg);
     gap: 0.2rem;
 }
 
@@ -31,8 +31,8 @@ p.no-favorites {
     margin: 0;
 }
 
-.tabhead {
-    background-color: var(--ion-color-quaternary);
+.full-head {
+    background-color: var(--ion-color-theme-bg-secondary);
     color: var(--ion-color-primary);
     border: 0;
     font-size: 1em;

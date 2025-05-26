@@ -31,7 +31,7 @@
         </ion-col>
       </ion-row>
 
-      <ion-row class="tabhead">
+      <ion-row class="full-head">
         <ion-col class="ion-text-center date-time-cell">
           <span class="date-time-inner-cell"><ion-icon name="calendar"></ion-icon>{{ game.date | date:'d. M.
             yyyy'}}</span><span class="date-time-inner-cell"><ion-icon name="time"></ion-icon>{{ game.date |
@@ -103,11 +103,11 @@
   <div [ngSwitch]="selectedSegment">
     <div *ngSwitchCase="'events'">
       <div class="shadow-box no-round">
-        <h2 class="tabhead nomp ion-text-center" *ngIf="game && game.result != null && !isLoadingEvents">1. poločas</h2>
+        <h2 class="full-head nomp ion-text-center" *ngIf="game && game.result != null && !isLoadingEvents">1. poločas</h2>
         <ion-list *ngIf="gameEvents.firstHalfEvents.length > 0" class="nomp">
           <ion-item *ngFor="let event of gameEvents.firstHalfEvents; let i = index;"
             (click)="onItemClick($event, event.player, 'player')"
-            [ngClass]="{'row-even': i % 2 === 0, 'row-odd': i % 2 !== 0 }" button>
+            [ngClass]="{'row-even': i % 2 === 0, 'row-odd': i % 2 !== 0 }" button detail="false">
             <div [ngClass]="event.homeOrAway === 'home' ? 'goal-home' : 'goal-away'">
               <span class="text-event fixed-width">{{ event.minute }}'</span>
               <div class="icon-wrapper fixed-width">
@@ -126,11 +126,11 @@
         <p class="ion-padding info-text ion-text-center"
           *ngIf="game && game.result != null && gameEvents.firstHalfEvents.length === 0 && !isLoadingEvents">-</p>
 
-        <h2 class="tabhead nomp ion-text-center" *ngIf="game && game.result && !isLoadingEvents">2. poločas</h2>
+        <h2 class="full-head nomp ion-text-center" *ngIf="game && game.result && !isLoadingEvents">2. poločas</h2>
         <ion-list *ngIf="gameEvents.secondHalfEvents.length > 0" class="nomp">
           <ion-item *ngFor="let event of gameEvents.secondHalfEvents; let i = index;"
             (click)="onItemClick($event, event.player, 'player')"
-            [ngClass]="{'row-even': i % 2 === 0, 'row-odd': i % 2 !== 0 }" button>
+            [ngClass]="{'row-even': i % 2 === 0, 'row-odd': i % 2 !== 0 }" button detail="false">
             <div [ngClass]="event.homeOrAway === 'home' ? 'goal-home' : 'goal-away'">
               <span class="text-event">{{ event.minute }}'</span>
               <div class="icon-wrapper">
@@ -150,7 +150,7 @@
         <p class="ion-padding info-text ion-text-center"
           *ngIf="game && game.result && gameEvents.secondHalfEvents.length === 0 && !isLoadingEvents">-</p>
 
-        <h2 class="tabhead nomp ion-text-center" *ngIf="game && !isLoadingEvents && game.result">Informace</h2>
+        <h2 class="full-head nomp ion-text-center" *ngIf="game && !isLoadingEvents && game.result">Informace</h2>
         <p class="ion-padding info-text" *ngIf="game && !isLoadingEvents && game.result">Počet diváků: {{ game.visitors
           }}</p>
       </div>
@@ -198,7 +198,7 @@
         *ngIf="gameLineUps.homeStarters.length > 0 && gameLineUps.homeBench.length > 0 && gameLineUps.awayStarters.length > 0 && gameLineUps.awayBench.length > 0 && !isLoadingSquadlist"
         class="nomp shadow-box">
 
-        <ion-row class="tabhead">
+        <ion-row class="full-head">
           <ion-col class="ion-text-center">
             základní sestava
           </ion-col>
@@ -249,7 +249,7 @@
           </ion-col>
         </ion-row>
 
-        <ion-row class="tabhead">
+        <ion-row class="full-head">
           <ion-col class="ion-text-center">
             náhradníci
           </ion-col>
@@ -299,7 +299,7 @@
             </div>
           </ion-col>
         </ion-row>
-        <ion-row class="tabhead">
+        <ion-row class="full-head">
           <ion-col class="ion-text-center">
             rozhodčí
           </ion-col>
@@ -376,84 +376,9 @@
     </div>
 
     <div *ngSwitchCase="'table'">
-      <ion-grid *ngIf="leagueTable.length > 0" class="nomp shadow-box">
-        <ion-row class="tabhead">
-
-          <ion-col size="auto">
-            <div class="square-cell square-inner-header">#</div>
-          </ion-col>
-
-          <ion-col size="auto">
-            <div class="square-cell square-logo-header"></div>
-          </ion-col>
-
-          <ion-col class="team-name-cell">
-            tým
-          </ion-col>
-
-          <ion-col size="auto">
-            <div class="square-cell square-inner-header">Z</div>
-          </ion-col>
-
-          <ion-col size="auto">
-            <div class="square-cell square-double-header">skóre</div>
-          </ion-col>
-
-          <ion-col size="auto">
-            <div class="square-cell square-inner-header">B</div>
-          </ion-col>
-
-        </ion-row>
-
-        <ion-row *ngFor="let club of leagueTable; let i = index;" class="table-team"
-          (click)="onItemClick($event, club, 'team')" [ngClass]="{'row-even': i % 2 === 0, 'row-odd': i % 2 !== 0 }"
-          [ngClass]="{ 'highlighted-club': club.id === game.homeTeam.id || club.id === game.awayTeam.id, 'row-even': i % 2 === 0, 'row-odd': i % 2 !== 0 }">
-          <div class="ripple-wrapper ion-activatable ripple-parent half-padding">
-            <ion-col size="auto">
-              <div *ngIf="i == 0" class="square-cell square-inner first-team">{{ i + 1 }}.</div>
-              <div *ngIf="i == 9" class="square-cell square-inner last-team">{{ i + 1 }}.</div>
-              <div *ngIf="i != 0 && i != 9" class="square-cell square-inner middle-team">{{ i + 1 }}.</div>
-            </ion-col>
-
-            <ion-col size="auto">
-              <div class="square-cell square-logo-table">
-                <ion-thumbnail class="small fixed">
-                  <img [src]="club.photoUrl" alt="{{ club.name }}" />
-                </ion-thumbnail>
-              </div>
-            </ion-col>
-
-            <ion-col class="team-name-cell">
-              {{ club.name }}
-            </ion-col>
-
-            <ion-col size="auto">
-              <div class="square-cell square-inner">{{ club.gamesPlayed }}</div>
-            </ion-col>
-
-            <ion-col size="auto">
-              <div class="square-cell square-double">{{ club.goalsFor }}:{{ club.goalsAgainst }}</div>
-            </ion-col>
-
-            <ion-col size="auto">
-              <div class="square-cell square-inner points">{{ club.points }}</div>
-            </ion-col>
-            <ion-ripple-effect></ion-ripple-effect>
-          </div>
-        </ion-row>
-      </ion-grid>
-      <div class="symbol-description" *ngIf="leagueTable.length > 0">
-        <div class="table-description">
-          <ion-icon name="square" class="icon-primary"></ion-icon><ion-text>
-            <p>Postup</p>
-          </ion-text>
+      <div *ngIf="leagueTable.length > 0">
+        <app-league-table [table]="leagueTable" [highlightIds]="[game.homeTeam.id, game.awayTeam.id]"></app-league-table>
         </div>
-        <div class="table-description" *ngIf="leagueTable.length > 0">
-          <ion-icon name="square" class="icon-red"></ion-icon><ion-text>
-            <p>Sestup</p>
-          </ion-text>
-        </div>
-      </div>
       <div *ngIf="isLoadingTable && !isLoading" class="loading-message">
         <ion-spinner name="bubbles"></ion-spinner>
         <p>Načítám tabulku...</p>

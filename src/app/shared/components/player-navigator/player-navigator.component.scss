@@ -1,15 +1,15 @@
 .navigator-item {
     font-size: 1em;
-    color: var(--ion-color-dark);
+    color: var(--ion-color-theme-fg);
     padding: 0.5rem;
     display: flex;
     align-items: center;
-    background-color: var(--ion-color-light);
+    background-color: var(--ion-color-theme-bg);
     gap: 0.2rem;
 }
 
 ion-list {
-   background-color:  var(--ion-color-light);
+   background-color:  var(--ion-color-theme-bg);
    padding: 0;
 }
 
@@ -23,24 +23,24 @@ ion-item {
 }
 
 .level2 {
-    margin-left: 1rem;
+    margin-left: 2rem;
 }
 
 .level3 {
-    margin-left: 2rem;
+    margin-left: 3rem;
     
 }
 
 .level4 {
-    margin-left: 3rem;
-}
-
-.level5 {
     margin-left: 4rem;
 }
 
-.level6 {
+.level5 {
     margin-left: 5rem;
+}
+
+.level6 {
+    margin-left: 6rem;
 }
 
 .team-name-cell {
@@ -48,9 +48,9 @@ ion-item {
 }
 
 .row-odd {
-    background-color: var(--ion-color-light);
+    background-color: var(--ion-color-theme-bg);
 }
 
 .row-even {
-    background-color: var(--ion-color-quaternary);
+    background-color: var(--ion-color-theme-bg-secondary);
 }

@@ -31,61 +31,8 @@
     <ng-container *ngIf="!isLoading">
       <ng-container *ngIf="games | keyvalue as leagues">
         <ng-container *ngFor="let league of leagues">
-          <div class="ion-text-center tabhead">{{ league.key }}</div>
-          <ion-list>
-            <ion-item *ngFor="let game of league.value" class="no-border bg-color" (click)="goToGameDetail(game.id)" button detail="false">
-              <ion-grid fixed="true" class="p-nomar">
-                <div class="shadow-box">
-                  <div class="rounded-item">
-                  <ion-row class="roundanddate">
-                    <ion-col size="6" class="ion-text-left">
-                      <p>{{ game.round_number }}. kolo</p>
-                    </ion-col>
-                    <ion-col size="6" class="ion-text-right">
-                      <p>{{ game.date | date:'dd. MM. yyyy'}}</p>
-                    </ion-col>
-    
-                  </ion-row>
-                  <ion-row class="ion-align-items-center main-info">
-    
-                    <ion-col size="auto">
-                      <div class="square-cell square-logo">
-                        <ion-thumbnail class="small fixed">
-                          <img [src]="game.homeTeam.photoUrl" alt="{{ game.homeTeam.name }}" />
-                        </ion-thumbnail>
-                      </div>
-                    </ion-col>
-    
-                    <ion-col class="team-name-cell">
-                      {{ game.homeTeam.name }}
-                    </ion-col>
-    
-                    <ion-col size="auto">
-                      <div class="square-cell square-double">
-                        <p *ngIf="game.result" class="result">{{ game.result }}</p>
-                        <p *ngIf="!game.result" class="result">-</p>
-                      </div>
-                    </ion-col>
-    
-                    <ion-col class="team-name-cell tnc-away ion-text-right">
-                      {{ game.awayTeam.name }}
-                    </ion-col>
-    
-                    <ion-col size="auto">
-                      <div class="square-cell square-logo">
-                        <ion-thumbnail class="small fixed">
-                          <img [src]="game.awayTeam.photoUrl" alt="{{ game.awayTeam.name }}" />
-                        </ion-thumbnail>
-                      </div>
-                    </ion-col>
-    
-                  </ion-row>
-                </div>
-              </div>
-              </ion-grid>
-            
-            </ion-item>
-          </ion-list>
+          <div class="ion-text-center full-head">{{ league.key }}</div>
+            <app-game-list [games]="league.value"></app-game-list>
         </ng-container>
       </ng-container>
     </ng-container>

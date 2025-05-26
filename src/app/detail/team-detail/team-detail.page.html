@@ -50,56 +50,9 @@
 
   <div [ngSwitch]="selectedSegment">
     <div *ngSwitchCase="'results'">
-      <ion-list *ngIf="gamesPlayed.length > 0 && !isLoadingGames">
-        <ion-item *ngFor="let game of gamesPlayed" class="no-border" (click)="goToGameDetail(game.id)" button detail="false">
-          <ion-grid fixed="true" class="p-nomar">
-            <div class="shadow-box">
-              <ion-row class="roundanddate">
-                <ion-col size="6" class="ion-text-left">
-                  <p>{{ game.round_number }}. kolo</p>
-                </ion-col>
-                <ion-col size="6" class="ion-text-right">
-                  <p>{{ game.date | date:'dd. MM. yyyy'}}</p>
-                </ion-col>
-
-              </ion-row>
-              <ion-row class="ion-align-items-center main-info">
-
-                <ion-col size="auto">
-                  <div class="square-cell square-logo">
-                    <ion-thumbnail class="small fixed">
-                      <img [src]="game.homeTeam.photoUrl" alt="{{ game.homeTeam.name }}" />
-                    </ion-thumbnail>
-                  </div>
-                </ion-col>
-
-                <ion-col class="team-name-cell">
-                  {{ game.homeTeam.name }}
-                </ion-col>
-
-                <ion-col size="auto">
-                  <div class="square-cell square-double">
-                    <p class="result">{{ game.result}}</p>
-                  </div>
-                </ion-col>
-
-                <ion-col class="team-name-cell tnc-away ion-text-right">
-                  {{ game.awayTeam.name }}
-                </ion-col>
-
-                <ion-col size="auto">
-                  <div class="square-cell square-logo">
-                    <ion-thumbnail class="small fixed">
-                      <img [src]="game.awayTeam.photoUrl" alt="{{ game.awayTeam.name }}" />
-                    </ion-thumbnail>
-                  </div>
-                </ion-col>
-
-              </ion-row>
-            </div>
-          </ion-grid>
-        </ion-item>
-      </ion-list>
+      <div *ngIf="gamesPlayed.length > 0 && !isLoadingGames">
+        <app-game-list [games]="gamesPlayed"></app-game-list>
+      </div>
       <div *ngIf="isLoadingGames" class="loading-message">
         <ion-spinner name="bubbles"></ion-spinner>
         <p>Načítám zápasy...</p>
@@ -109,56 +62,9 @@
     </div>
 
     <div *ngSwitchCase="'matches'">
-      <ion-list *ngIf="gamesToPlay.length > 0 && !isLoadingGames">
-        <ion-item *ngFor="let game of gamesToPlay" class="no-border" (click)="goToGameDetail(game.id)" button detail="false">
-          <ion-grid fixed="true" class="p-nomar">
-            <div class="shadow-box">
-              <ion-row class="roundanddate">
-                <ion-col size="6" class="ion-text-left">
-                  <p>{{ game.round_number }}. kolo</p>
-                </ion-col>
-                <ion-col size="6" class="ion-text-right">
-                  <p>{{ game.date | date:'dd. MM. yyyy'}}</p>
-                </ion-col>
-
-              </ion-row>
-              <ion-row class="ion-align-items-center main-info">
-
-                <ion-col size="auto">
-                  <div class="square-cell square-logo">
-                    <ion-thumbnail class="small fixed">
-                      <img [src]="game.homeTeam.photoUrl" alt="{{ game.homeTeam.name }}" />
-                    </ion-thumbnail>
-                  </div>
-                </ion-col>
-
-                <ion-col class="team-name-cell">
-                  {{ game.homeTeam.name }}
-                </ion-col>
-
-                <ion-col size="auto">
-                  <div class="square-cell square-double">
-                    <p class="result">{{ game.date | date:'HH:mm'}}</p>
-                  </div>
-                </ion-col>
-
-                <ion-col class="team-name-cell tnc-away ion-text-right">
-                  {{ game.awayTeam.name }}
-                </ion-col>
-
-                <ion-col size="auto">
-                  <div class="square-cell square-logo-table">
-                    <ion-thumbnail class="small fixed">
-                      <img [src]="game.awayTeam.photoUrl" alt="{{ game.awayTeam.name }}" />
-                    </ion-thumbnail>
-                  </div>
-                </ion-col>
-
-              </ion-row>
-            </div>
-          </ion-grid>
-        </ion-item>
-      </ion-list>
+      <div *ngIf="gamesToPlay.length > 0 && !isLoadingGames">
+        <app-game-list [games]="gamesToPlay"></app-game-list>
+      </div>
       <div *ngIf="isLoadingGames" class="loading-message">
         <ion-spinner name="bubbles"></ion-spinner>
         <p>Načítám zápasy...</p>
@@ -168,91 +74,15 @@
     </div>
 
     <div *ngSwitchCase="'table'">
-      <ion-grid *ngIf="leagueTable.length > 0" class="nomp shadow-box">
-        <ion-row class="tabhead">
-
-          <ion-col size="auto">
-            <div class="square-cell square-inner-header">#</div>
-          </ion-col>
-
-          <ion-col size="auto">
-            <div class="square-cell square-logo-header"></div>
-          </ion-col>
-
-          <ion-col class="team-name-cell">
-            tým
-          </ion-col>
-
-          <ion-col size="auto">
-            <div class="square-cell square-inner-header">Z</div>
-          </ion-col>
-
-          <ion-col size="auto">
-            <div class="square-cell square-double-header">skóre</div>
-          </ion-col>
-
-          <ion-col size="auto">
-            <div class="square-cell square-inner-header">B</div>
-          </ion-col>
-
-        </ion-row>
-
-        <ion-row *ngFor="let club of leagueTable; let i = index;" class="table-team"
-          (click)="onItemClick($event, club, 'team')"
-          [ngClass]="{ 'highlighted-club': club.id === team.id, 'row-even': i % 2 === 0, 'row-odd': i % 2 !== 0 }">
-          <div class="ripple-wrapper ion-activatable ripple-parent half-padding">
-            <ion-col size="auto">
-              <div *ngIf="i == 0" class="square-cell square-inner first-team">{{ i + 1 }}.</div>
-              <div *ngIf="i == 9" class="square-cell square-inner last-team">{{ i + 1 }}.</div>
-              <div *ngIf="i != 0 && i != 9" class="square-cell square-inner middle-team">{{ i + 1 }}.</div>
-            </ion-col>
-
-            <ion-col size="auto">
-              <div class="square-cell square-logo-table">
-                <ion-thumbnail class="small fixed">
-                  <img [src]="club.photoUrl" alt="{{ club.name }}" />
-                </ion-thumbnail>
-              </div>
-            </ion-col>
-
-            <ion-col class="team-name-cell">
-              {{ club.name }}
-            </ion-col>
-
-            <ion-col size="auto">
-              <div class="square-cell square-inner">{{ club.gamesPlayed }}</div>
-            </ion-col>
-
-            <ion-col size="auto">
-              <div class="square-cell square-double">{{ club.goalsFor }}:{{ club.goalsAgainst }}</div>
-            </ion-col>
-
-            <ion-col size="auto">
-              <div class="square-cell square-inner points">{{ club.points }}</div>
-            </ion-col>
-            <ion-ripple-effect></ion-ripple-effect>
-          </div>
-        </ion-row>
-      </ion-grid>
-
-      <div class="symbol-description" *ngIf="leagueTable.length > 0">
-        <div class="table-description ion-margin-top">
-          <ion-icon name="square" class="icon-primary"></ion-icon><ion-text>
-            <p>Postup</p>
-          </ion-text>
-        </div>
-        <div class="table-description" *ngIf="leagueTable.length > 0">
-          <ion-icon name="square" class="icon-red"></ion-icon><ion-text>
-            <p>Sestup</p>
-          </ion-text>
-        </div>
+      <div *ngIf="leagueTable.length > 0">
+        <app-league-table [table]="leagueTable" [highlightIds]="[team.id]"></app-league-table>
       </div>
-      <p *ngIf="leagueTable.length == 0 && team && !isLoadingTable" class="ion-text-center ion-padding">Tabulka není k
-        dispozici.</p>
       <div *ngIf="isLoadingTable" class="loading-message">
         <ion-spinner name="bubbles"></ion-spinner>
         <p>Načítám tabulku...</p>
       </div>
+      <p *ngIf="leagueTable.length == 0 && league && !isLoadingTable" class="ion-text-center ion-padding">Tabulka není k
+        dispozici.</p>
     </div>
 
     <div *ngSwitchCase="'playerslist'">

@@ -19,7 +19,7 @@
 
 
   <ion-content>
-    <h2 class="tabhead nomp ion-text-left">vyhledávání podle názvu</h2>
+    <h2 class="full-head nomp ion-text-left">vyhledávání podle názvu</h2>
     <div class="custom-mp bg-ligt">
         <ion-searchbar class="search-color" [placeholder]="activeTab === 'league' ? 'Hledat soutěž...' : 
                       activeTab === 'team' ? 'Hledat tým...' : 
@@ -44,7 +44,7 @@
           </ion-item>
         </ion-list>
     </div>
-    <h2 class="tabhead nomp ion-text-left">
+    <h2 class="full-head nomp ion-text-left">
       {{ activeTab === 'league' ? 'vyhledávání podle organizace' :
       activeTab === 'team' ? 'vyhledávání podle lokace nebo soutěže' :
       'vyhledávání podle týmu' }}</h2>
@@ -63,7 +63,7 @@
         </app-player-navigator>
       </div>
     </div>
-    <h2 class="tabhead nomp ion-text-left">
+    <h2 class="full-head nomp ion-text-left">
       {{ activeTab === 'league' ? 'oblíbené soutěže' :
       activeTab === 'team' ? 'oblíbené týmy' :
       'oblíbení hráči' }}</h2>

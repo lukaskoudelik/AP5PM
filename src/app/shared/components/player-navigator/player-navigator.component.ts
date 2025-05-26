@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { IonicModule } from '@ionic/angular';
-import { CommonModule } from '@angular/common';
 import { OrganizationService } from 'src/app/services/domain/organization.service';
 import { LeagueService } from 'src/app/services/domain/league.service';
 import { TeamService } from 'src/app/services/domain/team.service';
@@ -11,10 +9,7 @@ import { NavigationService } from 'src/app/services/domain/navigation.service';
   selector: 'app-player-navigator',
   templateUrl: './player-navigator.component.html',
   styleUrls: ['./player-navigator.component.scss'],
-  imports: [
-    CommonModule,
-    IonicModule
-  ]
+  standalone: false,
 })
 export class PlayerNavigatorComponent  implements OnInit {
 
@@ -28,7 +23,6 @@ export class PlayerNavigatorComponent  implements OnInit {
   players: any[] = [];
 
   async ngOnInit() {
-
     this.organizations = await this.organizationService.getOrganizations();
     this.regions = await this.organizationService.getRegions();
     this.districts = await this.organizationService.getDistricts();
@@ -37,70 +31,34 @@ export class PlayerNavigatorComponent  implements OnInit {
     this.players = await this.playerService.getPlayersWithPhotos();
   }
 
-  isOrgOpen = false;
-  isLocationsOpen = false;
-  isNoTeamOpen = false;
-  openOrgs: Record<number, boolean> = {};
-  openRegions: Record<number, boolean> = {};
-  openRegionsUnderDistrict: Record<number, boolean> = {};
-  openDistricts: Record<number, boolean> = {};
-  openLeague: Record<number, boolean> = {};
-  openTeamOfOrg: Record<number, boolean> = {};
-  openTeamOfLoc: Record<number, boolean> = {};
-
-  openLocRegion: Record<number, boolean> = {};
-  openLocDistrict: Record<number, boolean> = {};
-
-
-
+  isItemOpen: {
+    list: Record<number, boolean>,
+    organization: Record<number, boolean>,
+    region: Record<number, boolean>,
+    regionUnderDistricts: Record<number, boolean>,
+    district: Record<number, boolean>,
+    league: Record<number, boolean>,
+    locRegion: Record<number, boolean>,
+    locDistrict: Record<number, boolean>,
+    orgTeam: Record<number, boolean>,
+    locTeam: Record<number, boolean>
+  } = {
+      list: {},
+      organization: {},
+      region: {},
+      regionUnderDistricts: {},
+      district: {},
+      league: {},
+      locRegion: {},
+      locDistrict: {},
+      orgTeam: {},
+      locTeam: {}
+    }
+    
   specialOrganizations = ['Celostátní', 'Čechy', 'Morava a Slezsko'];
 
-  toggleOrganizations() {
-    this.isOrgOpen = !this.isOrgOpen;
-  }
-
-  toggleLocations() {
-    this.isLocationsOpen = !this.isLocationsOpen;
-  }
-
-  toggleTeamOfOrg(teamId: number) {
-    this.openTeamOfOrg[teamId] = !this.openTeamOfOrg[teamId];
-  }
-
-  toggleTeamOfLoc(teamId: number) {
-    this.openTeamOfLoc[teamId] = !this.openTeamOfLoc[teamId];
-  }
-
-  toggleNoTeam() {
-    this.isNoTeamOpen = !this.isNoTeamOpen;
-  }
-
-  toggleOrg(orgId: number) {
-    this.openOrgs[orgId] = !this.openOrgs[orgId];
-  }
-
-  toggleRegion(regionId: number) {
-    this.openRegions[regionId] = !this.openRegions[regionId];
-  }
-
-  toggleRegionUnderDistrict(regionId: number) {
-    this.openRegionsUnderDistrict[regionId] = !this.openRegionsUnderDistrict[regionId];
-  }
-
-  toggleLeague(leagueId: number) {
-    this.openLeague[leagueId] = !this.openLeague[leagueId];
-  }
-
-  toggleDistrict(districtId: number) {
-    this.openDistricts[districtId] = !this.openDistricts[districtId];
-  }
-
-  toggleLocRegion(regionId: number) {
-    this.openLocRegion[regionId] = !this.openLocRegion[regionId];
-  }
-
-  toggleLocDistrict(districtId: number) {
-    this.openLocDistrict[districtId] = !this.openLocDistrict[districtId];
+  toggleItem(type: keyof typeof this.isItemOpen, id: number) {
+    this.isItemOpen[type][id] = !this.isItemOpen[type][id];
   }
 
   getLeaguesByRegion(regionId: number) {

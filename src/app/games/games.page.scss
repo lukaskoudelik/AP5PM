@@ -4,22 +4,17 @@
     --box-shadow: none;
   }
 
-.centered-container {
-    display: flex;
-    justify-content: center;
-}
-
 ion-list {
-  background-color: var(--ion-color-quaternary);
+  background-color: var(--ion-color-theme-bg-secondary);
 }
 
 ion-picker {
-  --background: var(--ion-color-light);
+  --background: var(--ion-color-theme-bg);
 }
 
 ion-datetime {
-  --wheel-highlight-background: var(--ion-color-quaternary);
-  --background: var(--ion-color-light);
+  --wheel-highlight-background: var(--ion-color-theme-bg-secondary);
+  --background: var(--ion-color-theme-bg);
 
-  --wheel-fade-background: var(--ion-color-light);
+  --wheel-fade-background: var(--ion-color-theme-bg);
 }

@@ -12,13 +12,14 @@ import { LeagueService } from 'src/app/services/domain/league.service';
 import { GameService } from 'src/app/services/domain/game.service';
 import { TableService } from 'src/app/services/domain/table.service';
 import { PlayerService } from 'src/app/services/domain/player.service';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @Component({
   selector: 'app-team-detail',
   templateUrl: './team-detail.page.html',
   styleUrls: ['./team-detail.page.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule, FormsModule],
+  imports: [CommonModule, IonicModule, FormsModule, SharedModule],
 })
 export class TeamDetailPage implements OnInit {
   activeTab: 'team' = 'team';
@@ -121,7 +122,4 @@ export class TeamDetailPage implements OnInit {
     this.navigationService.goToItem(event, item, type);
   }
 
-  goToGameDetail(gameId: string) {
-    this.navigationService.goToGameDetail(gameId);
-  }
 }

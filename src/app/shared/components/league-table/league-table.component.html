@@ -1,0 +1,78 @@
+<ion-grid class="nomp shadow-box">
+        <ion-row class="full-head">
+
+          <ion-col size="auto">
+            <div class="square-cell square-inner-header">#</div>
+          </ion-col>
+
+          <ion-col size="auto">
+            <div class="square-cell square-logo-header"></div>
+          </ion-col>
+
+          <ion-col class="team-name-cell">
+            tým
+          </ion-col>
+
+          <ion-col size="auto">
+            <div class="square-cell square-inner-header">Z</div>
+          </ion-col>
+
+          <ion-col size="auto">
+            <div class="square-cell square-double-header">skóre</div>
+          </ion-col>
+
+          <ion-col size="auto">
+            <div class="square-cell square-inner-header">B</div>
+          </ion-col>
+
+        </ion-row>
+
+        <ion-row *ngFor="let club of table; let i = index;" class="table-team"
+          (click)="onItemClick($event, club, 'team')" [ngClass]="{'highlighted-club': highlightIds.includes(club.id), 'row-even': i % 2 === 0, 'row-odd': i % 2 !== 0 }">
+          <div class="ripple-wrapper ion-activatable ripple-parent half-padding">
+            <ion-col size="auto">
+              <div *ngIf="i == 0" class="square-cell square-inner first-team">{{ i + 1 }}.</div>
+              <div *ngIf="i == 9" class="square-cell square-inner last-team">{{ i + 1 }}.</div>
+              <div *ngIf="i != 0 && i != 9" class="square-cell square-inner middle-team">{{ i + 1 }}.</div>
+            </ion-col>
+
+            <ion-col size="auto">
+              <div class="square-cell square-logo-table">
+                <ion-thumbnail class="small fixed">
+                  <img [src]="club.photoUrl" alt="{{ club.name }}" />
+                </ion-thumbnail>
+              </div>
+            </ion-col>
+
+            <ion-col class="team-name-cell">
+              {{ club.name }}
+            </ion-col>
+
+            <ion-col size="auto">
+              <div class="square-cell square-inner">{{ club.gamesPlayed }}</div>
+            </ion-col>
+
+            <ion-col size="auto">
+              <div class="square-cell square-double">{{ club.goalsFor }}:{{ club.goalsAgainst }}</div>
+            </ion-col>
+
+            <ion-col size="auto">
+              <div class="square-cell square-inner points">{{ club.points }}</div>
+            </ion-col>
+            <ion-ripple-effect></ion-ripple-effect>
+          </div>
+        </ion-row>
+      </ion-grid>
+
+      <div class="symbol-description">
+        <div class="table-description">
+          <ion-icon name="square" class="icon-gold"></ion-icon><ion-text>
+            <p>Postup</p>
+          </ion-text>
+        </div>
+        <div class="table-description">
+          <ion-icon name="square" class="icon-red"></ion-icon><ion-text>
+            <p>Sestup</p>
+          </ion-text>
+        </div>
+      </div>
