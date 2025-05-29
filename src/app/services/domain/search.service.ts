@@ -5,7 +5,7 @@ import { TeamRepository } from "../repositories/team.repository";
 import { Injectable } from '@angular/core';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 
 export class SearchService {
@@ -15,34 +15,32 @@ export class SearchService {
         let newItemsCount = 0;
         let formattedResults = [];
 
-        if (filter === 'team') {
-            const teamsData = await this.teamRepo.getTeamsWithOffset(searchQuery, currentPage, itemsPerPage);
-            formattedResults = await this.formatData(teamsData, 'team');
-            newItemsCount = formattedResults.length;
+        const fetchers: Record<'team' | 'player' | 'league', () => Promise<any[]>> = {
+            team: () => this.teamRepo.getTeamsWithOffset(searchQuery, currentPage, itemsPerPage),
+            player: () => this.playerRepo.getPlayersWithOffset(searchQuery, currentPage, itemsPerPage),
+            league: () => this.leagueRepo.getLeaguesWithOffset(searchQuery, currentPage, itemsPerPage),
+        };
 
-        } else if (filter === 'league') {
-            const leaguesData = await this.leagueRepo.getLeaguesWithOffset(searchQuery, currentPage, itemsPerPage);
-            formattedResults = await this.formatData(leaguesData, 'league');
-            newItemsCount = formattedResults.length;
+        if (filter === 'all') {
+            const [teams, leagues, players] = await Promise.all([
+                fetchers.team(),
+                fetchers.league(),
+                fetchers.player()
+            ]);
 
-        } else if (filter === 'player') {
-            const playersData = await this.playerRepo.getPlayersWithOffset(searchQuery, currentPage, itemsPerPage);
-            formattedResults = await this.formatData(playersData, 'player');
-            newItemsCount = formattedResults.length;
-
-        } else {
-            const teamsData = await this.teamRepo.getTeamsWithOffset(searchQuery, currentPage, itemsPerPage);
-            const leaguesData = await this.leagueRepo.getLeaguesWithOffset(searchQuery, currentPage, itemsPerPage);
-            const playersData = await this.playerRepo.getPlayersWithOffset(searchQuery, currentPage, itemsPerPage);
-
-            const formattedTeams = await this.formatData(teamsData, 'team');
-            const formattedLeagues = await this.formatData(leaguesData, 'league');
-            const formattedPlayers = await this.formatData(playersData, 'player');
+            const [formattedTeams, formattedLeagues, formattedPlayers] = await Promise.all([
+                this.formatData(teams, 'team'),
+                this.formatData(leagues, 'league'),
+                this.formatData(players, 'player')
+            ]);
 
             formattedResults = [...formattedTeams, ...formattedLeagues, ...formattedPlayers];
-            newItemsCount = formattedResults.length;
+        } else {
+            const data = await fetchers[filter]();
+            formattedResults = await this.formatData(data, filter);
         }
 
+        newItemsCount = formattedResults.length;
         return { newItemsCount, formattedResults };
     }
 
@@ -78,16 +76,15 @@ export class SearchService {
             }
 
             const formatteditems = await this.formatData(itemsData, type);
-
             const searchedResults = [...formatteditems];
 
             const filteredResults = searchedResults.filter(item =>
                 item.name.toLowerCase().includes(searchQuery.toLowerCase())
             );
-            return [searchedResults, filteredResults];
-            
+            return filteredResults;
+
         } catch (error) {
-            console.error('Error loading data:', error);
+            console.error('Chyba při náčítání dat.', error);
             return [];
         }
     }

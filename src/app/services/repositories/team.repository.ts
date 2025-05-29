@@ -4,24 +4,8 @@ import { supabase } from '../supabase-client';
 @Injectable({ providedIn: 'root' })
 export class TeamRepository {
 
-      async getTeams() {
+  async getTeams() {
     const { data, error } = await supabase.from('teams').select('*');
-    if (error) {
-      console.error('Chyba při načítání týmů:', error.message);
-      return [];
-    }
-    return data || [];
-  }
-  
-
-    async getTeamsWithOffset(searchQuery: string, page: number, itemsPerPage: number) {
-    const offset = page * itemsPerPage;
-    const { data, error } = await supabase
-      .from('teams')
-      .select('*')
-      .ilike('name', `%${searchQuery}%`)
-      .range(offset, offset + itemsPerPage - 1);
-
     if (error) {
       console.error('Chyba při načítání týmů:', error.message);
       return [];
@@ -41,13 +25,28 @@ export class TeamRepository {
   async getTeamsByLeague(leagueId: string) {
     const { data, error } = await supabase.from('teams').select('*').eq('league_id', leagueId);
     if (error) {
-      console.error(`Chyba při načítání týmu:`, error.message);
+      console.error('Chyba při načítání týmu.', error.message);
       return [];
     }
     return data || [];
   }
 
-   async getTeamsByIds(teamIds: string[]) {
+  async getTeamsWithOffset(searchQuery: string, page: number, itemsPerPage: number) {
+    const offset = page * itemsPerPage;
+    const { data, error } = await supabase
+      .from('teams')
+      .select('*')
+      .ilike('name', `%${searchQuery}%`)
+      .range(offset, offset + itemsPerPage - 1);
+
+    if (error) {
+      console.error('Chyba při načítání týmů.', error.message);
+      return [];
+    }
+    return data || [];
+  }
+
+  async getTeamsByIds(teamIds: string[]) {
     try {
       const { data, error } = await supabase
         .from('teams')

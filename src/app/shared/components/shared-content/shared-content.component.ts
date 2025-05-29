@@ -17,7 +17,6 @@ export class SharedContentComponent  implements OnInit, OnChanges {
   @Input() activeTab: 'league' | 'team' | 'player' = 'team';
   @Input() searchQuery: string = '';
   @Input() filteredResults: any[] = [];
-  searchedResults: any[] = [];
   @Input() favoriteItems: { league: any[], team: any[], player: any[] } = { league: [], team: [], player: [] };
   itemsData: any[] = [];
 
@@ -45,10 +44,9 @@ export class SharedContentComponent  implements OnInit, OnChanges {
 
   async onSearchInput(type: 'league' | 'team' | 'player') {
     if (!this.searchQuery) {
-      this.searchedResults = [];
       this.filteredResults = [];
     } else {
-      this.searchedResults, this.filteredResults = await this.searchService.loadAll(type, this.searchQuery);
+      this.filteredResults = await this.searchService.loadAll(type, this.searchQuery);
     }
   }
 

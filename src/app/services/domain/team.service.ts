@@ -3,7 +3,7 @@ import { TeamRepository } from '../repositories/team.repository';
 import { Injectable } from '@angular/core';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 
 export class TeamService {
@@ -45,7 +45,7 @@ export class TeamService {
             const fullPhotoUrl = await this.imageRepo.getPhotoUrl(team.photo_url);
             return { ...team, photoUrl: fullPhotoUrl };
         } catch (error) {
-            console.error('Error fetching team with photo URL:', error);
+            console.error('Chyba při načítání týmu s fotogafií:', error);
             throw error;
         }
     }
@@ -70,7 +70,7 @@ export class TeamService {
             const teamData = await this.teamRepo.getTeamById(`${teamId}`);
             return teamData;
         } catch (error) {
-            console.error('Error loading team:', error);
+            console.error('Chyba při načítání týmů s fotogafií:', error);
         }
     }
 

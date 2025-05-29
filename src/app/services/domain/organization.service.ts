@@ -15,19 +15,19 @@ export class OrganizationService {
             const orgData = await this.organizationRepo.getOrganizationById(`${orgId}`);
             return orgData;
         } catch (error) {
-            console.error('Error loading organization:', error);
+            console.error('Chyba při načítání organizací.', error);
         }
     }
 
-    async getOrganizations(){
+    async loadOrganizations(){
         return this.organizationRepo.getOrganizations()
     }
 
-    async getDistricts(){
+    async loadDistricts(){
         return this.districtRepo.getDistricts()
     }
 
-    async getRegions(){
+    async loadRegions(){
         return this.regionRepo.getRegions()
     }
 }

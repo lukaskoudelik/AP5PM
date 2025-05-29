@@ -8,23 +8,23 @@ const routes: Routes = [
   },
   {
     path: 'search',
-    loadComponent: () => import('./search/search.page').then(m => m.SearchPage),
+    loadComponent: () => import('./pages/search/search.page').then(m => m.SearchPage),
   },
   {
     path: 'team/:id',
-    loadComponent: () => import('./detail/team-detail/team-detail.page').then( m => m.TeamDetailPage)
+    loadComponent: () => import('./pages/detail/team-detail/team-detail.page').then( m => m.TeamDetailPage)
   },
   {
     path: 'league/:id',
-    loadComponent: () => import('./detail/league-detail/league-detail.page').then( m => m.LeagueDetailPage)
+    loadComponent: () => import('./pages/detail/league-detail/league-detail.page').then( m => m.LeagueDetailPage)
   },
   {
     path: 'player/:id',
-    loadComponent: () => import('./detail/player-detail/player-detail.page').then( m => m.PlayerDetailPage)
+    loadComponent: () => import('./pages/detail/player-detail/player-detail.page').then( m => m.PlayerDetailPage)
   },
   {
     path: 'game/:id',
-    loadComponent: () => import('./detail/game-detail/game-detail.page').then( m => m.GameDetailPage)
+    loadComponent: () => import('./pages/detail/game-detail/game-detail.page').then( m => m.GameDetailPage)
   },
   
 ];

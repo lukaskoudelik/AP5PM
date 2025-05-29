@@ -43,7 +43,7 @@ export class AppComponent implements OnInit {
     this.navigationService.goToItem(event, league, type);
   }
 
-  async toggleFavorite(item: any, type: 'league' | 'team' | 'player') {
+  async toggleFavoriteItem(item: any, type: 'league' | 'team' | 'player') {
     this.favouritesService.toggleFavorite(item, type);
   }
 

@@ -7,6 +7,7 @@ import { NavigationService } from 'src/app/services/domain/navigation.service';
   styleUrls: ['./league-table.component.scss'],
   standalone: false,
 })
+
 export class LeagueTableComponent {
   @Input() table: any[] = [];
   @Input() highlightIds: number[] = [];

@@ -9,23 +9,23 @@ const routes: Routes = [
     children: [
       {
         path: 'team',
-        loadChildren: () => import('../team/team.module').then(m => m.TeamPageModule)
+        loadChildren: () => import('./team/team.module').then(m => m.TeamPageModule)
       },
       {
         path: 'league',
-        loadChildren: () => import('../league/league.module').then(m => m.LeaguePageModule)
+        loadChildren: () => import('./league/league.module').then(m => m.LeaguePageModule)
       },
       {
         path: 'player',
-        loadChildren: () => import('../player/player.module').then(m => m.PlayerPageModule)
+        loadChildren: () => import('./player/player.module').then(m => m.PlayerPageModule)
       },
       {
         path: 'games',
-        loadChildren: () => import('../games/games.module').then(m => m.GamesPageModule)
+        loadChildren: () => import('./games/games.module').then(m => m.GamesPageModule)
       },
       {
         path: 'settings',
-        loadChildren: () => import('../settings/settings.module').then(m => m.SettingsPageModule)
+        loadChildren: () => import('./settings/settings.module').then(m => m.SettingsPageModule)
       },
       {
         path: '',

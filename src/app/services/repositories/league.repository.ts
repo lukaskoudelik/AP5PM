@@ -12,6 +12,15 @@ export class LeagueRepository {
         return data || [];
     }
 
+    async getLeagueById(leagueId: string) {
+        const { data, error } = await supabase.from('leagues').select('*').eq('id', leagueId).single();
+        if (error) {
+            console.error(`Chyba při načítání ligy s ID ${leagueId}:`, error.message);
+            return null;
+        }
+        return data || null;
+    }
+
     async getLeaguesWithOffset(searchQuery: string, page: number, itemsPerPage: number) {
         const offset = page * itemsPerPage;
         const { data, error } = await supabase
@@ -25,15 +34,6 @@ export class LeagueRepository {
             return [];
         }
         return data || [];
-    }
-
-    async getLeagueById(leagueId: string) {
-        const { data, error } = await supabase.from('leagues').select('*').eq('id', leagueId).single();
-        if (error) {
-            console.error(`Chyba při načítání ligy s ID ${leagueId}:`, error.message);
-            return null;
-        }
-        return data || null;
     }
 
     async getLeaguesByOrganization(organizationId: string) {

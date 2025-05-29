@@ -4,9 +4,9 @@ import { IonicModule } from '@ionic/angular';
 import { SharedContentComponent } from './components/shared-content/shared-content.component';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { LeagueNavigatorComponent } from './components/league-navigator/league-navigator.component';
-import { PlayerNavigatorComponent } from './components/player-navigator/player-navigator.component';
-import { TeamNavigatorComponent } from './components/team-navigator/team-navigator.component';
+import { LeagueNavigatorComponent } from './components/navigators/league-navigator/league-navigator.component';
+import { PlayerNavigatorComponent } from './components/navigators/player-navigator/player-navigator.component';
+import { TeamNavigatorComponent } from './components/navigators/team-navigator/team-navigator.component';
 import { GameListComponent } from './components/game-list/game-list.component';
 import { LeagueTableComponent } from './components/league-table/league-table.component';
 

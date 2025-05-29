@@ -19,7 +19,7 @@
 
   --ion-color-red: darkred;
   --ion-color-yellow: goldenrod;
-  --ion-color-blue: dodgerblue;
+  --ion-color-blue: RoyalBlue;
 
   --ion-font-family: 'RecursoSansRegular';
   --background: var(--ion-color-theme-bg);
@@ -70,8 +70,6 @@ ion-item {
   padding: 0.5rem;
   opacity: 0.8;
 }
-
-
 
 // Tabs and toolbar
 
@@ -208,11 +206,6 @@ ion-card {
   --background: var(--ion-color-theme-bg-secondary);
 }
 
-.cardhdr {
-  display: flex;
-  align-items: left;
-}
-
 ion-thumbnail.prf {
   height: 6rem;
   width: 6rem;
@@ -221,6 +214,11 @@ ion-thumbnail.prf {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.cardhdr {
+  display: flex;
+  align-items: left;
 }
 
 
@@ -236,9 +234,6 @@ ion-segment-button {
   font-family: 'RecursoSansBold';
   border: solid 1px var(--ion-color-primary);
   box-shadow: none;
-}
-
-ion-segment-button {
   padding: 0;
   margin: 0 0.5rem 1rem 0.5rem;
   border-radius: 1rem;
@@ -393,10 +388,46 @@ p.nomar {
 
 
 @media screen and (max-width: 375px) {
-  .table-team {
+
+  .table-team,
+  .team-name-cell,
+  p,
+  ion-label,
+  p.result {
+    font-size: 0.9em;
+  }
+
+  .square-double {
+    width: 2.5rem;
+  }
+
+  ion-thumbnail.small.fixed,
+  .square-inner {
+    width: 1.8rem;
+    height: 1.8rem;
+    font-size: 0.9em;
+  }
+
+  .square-logo {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  ion-tab-button ion-label {
     font-size: 0.8em;
   }
+
+  ion-card-title {
+    font-size: 1.2rem;
+  }
+
+  ion-card-subtitle {
+    font-size: 1rem;
+  }
+
+
 }
+
 
 // Dark mode
 .ion-palette-dark.ios,
@@ -415,14 +446,22 @@ p.nomar {
   48;
 
   --ion-color-theme-bg: #232323;
-  --ion-color-theme-bg-rgb: 35, 35, 35;
+  --ion-color-theme-bg-rgb: 35,
+  35,
+  35;
   --ion-color-theme-fg: #f5f8f5;
-   --ion-color-theme-fg-rgb: 245, 248, 245;
+  --ion-color-theme-fg-rgb: 245,
+  248,
+  245;
 
   --ion-color-theme-bg-secondary: #171717;
-  --ion-color-theme-bg-secondar-rgb: 23, 23, 23;
+  --ion-color-theme-bg-secondar-rgb: 23,
+  23,
+  23;
   --ion-color-theme-fg-secondary: #ebf5eb;
-  --ion-color-theme-fg-secondary-rgb: 235, 245, 235;
+  --ion-color-theme-fg-secondary-rgb: 235,
+  245,
+  235;
 
   --ion-color-red: #c30000;
   --ion-color-yellow: gold;
@@ -439,5 +478,4 @@ p.nomar {
   .last-team {
     color: var(--ion-color-theme-fg);
   }
-
 }
