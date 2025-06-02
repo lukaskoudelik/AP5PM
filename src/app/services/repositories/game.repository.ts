@@ -53,7 +53,7 @@ async getGames() {
       return data || [];
 
     } catch (error) {
-      console.error('Error fetching games by IDs:', error);
+      console.error('Chyba při načítání zápasů:', error);
       throw error;
     }
   }

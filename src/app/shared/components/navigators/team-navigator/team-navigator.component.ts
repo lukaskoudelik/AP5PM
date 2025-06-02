@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NavigationService } from 'src/app/services/domain/navigation.service';
 import { TeamService } from 'src/app/services/domain/team.service';
 import { LeagueService } from 'src/app/services/domain/league.service';
@@ -47,7 +47,6 @@ export class TeamNavigatorComponent implements OnInit {
   leagues: any[] = [];
 
   async ngOnInit() {
-
     this.organizations = await this.organizationService.loadOrganizations();
     this.regions = await this.organizationService.loadRegions();
     this.districts = await this.organizationService.loadDistricts();

@@ -24,7 +24,7 @@ export class LeagueService {
             const leagueData = await this.leagueRepo.getLeagueById(`${leagueId}`);
             return leagueData;
         } catch (error) {
-            console.error('Error loading league:', error);
+            console.error('Chyba při načítání lig.', error);
         }
     }
 
@@ -34,7 +34,7 @@ export class LeagueService {
             const fullPhotoUrl = await this.imageRepo.getPhotoUrl(league.photo_url);
             return { ...league, photoUrl: fullPhotoUrl };
         } catch (error) {
-            console.error('Error fetching league with photo URL:', error);
+            console.error('Chyba při načítání lig.', error);
             throw error;
         }
     }

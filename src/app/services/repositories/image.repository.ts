@@ -12,7 +12,7 @@ export class ImageRepository {
       }
       return data.publicUrl;
     } catch (error) {
-      console.error('Neočekávaná chyba při získávání URL obrázku:', error);
+      console.error('Chyba při získávání URL obrázku:', error);
       return '';
     }
   }

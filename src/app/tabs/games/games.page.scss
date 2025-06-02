@@ -4,10 +4,6 @@
     --box-shadow: none;
   }
 
-ion-list {
-  background-color: var(--ion-color-theme-bg-secondary);
-}
-
 ion-picker {
   --background: var(--ion-color-theme-bg);
 }
@@ -17,4 +13,10 @@ ion-datetime {
   --background: var(--ion-color-theme-bg);
 
   --wheel-fade-background: var(--ion-color-theme-bg);
+}
+
+.centered-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

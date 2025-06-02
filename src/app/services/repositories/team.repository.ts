@@ -60,7 +60,7 @@ export class TeamRepository {
       return data || [];
 
     } catch (error) {
-      console.error('Error fetching games by IDs:', error);
+      console.error('Chyba při načítání týmů.', error);
       throw error;
     }
   }

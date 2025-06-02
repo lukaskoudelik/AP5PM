@@ -432,36 +432,32 @@ p.nomar {
 // Dark mode
 .ion-palette-dark.ios,
 .ion-palette-dark.md {
-  :root {
-    --background: var(--ion-color-theme-fg);
-  }
-
   --ion-color-primary: #a0faaa;
   --ion-color-primary-rgb: 160,
-  250,
-  150;
+    250,
+    150;
   --ion-color-secondary: #144330;
   --ion-color-secondary-rgb: 20,
-  67,
-  48;
+    67,
+    48;
 
   --ion-color-theme-bg: #232323;
   --ion-color-theme-bg-rgb: 35,
-  35,
-  35;
+    35,
+    35;
   --ion-color-theme-fg: #f5f8f5;
   --ion-color-theme-fg-rgb: 245,
-  248,
-  245;
+    248,
+    245;
 
   --ion-color-theme-bg-secondary: #171717;
   --ion-color-theme-bg-secondar-rgb: 23,
-  23,
-  23;
+    23,
+    23;
   --ion-color-theme-fg-secondary: #ebf5eb;
   --ion-color-theme-fg-secondary-rgb: 235,
-  245,
-  235;
+    245,
+    235;
 
   --ion-color-red: #c30000;
   --ion-color-yellow: gold;
